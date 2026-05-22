@@ -1,17 +1,18 @@
-# Commit 11: AJAX & Frontend Dynamique
+# Commit 2: Frontend & Layouts
 
 À cette étape:
-- JavaScript pour les filtres
-- Appels AJAX pour le menu filtering
-- Réinitialisation des filtres
-- Affichage dynamique des résultats
+- Créer les templates HTML/PHP de base
+- Styliser avec Bootstrap & CSS custom
+- JavaScript basique pour l'interactivité
 
 **Fichiers créés:**
-- public/assets/javascript/recherche.js (filtres AJAX)
-- noUiSlider integration
-- Bootstrap icons
+- header.php (navigation, structure HTML)
+- footer.php (bas de page)
+- home.view.php (page d'accueil)
+- CSS personnalisé
+- JS principal
 
 **À tester:**
-- Les filtres AJAX fonctionnent
-- Le reset fonctionne
-- Les menus se mettent à jour dynamiquement
+- Structure HTML valide
+- Bootstrap fonctionne
+- Navigation visible
