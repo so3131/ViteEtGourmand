@@ -1,18 +1,15 @@
-# Commit 2: Frontend & Layouts
+# Commit 3: Configuration
 
 À cette étape:
-- Créer les templates HTML/PHP de base
-- Styliser avec Bootstrap & CSS custom
-- JavaScript basique pour l'interactivité
+- Configurer les constantes globales
+- Créer la classe Database pour PDO
+- Établir la connexion à MariaDB
 
 **Fichiers créés:**
-- header.php (navigation, structure HTML)
-- footer.php (bas de page)
-- home.view.php (page d'accueil)
-- CSS personnalisé
-- JS principal
+- Constants.php (chemins, URLs, constantes)
+- Database.php (classe de connexion PDO)
 
 **À tester:**
-- Structure HTML valide
-- Bootstrap fonctionne
-- Navigation visible
+- Les constantes sont définies
+- La connexion DB fonctionne
+- Les erreurs PDO sont bien gérées
