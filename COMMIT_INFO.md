@@ -1,15 +1,14 @@
-# Commit 3: Configuration
+# Commit 4: Base de Données
 
 À cette étape:
-- Configurer les constantes globales
-- Créer la classe Database pour PDO
-- Établir la connexion à MariaDB
+- Créer les tables MySQL/MariaDB
+- Définir les schémas
+- Insérer les données initiales
 
-**Fichiers créés:**
-- Constants.php (chemins, URLs, constantes)
-- Database.php (classe de connexion PDO)
+**Fichier créé:**
+- vite_gourmand.sql (schéma complet + données)
 
 **À tester:**
-- Les constantes sont définies
-- La connexion DB fonctionne
-- Les erreurs PDO sont bien gérées
+- Importer le SQL dans PhpMyAdmin
+- Les tables sont créées
+- Les données initiales sont présentes
