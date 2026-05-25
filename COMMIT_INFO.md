@@ -1,14 +1,15 @@
-# Commit 4: Base de Données
+# Commit 5: Base Models & Managers
 
 À cette étape:
-- Créer les tables MySQL/MariaDB
-- Définir les schémas
-- Insérer les données initiales
+- Créer la classe BaseModel (parent)
+- Créer la classe BaseManager (parent)
+- Définir les méthodes génériques CRUD
 
-**Fichier créé:**
-- vite_gourmand.sql (schéma complet + données)
+**Fichiers créés:**
+- BaseModel.php (classe mère pour les entités)
+- BaseManager.php (classe mère pour l'accès données)
 
 **À tester:**
-- Importer le SQL dans PhpMyAdmin
-- Les tables sont créées
-- Les données initiales sont présentes
+- Les classes se chargent sans erreur
+- Les méthodes génériques fonctionnent
+- La connexion PDO est bien utilisée
