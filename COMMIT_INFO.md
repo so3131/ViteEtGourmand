@@ -1,15 +1,16 @@
-# Commit 5: Base Models & Managers
+# Commit 6: Models & Managers Spécifiques
 
 À cette étape:
-- Créer la classe BaseModel (parent)
-- Créer la classe BaseManager (parent)
-- Définir les méthodes génériques CRUD
+- Créer les entités (Menu, Utilisateur, etc)
+- Créer les Managers pour chaque table
+- Surcharger les méthodes génériques si besoin
 
 **Fichiers créés:**
-- BaseModel.php (classe mère pour les entités)
-- BaseManager.php (classe mère pour l'accès données)
+- Menu.php (entité Menu)
+- MenuManager.php (accès données Menu)
+- Autres modèles selon besoins
 
 **À tester:**
-- Les classes se chargent sans erreur
-- Les méthodes génériques fonctionnent
-- La connexion PDO est bien utilisée
+- Les Managers hérient bien de BaseManager
+- Les requêtes spécifiques fonctionnent
+- Les relations entre tables fonctionnent
