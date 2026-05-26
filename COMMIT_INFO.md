@@ -1,16 +1,15 @@
-# Commit 6: Models & Managers Spécifiques
+# Commit 7: Routeur Simple
 
 À cette étape:
-- Créer les entités (Menu, Utilisateur, etc)
-- Créer les Managers pour chaque table
-- Surcharger les méthodes génériques si besoin
+- Créer le routeur (index.php)
+- Implémenter HomeController
+- Gérer la page d'accueil
 
 **Fichiers créés:**
-- Menu.php (entité Menu)
-- MenuManager.php (accès données Menu)
-- Autres modèles selon besoins
+- public/index.php (routeur de base)
+- HomeController.php (affiche la page d'accueil)
 
 **À tester:**
-- Les Managers hérient bien de BaseManager
-- Les requêtes spécifiques fonctionnent
-- Les relations entre tables fonctionnent
+- La page d'accueil s'affiche
+- Le routeur dirige correctement
+- Les sessions PHP fonctionnent
