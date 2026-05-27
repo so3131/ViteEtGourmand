@@ -1,15 +1,20 @@
-# Commit 7: Routeur Simple
+# Commit 8: Système d'Authentification
 
 À cette étape:
-- Créer le routeur (index.php)
-- Implémenter HomeController
-- Gérer la page d'accueil
+- Créer la classe Auth pour gérer l'authentification
+- Implémenter LoginController
+- Implémenter SigninController
+- Gérer les sessions utilisateurs
 
 **Fichiers créés:**
-- public/index.php (routeur de base)
-- HomeController.php (affiche la page d'accueil)
+- app/controllers/authController/Auth.php (logique auth)
+- app/controllers/authController/LoginController.php
+- app/controllers/authController/SigninController.php
+- app/views/Auth/login.view.php
+- app/views/Auth/signin.view.php
 
 **À tester:**
-- La page d'accueil s'affiche
-- Le routeur dirige correctement
-- Les sessions PHP fonctionnent
+- S'inscrire (signin)
+- Se connecter (login)
+- Les sessions se créent
+- Les mots de passe sont hashés
