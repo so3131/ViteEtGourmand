@@ -1,13 +1,12 @@
-# Commit 9: User Controllers
+# Commit 10: Admin & Employee Controllers
 
 À cette étape:
-- MenuController (search, filter, details)
-- DashboardUserController
-- ContactController
-- TimeTableController
+- DashboardAdminController
+- StatsAdminController
+- DashboardEmployeeController
+- Autres controllers admin/employee
 
 **À tester:**
-- Affichage des menus
-- Filtres AJAX
-- Dashboard utilisateur
-- Formulaire de contact
+- Les admins voient le dashboard admin
+- Les employés voient le dashboard employé
+- Les vérifications de rôles fonctionnent
