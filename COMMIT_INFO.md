@@ -1,12 +1,17 @@
-# Commit 10: Admin & Employee Controllers
+# Commit 11: AJAX & Frontend Dynamique
 
 À cette étape:
-- DashboardAdminController
-- StatsAdminController
-- DashboardEmployeeController
-- Autres controllers admin/employee
+- JavaScript pour les filtres
+- Appels AJAX pour le menu filtering
+- Réinitialisation des filtres
+- Affichage dynamique des résultats
+
+**Fichiers créés:**
+- public/assets/javascript/recherche.js (filtres AJAX)
+- noUiSlider integration
+- Bootstrap icons
 
 **À tester:**
-- Les admins voient le dashboard admin
-- Les employés voient le dashboard employé
-- Les vérifications de rôles fonctionnent
+- Les filtres AJAX fonctionnent
+- Le reset fonctionne
+- Les menus se mettent à jour dynamiquement
