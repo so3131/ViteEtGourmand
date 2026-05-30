@@ -1,17 +1,11 @@
-# Commit 11: AJAX & Frontend Dynamique
+# Commit 12: Helpers & Utilitaires
 
 À cette étape:
-- JavaScript pour les filtres
-- Appels AJAX pour le menu filtering
-- Réinitialisation des filtres
-- Affichage dynamique des résultats
-
-**Fichiers créés:**
-- public/assets/javascript/recherche.js (filtres AJAX)
-- noUiSlider integration
-- Bootstrap icons
+- FormHelper (validation et nettoyage)
+- ImageHelper (gestion des images)
+- Function.php (utilitaires généraux)
 
 **À tester:**
-- Les filtres AJAX fonctionnent
-- Le reset fonctionne
-- Les menus se mettent à jour dynamiquement
+- Les helpers se chargent
+- Les fonctions utilitaires fonctionnent
+- La validation de formulaire fonctionne
