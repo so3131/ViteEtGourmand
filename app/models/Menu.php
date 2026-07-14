@@ -79,4 +79,8 @@ public function calculerTotal(int $quantite, float $fraisLivraison = 0, float $d
     // On ajoute le reste
     return $prixMenu + $fraisLivraison + $depotGarantie;
 }
+public function hasDiscount(int $quantite): bool 
+{
+    return $quantite >= ($this->nombre_personne_minimum + 5);
+}
 }

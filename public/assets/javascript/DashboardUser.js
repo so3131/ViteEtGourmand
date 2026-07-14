@@ -1,5 +1,5 @@
-// Sélectionne tous les boutons d'annulation de commande
 
+// Sélectionne tous les boutons d'annulation de commande
 document.querySelectorAll('.btn-erase-order').forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();

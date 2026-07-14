@@ -7,3 +7,4 @@ define('ROLE_ADMIN', 1);
 define('ROLE_EMPLOYE', 2);
 define('ROLE_USER', 3);
 define('ROLE_VISITEUR', 0);
+define('DEPOT_GARANTIE_MATERIEL', 600.00);

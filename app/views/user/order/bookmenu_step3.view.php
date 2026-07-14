@@ -28,6 +28,7 @@
 
     <h3>Informations de prestation</h3>
     <p>Date : <?= htmlspecialchars($orderData['prestation']['date_prestation'] ?? 'Non défini') ?></p>
+    <p>Heure : <?= htmlspecialchars($orderData['prestation']['heure_livraison'] ?? 'Non défini') ?></p>
     <p>Lieu : <?= htmlspecialchars($orderData['prestation']['lieu']['ville'] ?? 'Non défini') ?></p>
 
     <h3>Détails du menu</h3>
@@ -42,6 +43,12 @@
     <p>Frais de livraison : <?= number_format($orderData['prestation']['frais_livraison'] ?? 0, 2) ?> €</p>
     <p>Dépôt de garantie : <?= number_format($orderData['prestation']['depot_garantie'] ?? 0, 2) ?> €</p>
     <hr>
+   <?php if (!empty($Discount)): ?>
+    <p>
+        <strong>Bonne nouvelle !</strong> Une réduction de 10% a été appliquée 
+        car vous avez commandé pour au moins 5 personnes de plus que le minimum requis.
+   </p>
+<?php endif; ?>
     <strong>Total à payer : <?= number_format($total_general ?? 0, 2) ?> €</strong>
 
     <form action="index.php?page=order-menu&step=4" method="POST">

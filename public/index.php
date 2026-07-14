@@ -63,6 +63,10 @@ $route = match ($page) {
     'dashboard-user'     => ['class' => '\App\Controllers\UserController\DashboardUserController', 'action' => 'userDashboard'],
     'update-profil'     => ['class' => '\App\Controllers\AuthController\updateProfilController', 'action' => 'updateProfil'],
     'erase-order' => ['class' => '\App\Controllers\UserController\EraseOrderController','params' => ['db', 'commande_id'], 'action' => 'eraseOrder'],
+    'edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController','params' => ['db', 'commande_id'], 'action' => 'editOrderView'],
+    'recalculer-prix' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'action' => 'recalculerPrix'],
+    'cancel-edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'action' => 'cancelEditOrder'],
+    'update-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'params' => ['db', 'commande_id'], 'action' => 'updateOrder'],
 
     // Tunnel de commande
     'order-menu'    => ['class' => '\App\Controllers\UserController\OrderMenuController',
@@ -111,5 +115,5 @@ if (isset($route['params']) && is_array($route['params'])) {
         }
     }
 }
-// On exécute
+
 $controllerClass::$action(...$params);

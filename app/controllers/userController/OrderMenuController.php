@@ -2,6 +2,7 @@
 
 namespace App\Controllers\UserController;
 
+
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 require_once ROOT_PATH . '/app/helpers/Function.php';
 
@@ -11,6 +12,7 @@ use App\Controllers\AuthController\Auth;
 use App\Managers\LieuManager;
 use App\Models\Order;
 use App\Managers\OrderManager;
+use App\Helpers\MailService;
 
 
 class OrderMenuController
@@ -30,6 +32,7 @@ class OrderMenuController
         $menuInfo = null;
         $total_general = 0;
         $order = [];
+        $Discount = false;
 
 
         // 1. Définition constante du step
@@ -53,6 +56,7 @@ class OrderMenuController
             switch ($step) {
 
                 case 0:
+                                            $menu = MenuManager::getById($db, $menuID);
 
                     // 1. Gestion du POST de l'étape 0
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -71,16 +75,26 @@ class OrderMenuController
                         $lieuId = (int)($_POST['lieu_id'] ?? 0);
 
                         $lieu = LieuManager::getById($db, $lieuId);
-
+      $menuInfo = MenuManager::getById($db, $menuID);
+                        if (!$menuInfo) {
+                            error_message("Menu introuvable.");
+                            header('Location: index.php?page=home');
+                            exit();
+                        }
                         try {
-                            $dateSelectionnee = new \DateTime($datePrestation);
-                            $dateAujourdhui = new \DateTime('today'); // 'today' met l'heure à 00:00:00 pour une comparaison juste sur le jour
+                          $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
+$dateMinimale = new \DateTime('today');
+$dateMinimale->modify('+' . $delaiCommande . ' days');
 
-                            if ($dateSelectionnee < $dateAujourdhui) {
-                                error_message("La date de prestation ne peut pas être dans le passé.");
-                                header('Location: index.php?page=order-menu&step=0');
-                                exit();
-                            }
+$dateSelectionnee = new \DateTime($datePrestation);
+$dateSelectionnee->setTime(0, 0, 0);
+
+
+if ($dateSelectionnee < $dateMinimale) {
+    error_message("La date de prestation doit être au minimum à J+" . $delaiCommande . ".");
+    header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
+    exit();
+}
                         } catch (\Exception $e) {
                             error_message("Format de date invalide.");
                             header('Location: index.php?page=order-menu&step=0');
@@ -151,33 +165,26 @@ class OrderMenuController
                     );
 
                     // 4. Récupération de la quantité choisie par l'utilisateur
-                    $quantite = (int)($_POST['nombre_personne'] ?? 0);
-                    error_log("--- DEBUG ---");
-                    error_log("Quantité reçue via POST: " . $quantite);
-                    error_log("Minimum requis via getter: " . $menu->getMinimumRequis());
-                    if ($menu->estQuantiteValide($quantite)) {
-                        $_SESSION['current_order']['menu'] = [
-                            'menu_id' => $menu->menu_id,
-                            'titre' => $menu->titre,
-                            'prix_unitaire' => $menu->prix_par_personne,
-                            'quantite' => $quantite
-                        ];
-                        $quantite = (int)$_POST['nombre_personne'];
-                        // Calcul du prix total avec la logique métier du menu
-                        $prixMenuTotal = $menu->calculerPrix($quantite);
+      $quantite = (int)($_POST['nombre_personne'] ?? 0);
 
-                        $_SESSION['current_order']['menu']['prix_menu_total'] = $prixMenuTotal;
+if ($menu->estQuantiteValide($quantite)) {
+    $_SESSION['current_order']['menu'] = [
+        'menu_id' => $menu->menu_id,
+        'titre' => $menu->titre,
+        'prix_unitaire' => $menu->prix_par_personne,
+        'quantite' => $quantite
+    ];
 
-                        if (!empty($menuID)) {
-                            session_write_close();
-                            header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=2');
-                            exit();
-                        } else {
-                            error_log("Erreur : Tentative de redirection vers étape 2 sans menuID.");
-                            header('Location: index.php?page=home');
-                            exit();
-                        }
-                    }
+    $prixMenuTotal = $menu->calculerPrix($quantite);
+    $_SESSION['current_order']['menu']['prix_menu_total'] = $prixMenuTotal;
+
+    header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=2');
+    exit();
+} else {
+    error_message("Minimum requis: " . $menu->getMinimumRequis());
+    header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=1');
+    exit();
+}
                     break;
 
                 case 2:
@@ -199,7 +206,7 @@ class OrderMenuController
 
                         // 2. Mise à jour de la session uniquement après validation
                         $_SESSION['current_order']['prestation']['location_materiel'] = $needRental;
-                        $_SESSION['current_order']['prestation']['depot_garantie'] = $needRental ? 600.00 : 0.00;
+                        $_SESSION['current_order']['prestation']['depot_garantie'] = $needRental ? DEPOT_GARANTIE_MATERIEL : 0.00;
 
                         // 3. Redirection
                         header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=3');
@@ -209,9 +216,9 @@ class OrderMenuController
 
                 case 3:
                    
-                    // Une vue détaillée du prix visible avant validation (prix menu ainsi que le prix de la livraison).
+                  
 
-                    break;
+                    
                 case 4:
 
 
@@ -243,25 +250,44 @@ class OrderMenuController
     $menuData = $_SESSION['current_order']['menu'];
     $totalCommande = $_SESSION['current_order']['total_final'];
 
-    // 4. PAIEMENT / ENREGISTREMENT AVEC GESTION D'ERREURS
-    try {
-        if (OrderManager::createOrderFromData($db, $user, $menuData, $prestation, $totalCommande)) {
-            unset($_SESSION['current_order']);
-            header('Location: index.php?page=order-success');
-            exit();
+ // 4. PAIEMENT / ENREGISTREMENT AVEC GESTION D'ERREURS
+try {
+    if (OrderManager::createOrderFromData($db, $user, $menuData, $prestation, $totalCommande)) {
+        
+        // On tente d'envoyer l'email, mais on ne bloque pas la redirection si ça échoue
+        try {
+            $orderDetails = [
+                'nom' => $user->nom,
+    'prenom' => $user->prenom,
+    'menu'   => $menuData['titre'] ?? 'Menu inconnu',
+    'quantite' => $menuData['quantite'] ?? 0,
+    'prix_total' => $totalCommande,
+    'date_prestation' => $prestation['date_prestation'] ?? 'Non défini',
+    'heure_livraison' => $prestation['heure_livraison'] ?? 'Non défini',
+    'lieu' => $prestation['lieu']['ville'] ?? 'Non défini',
+];
+
+// Appelle la fonction avec le tableau
+MailService::sendOrderConfirmationEmail($user->email, $orderDetails);
+        } catch (\Exception $mailError) {
+            // On log l'erreur mail sans arrêter le processus
+            error_log("Erreur envoi email confirmation : " . $mailError->getMessage());
         }
-    } catch (\Exception $e) {
-        //  message "Stock insuffisant"
-        error_log("Echec création commande pour user " . $user->user_id . ": " . $e->getMessage());
-        
-        // On affiche le message réel à l'utilisateur
-        error_message($e->getMessage()); 
-        
-        // Redirection vers l'étape précédente avec l'erreur
-        header('Location: index.php?page=order-menu&step=4&error=' . urlencode($e->getMessage()));
+
+        // On nettoie la session et on redirige
+        unset($_SESSION['current_order']);
+        header('Location: index.php?page=order-success');
         exit();
     }
-    break;
+} catch (\Exception $e) {
+    // Erreur lors de la création de la commande (ex: stock insuffisant)
+    error_log("Echec création commande pour user " . $user->user_id . ": " . $e->getMessage());
+    
+    error_message($e->getMessage()); 
+    header('Location: index.php?page=order-menu&step=4&error=' . urlencode($e->getMessage()));
+    exit();
+}
+break;
             } // Fin du switch
         } // Fin du if(POST)
 
@@ -300,6 +326,11 @@ class OrderMenuController
         }
 
         // 2. PRÉPARATION DES VARIABLES POUR LA VUE
+   
+         if (!empty($orderData['menu']['quantite']) && $menu !== null) {
+            $Discount = $menu->hasDiscount((int)$orderData['menu']['quantite']);
+        }
+        
         $data = [
             'step' => (int)($_GET['step'] ?? 0),
             'menuID' => $menuID,
@@ -307,7 +338,8 @@ class OrderMenuController
             'menuInfo' => $menuInfo,
             'db' => $db,
             'total_general' => $total_general,
-            'order' => $orderData
+            'order' => $orderData,
+            'hasDiscount' => $Discount
         ];
 
         $step = $data['step'];
@@ -317,6 +349,7 @@ class OrderMenuController
         $db = $data['db'];
         $total_general = $data['total_general'];
         $order = $data['order'];
+        $Discount = $data['hasDiscount'];
 
         /** @var int $step */
         /** @var int $menuID */
@@ -325,6 +358,7 @@ class OrderMenuController
         /** @var \PDO $db */
         /** @var float $total_general */
         /** @var array $order */
+        /** @var bool $Discount */
 
         // 3. AFFICHAGE
         $specific_scripts = ["assets/javascript/orderMenu.js"];
@@ -366,6 +400,7 @@ class OrderMenuController
         // 1. On nettoie la session
         unset($_SESSION['current_order']);
         // Ajoute ici tes autres 'unset' si nécessaire (ex: $_SESSION['step'])
+                    
 
         // 2. On redirige
         header('Location: index.php?page=search');

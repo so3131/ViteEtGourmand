@@ -4,6 +4,21 @@
 /** @var string $nom */
 /** @var string $prenom */
 ?>
+<?php
+$delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
+$dateMinimale = null;
+
+if ($delaiCommande > 0) {
+    $dateMinimale = (new DateTime('today'))->modify('+' . $delaiCommande . ' days')->format('Y-m-d');
+}
+?>
+<?php if (!empty($_SESSION['flash_error'])): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= htmlspecialchars($_SESSION['flash_error']) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <?php unset($_SESSION['flash_error']); ?>
+<?php endif; ?>
 <div class="container mt-4">
     <h1 class="mb-4">Informations de livraison</h1>
     <h2>Vous avez choisis le menu : <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?></h2>
@@ -42,7 +57,14 @@
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Date de prestation</label>
                     <input type="date" name="date_prestation" class="form-control" required
+                        min="<?= htmlspecialchars($dateMinimale ?? '') ?>"
                         value="<?= $_SESSION['current_order']['prestation']['date_prestation'] ?? '' ?>">
+                    <?php if ($dateMinimale): ?>
+                        <small class="text-muted d-block mt-1">
+                            Date minimale autorisée : <?= htmlspecialchars(date('d/m/Y', strtotime($dateMinimale))) ?>
+                            (<?= $delaiCommande ?> jour<?= $delaiCommande > 1 ? 's' : '' ?> après la commande)
+                        </small>
+                    <?php endif; ?>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Heure de livraison</label>
@@ -71,12 +93,12 @@
                         <?php endforeach; ?>
                     </select>
                     <div class="mb-3 p-3 bg-light border rounded">
-    <strong>Frais de livraison estimés : </strong>
-    <span id="affichage_frais">0.00</span> €
-    <small class="text-muted d-block mt-1">
-        (Calculé automatiquement selon la distance de votre ville par rapport à Bordeaux)
-    </small>
-</div>
+                        <strong>Frais de livraison estimés : </strong>
+                        <span id="affichage_frais"><?= htmlspecialchars(number_format((float)($_SESSION['current_order']['prestation']['frais_livraison'] ?? 0), 2, '.', '')) ?></span> €
+                        <small class="text-muted d-block mt-1">
+                            (Calculé automatiquement selon la distance de votre ville par rapport à Bordeaux)
+                        </small>
+                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -87,6 +109,7 @@
                 </div>
 
                 <div class="d-flex justify-content-end mt-3">
+                    <a href="index.php?page=search" class="btn btn-secondary me-2">Annuler</a>
                     <button type="submit" class="btn btn-primary">Valider et choisir la quantité</button>
                 </div>
             </div>

@@ -108,7 +108,8 @@ class MenuManager
 public static function getById(\PDO $db, int $menuID): ?array {
     $sql = "SELECT vg_menu.*, 
                    vg_theme.libelle as theme_libelle, 
-                   vg_regime.libelle as regime_libelle 
+                   vg_regime.libelle as regime_libelle,
+               delai_commande
             FROM vg_menu 
             LEFT JOIN vg_theme ON vg_menu.theme_id = vg_theme.theme_id
             LEFT JOIN vg_regime ON vg_menu.regime_id = vg_regime.regime_id

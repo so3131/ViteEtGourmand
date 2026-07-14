@@ -21,15 +21,15 @@ public static function userDashboard(\PDO $db)
     $ordersData = OrderManager::getOrdersByUser($db, $userId);
     $viewData = [
     'ordersData' => $ordersData,
-    'title' => "Mon Tableau de bord - EcoRide"
+    'title' => "Mon Tableau de bord - Vite et Gourmand"
 ];
 extract($viewData);
     
 
     // 3. Préparation des assets (Configuration vue)
-    $title = "Mon Tableau de bord - EcoRide";
+    $title = "Mon Tableau de bord - Vite et Gourmand";
     $specific_styles = ["assets/css/styleGestion.css", "assets/css/MQGestion.css"];
-    $specific_scripts = ["assets/javascript/DashboardUser.js"];
+     $specific_scripts = ["assets/javascript/DashboardUser.js"];
 
     // 4. Affichage
     require_once ROOT_PATH . '/app/views/layout/header.php';
