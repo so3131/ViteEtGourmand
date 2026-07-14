@@ -1,0 +1,20 @@
+.carousel-item img {
+    width: 100%;       /* L'image prend toute la largeur de la boîte */
+    height: 400px;     /* Tu fixes une hauteur précise pour ton carrousel */
+    object-fit: cover; /* L'image est "rognée" intelligemment pour remplir la boîte sans être étirée */
+    object-position: center; /* Centre l'image si elle est rognée */
+}
+.card {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Force l'image à ne pas dépasser la carte */
+.card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* S'assure que le container principal ne déborde jamais */

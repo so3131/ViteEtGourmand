@@ -1,28 +1,22 @@
 <?php
-// StatsAdminController
-
-require_once dirname(__DIR__, 2) . '/config/Constants.php';
-require_once __DIR__ . '/../authController/Auth.php';
-
+namespace App\Controllers\AdminController;
+require_once dirname(__DIR__, 2) . '/config/constants.php';
 use App\Controllers\AuthController\Auth;
 
+// fonction qu'on appelle pour afficher la page depuis l'index.php
 class StatsAdminController
 {
-    public static function adminStats(PDO $db)
-    {
-        Auth::check([ROLE_ADMIN]);
+public static function adminStats(\PDO $db)
+{
+    $pdo = $db;
+    $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-        // Récupérer les stats
-        $statsQuery = "SELECT COUNT(*) as total_commandes FROM vg_commande";
-        $stmt = $db->prepare($statsQuery);
-        $stmt->execute();
-        $stats = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Sécurité : On vérifie si l'utilisateur est bien ADMIN grâce à la constante globale
+    Auth::check([ROLE_ADMIN]);
+    $title = "Statistiques - EcoRide";
 
-        $title = "Statistiques - Admin";
-        $specific_styles = ["assets/css/admin-stats.css"];
-
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/admin/stats.admin.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
-    }
+     require_once ROOT_PATH . '/app/views/layout/admin_header.php';
+    require_once ROOT_PATH . '/app/views/admin/stats.admin.view.php';
+    require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
+}
 }

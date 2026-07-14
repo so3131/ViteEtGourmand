@@ -1,0 +1,27 @@
+body {
+    /* Ajoute un filtre sombre sur l'image pour que le texte blanc soit lisible */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('../images/photo7.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* L'image reste fixe lors du scroll */
+    min-height: 100vh;
+    color: #ffffff; /* Texte blanc pour contraster avec le fond sombre */
+}
+.section,
+.hero-section{
+    /* Ajoute un filtre sombre sur l'image pour que le texte soit lisible */background-color: rgba(255, 255, 255, 0.5); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    border-radius: 30px;
+}
+.hero-img {
+    max-width: 80%; /* L'image occupera au maximum 80% de la largeur de sa colonne */
+    height: auto;
+    display: block;
+    margin: 0 auto; /* Centre l'image horizontalement */
+    
+}

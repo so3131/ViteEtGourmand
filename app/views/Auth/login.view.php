@@ -1,34 +1,49 @@
 <?php
-// Vue de connexion
-?>
-<div class="container my-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h1 class="card-title text-center mb-4">Connexion</h1>
+// Inclusion du fichier de configuration pour les constantes et du helper pour les formulaires
+require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once ROOT_PATH . '/app/helpers/FormHelper.php'; ?>
 
-                    <?php if ($error): ?>
-                        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-                    <?php endif; ?>
+<main class="d-flex align-items-center min-vh-75 mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 bg-white p-4 shadow-sm rounded">
+                
+                <h2 class="text-center mb-4">Connexion</h2>
 
-                    <form method="POST">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                <?php if (!empty($error)): ?>
+                    <div class="alert alert-danger py-2 mb-3">
+                        <i class="fa-solid fa-circle-exclamation"></i> <?= htmlspecialchars($error) ?>
+                    </div>
+                <?php endif; ?>
+
+                <form method="POST" action="index.php?page=login">
+                    <?php 
+                    // Champs compacts
+                    render_standard_field('email', 'Email', 'email', 'email@exemple.com', $_POST['email'] ?? '', 'error_email');
+                    render_standard_field('password', 'Mot de passe', 'password', '••••••••', '', 'error_password');
+                    ?>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3 small">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="gridCheck1" name="rememberMe">
+                            <label class="form-check-label" for="gridCheck1">Se souvenir de moi</label>
                         </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Mot de passe</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Se connecter</button>
-                    </form>
+                        <a href="?page=password-forgotten">Oublié ?</a>
+                    </div>
 
-                    <p class="text-center mt-3">
-                        Pas de compte? <a href="?page=signin">S'inscrire</a>
-                    </p>
-                </div>
+                    <button type="submit" class="btn btn-primary w-100 mb-3">Connexion</button>
+                    <div class="text-center mt-3">
+        <a href="index.php?page=forgot-password" class="text-decoration-none small">Mot de passe oublié ?</a>
+    </div>
+
+                    <div class="text-center small">
+                       Pas encore de compte ? 
+    <a href="index.php?page=signin&redirect=<?= urlencode($_GET['redirect'] ?? '') ?>">
+        Créer un compte
+    </a>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</div>
+</main>
