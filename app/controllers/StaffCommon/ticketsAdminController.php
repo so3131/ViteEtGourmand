@@ -1,5 +1,5 @@
 <?php
-namespace App\Controllers\AdminController;
+namespace App\Controllers\StaffCommon;
 // require_once dirname(__DIR__, 2) . '/config/constants.php';
 // use App\Controllers\AuthController\Auth;
 // // app/controllers/AdminTicketController.php
@@ -8,8 +8,7 @@ namespace App\Controllers\AdminController;
 // public static function adminTickets(\PDO $db)
 // {
 //     // Sécurité d'accès
-//     Auth::check([ROLE_ADMIN]);
-
+//  Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
 //     $title = "Gestion des tickets - EcoRide";
 //     $listeTickets = [];
 

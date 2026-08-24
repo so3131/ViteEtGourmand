@@ -13,9 +13,10 @@ class MenuController
 
         try {
             if (!empty($nomMenu)) {
-                $menus = MenuManager::get($db, null, ['titre' => $nomMenu]);
+                $menus = MenuManager::get($db, null, ['titre' => $nomMenu],
+        true);
             } else {
-                $menus = MenuManager::get($db);
+                $menus = MenuManager::get($db, null, [], true);
             }
         } catch (\PDOException $e) {
             error_log("Erreur lors de la recherche du menu : " . $e->getMessage());
@@ -50,7 +51,7 @@ class MenuController
         error_log("DEBUG: Filters = " . json_encode($filters));
 
 
-        $menus = MenuManager::get($db, null, $filters, true, false);
+        $menus = MenuManager::get($db, null, $filters, true);
 
         error_log("DEBUG: Menus retournés = " . print_r($menus, true));
 
@@ -59,6 +60,8 @@ class MenuController
         $json = json_encode($menus);
         error_log("JSON error: " . json_last_error_msg());
         error_log("JSON result length: " . strlen($json));
+        error_log("PHOTO DEBUG = " . print_r($menus[0]['plats_structures'] ?? null, true));
+
         echo $json;
         exit;
     }

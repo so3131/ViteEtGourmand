@@ -135,4 +135,38 @@ public static function getOrdersByUser(\PDO $db, int $userId)
     }
 
 
+ 
+public static function getAllOrders(\PDO $db, $filters = []) {
+    // 1. Initialisation de la requête de base avec les JOIN
+    $sql = "SELECT c.*, u.nom as client_nom, m.titre as menu_titre, 
+                   l.adresse as adresse_prestation, l.ville as ville_prestation, DATE_ADD(date_prestation, INTERVAL 10 DAY) AS date_limite_restitution
+            FROM vg_commande c 
+            JOIN vg_utilisateur u ON c.utilisateur_id = u.utilisateur_id 
+            JOIN vg_menu m ON c.menu_id = m.menu_id 
+            JOIN vg_lieu_prestation l ON c.lieu_prestation_id = l.id 
+            WHERE 1=1";
+
+    $params = [];
+
+    // 2. Ajout dynamique des filtres
+    if (!empty($filters['client_nom'])) {
+        $sql .= " AND u.nom LIKE :client_nom";
+        $params[':client_nom'] = '%' . $filters['client_nom'] . '%';
+    }
+
+    if (!empty($filters['status'])) {
+        $sql .= " AND c.statut = :status";
+        $params[':status'] = $filters['status'];
+    }
+
+    // 3. Tri
+    $sql .= " ORDER BY c.date_commande DESC";
+
+    // 4. Préparation et exécution
+    $stmt = $db->prepare($sql);
+    $stmt->execute($params);
+
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 }
+    }
+

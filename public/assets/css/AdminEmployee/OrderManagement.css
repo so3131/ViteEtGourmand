@@ -1,0 +1,36 @@
+#ordersTable thead th {
+    cursor: pointer !important;
+}
+#menusTable thead th {
+    cursor: pointer !important;
+}
+#ordersTable tbody tr {
+    display: table-row !important;
+    visibility: visible !important;
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+
+/* Force la visibilité des cellules */
+#ordersTable tbody td {
+    display: table-cell !important;
+    color: #333333 !important; /* Force la couleur du texte en sombre */
+    padding: 10px !important;
+    vertical-align: middle !important;
+}
+
+/* S'assure que le header du tableau est visible */
+#ordersTable thead tr {
+    display: table-row !important;
+    background-color: #f8f9fa !important;
+}
+/* Règle de priorité haute : cache les modales par défaut */
+.modal {
+    display: none !important;
+}
+
+/* Surcharge Bootstrap pour s'assurer que .show les affiche */
+.modal.show {
+    display: block !important;
+    background-color: rgba(0, 0, 0, 0.5);
+}

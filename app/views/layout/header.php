@@ -83,11 +83,15 @@ if ($current_page === '' || $current_page === '/') {
                                     <li class="text-center p-2">
                                         <img src="assets/images/pictureprofil2.png" class="rounded-circle" style="width: 50px;">
                                     </li>
-                                    <?php if (isset($_SESSION['role_id']) && $_SESSION['role_id'] === ROLE_ADMIN): ?>
+                                    <?php if (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_ADMIN): ?>
                                         <li><a class="dropdown-item" href="?page=dashboard-admin">Gestion Admin</a></li>
-                                    <?php endif; ?>
 
-                                    <li><a class="dropdown-item <?php echo ($current_page === 'dashboard-user') ? 'active' : ''; ?>" href="?page=dashboard-user">Gérer mon compte</a></li>
+                                    <?php elseif (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_EMPLOYE): ?>
+                                        <li><a class="dropdown-item" href="?page=dashboard-employee">Gestion Employé</a></li>
+
+                                    <?php else: ?>
+                                        <li><a class="dropdown-item <?php echo ($current_page === 'dashboard-user') ? 'active' : ''; ?>" href="?page=dashboard-user">Gérer mon compte</a></li>
+                                    <?php endif; ?>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -103,8 +107,5 @@ if ($current_page === '' || $current_page === '/') {
                 </div>
             </div>
         </nav>
-
-
-        <?php if (isset($header_variant) &&  $header_variant): include __DIR__ . '/search_banner.php'; ?> <?php endif; ?>
 
     </header>

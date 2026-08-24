@@ -9,7 +9,8 @@ class SecurityManager {
     array $pagesQuiExistent, 
     array $pagesAdmin, 
     array $pagesEmployee, 
-    array $pagesUser
+    array $pagesUser,
+    array $pagesStaff
 ): string {
         
         // Étape A : La page n'existe pas -> 404 direct
@@ -24,21 +25,28 @@ class SecurityManager {
         }
         
         // Étape C : L'utilisateur EST connecté, contrôle des rôles
-        if ($role_id !== null) {
+     if ($role_id !== null) {
             $role = (int)$role_id;
 
             if (in_array($page, $pagesAdmin) && $role !== \ROLE_ADMIN) {
-    return '404';
-} 
-if (in_array($page, $pagesEmployee) && $role !== \ROLE_EMPLOYE && $role !== \ROLE_ADMIN) {
-    return '404';
-} 
-if (in_array($page, $pagesUser)) {
-    // Si tu es un utilisateur, tu dois avoir l'un de ces rôles
-    if ($role !== \ROLE_USER && $role !== \ROLE_ADMIN && $role !== \ROLE_EMPLOYE) {
-        return '404';
-    }
-}
+                return '404';
+            } 
+            
+            if (in_array($page, $pagesEmployee) && $role !== \ROLE_EMPLOYE && $role !== \ROLE_ADMIN) {
+                return '404';
+            } 
+            
+            // ---> Placé ici au bon niveau (de manière indépendante) <---
+            if (in_array($page, $pagesStaff) && $role !== \ROLE_ADMIN && $role !== \ROLE_EMPLOYE) {
+                return '404';
+            }
+
+            if (in_array($page, $pagesUser)) {
+                // Si tu es un utilisateur, tu dois avoir l'un de ces rôles
+                if ($role !== \ROLE_USER && $role !== \ROLE_ADMIN && $role !== \ROLE_EMPLOYE) {
+                    return '404';
+                }
+            }
         }
        
         return $page;

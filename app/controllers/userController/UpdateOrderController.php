@@ -10,6 +10,7 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
 use App\Managers\MenuManager;
 use App\Managers\OrderManager;
 use App\models\Menu;
+use App\Config\constants;
 
 use App\Controllers\AuthController\Auth;
 
@@ -81,8 +82,8 @@ $dateSelectionnee->setTime(0, 0, 0);
                     (string)$menuData['description_menu'],
                     (float)$menuData['prix_par_personne'],
                     (int)$menuData['quantite_restante'],
-                    (int)$menuData['theme_id'],
-                    (int)$menuData['regime_id'],
+                    !empty($menuData['theme_id']) ? (int)$menuData['theme_id'] : null,
+!empty($menuData['regime_id']) ? (int)$menuData['regime_id'] : null,
                     $menuData['theme_libelle'] ?? '',
                     $menuData['regime_libelle'] ?? ''
                 );
@@ -201,8 +202,15 @@ $dateSelectionnee->setTime(0, 0, 0);
         // 1. Récupérer la commande
         $stmt = $db->prepare("SELECT * FROM vg_commande WHERE commande_id = :id");
         $stmt->execute(['id' => $commande_id]);
-        $commande = $stmt->fetch();
+        $commande = $stmt->fetch(\PDO::FETCH_ASSOC);
+if (!$commande) {
+        throw new \Exception("Commande introuvable.");
+    }
 
+    $menuData = MenuManager::getById($db, (int)$commande['menu_id']);
+    if (!$menuData) {
+        throw new \Exception("Menu introuvable.");
+    }
         // 2. Récupérer les lieux pour le select
         $lieux = $db->query("SELECT * FROM vg_lieu_prestation")->fetchAll();
         // 3. Afficher la vue

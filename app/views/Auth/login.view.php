@@ -28,7 +28,7 @@ require_once ROOT_PATH . '/app/helpers/FormHelper.php'; ?>
                             <input class="form-check-input" type="checkbox" id="gridCheck1" name="rememberMe">
                             <label class="form-check-label" for="gridCheck1">Se souvenir de moi</label>
                         </div>
-                        <a href="?page=password-forgotten">Oublié ?</a>
+                        <a href="index.php?page=forgot-password">Oublié ?</a>
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mb-3">Connexion</button>

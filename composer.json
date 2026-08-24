@@ -1,0 +1,17 @@
+{
+    "name": "sofie/projet_vite_gourmand_finale",
+    "autoload": {
+        "psr-4": {
+            "Sofie\\ProjetViteGourmandFinale\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "so3131",
+            "email": "224105980+so3131@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "mongodb/mongodb": "^2.4"
+    }
+}

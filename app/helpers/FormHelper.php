@@ -2,7 +2,7 @@
  
 /* 
 * Genere un champ de formulaire standardisé pour l'application */  
-function render_form_input(string $name, string $label, string $type = 'text', string $placeholder = '', string $value = '')
+function render_form_input(string $name, string $label, string $type = 'text', string $placeholder = '', string $value = '', string $autocomplete = 'off')
 {
 ?>
     <div class="mb-3">
@@ -13,6 +13,7 @@ function render_form_input(string $name, string $label, string $type = 'text', s
             name="<?= $name ?>"
             value="<?= htmlspecialchars($value) ?>"
             placeholder="<?= htmlspecialchars($placeholder) ?>"
+            autocomplete="<?= htmlspecialchars($autocomplete) ?>"
             required>
     </div>
 <?php

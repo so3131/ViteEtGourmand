@@ -19,38 +19,40 @@
     <div class="row">
         <div class="row">
             <div class="col-md-4">
-                <div id="menuCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                        <?php foreach ($plats as $index => $plat): ?>
-                            <button type="button" data-bs-target="#menuCarousel"
-                                data-bs-slide-to="<?= $index ?>"
-                                class="<?= $index === 0 ? 'active' : '' ?>">
-                            </button>
-                        <?php endforeach; ?>
-                    </div>
+    <div id="menuCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <?php foreach ($plats as $index => $plat): ?>
+                <button type="button" data-bs-target="#menuCarousel"
+                    data-bs-slide-to="<?= $index ?>"
+                    class="<?= $index === 0 ? 'active' : '' ?>">
+                </button>
+            <?php endforeach; ?>
+        </div>
 
-                    <div class="carousel-inner">
-                        <?php foreach ($plats as $index => $plat): ?>
-                            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                                <img src="render_image.php?id=<?php echo $plat['plat_id']; ?>"
-                                    class="d-block w-100"
-                                    alt="<?= htmlspecialchars($plat['titre_plat'] ?? 'Plat sans nom') ?>">
-                                <div class="carousel-caption">
-                                    <h5><?= htmlspecialchars($plat['titre_plat']) ?></h5>
-                                    <p><?= htmlspecialchars($plat['description_plat']) ?></p>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+        <div class="carousel-inner">
+            <?php foreach ($plats as $index => $plat): ?>
+                <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                    <img src="<?= !empty($plat['photo']) ? htmlspecialchars($plat['photo']) : 'assets/img/plats/default.webp' ?>"
+                        class="d-block w-100 rounded"
+                        style="height: 300px; object-fit: cover;"
+                        alt="<?= htmlspecialchars($plat['titre_plat'] ?? 'Plat sans nom') ?>">
+                    
+                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
+                        <h5><?= htmlspecialchars($plat['titre_plat']) ?></h5>
+                        <p class="m-0"><?= htmlspecialchars($plat['description_plat']) ?></p>
                     </div>
-
-                    <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </button>
                 </div>
-            </div>
+            <?php endforeach; ?>
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+</div>
 
             <div class="col-md-4">
                 <h1 class="fw-bold"><?= htmlspecialchars($menu['titre']) ?></h1>

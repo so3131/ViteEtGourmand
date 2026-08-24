@@ -1,0 +1,184 @@
+:root {
+    /* ===== COULEURS PRINCIPALES ===== */
+    --color-primary: #2ecc71;
+    --color-primary-dark: #27ae60;
+    --color-primary-light: #58d68d;
+
+    --color-warning: #f39c12;
+    --color-success: #27ae60;
+    --color-danger: #e74c3c;
+    --color-info: #3498db;
+
+    /* ===== COULEURS NEUTRES ===== */
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-gray-light: #ecf0f1;
+    --color-gray: #95a5a6;
+    --color-gray-dark: #7f8c8d;
+    --color-dark: #2c3e50;
+    --color-border: #bdc3c7;
+    --color-background: #f8f9fa;
+
+    /* ===== COULEURS TEXTE ===== */
+    --color-text: #2c3e50;
+    --color-text-light: #7f8c8d;
+    --color-text-lighter: #95a5a6;
+
+    /* ===== COULEURS SPÉCIFIQUES  ===== */
+    --color-eco-badge: #27ae60;
+    --color-eco-text: #ffffff;
+
+    /* ===== ESPACEMENTS ===== */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 2.5rem;
+    --spacing-3xl: 3rem;
+    --spacing-4xl: 4rem;
+
+    /* ===== TYPOGRAPHIE ===== */
+    --font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-family-fallback: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --font-size-5xl: 3rem;
+
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    /* ===== OMBRES ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2);
+
+    /* ===== RAYONS DE BORDURE ===== */
+    --border-radius-sm: 0.25rem;
+    --border-radius-md: 0.5rem;
+    --border-radius-lg: 1rem;
+    --border-radius-xl: 1.5rem;
+    --border-radius-full: 9999px;
+
+    /* ===== TRANSITIONS ===== */
+    --transition-fast: 150ms ease;
+    --transition-base: 300ms ease;
+    --transition-slow: 500ms ease;
+
+    /* ===== HAUTEURS & LARGEURS ===== */
+    --height-input: 2.5rem;
+    --height-button: 2.5rem;
+    --height-navbar: 3.5rem;
+    --max-width-container: 1200px;
+
+    /* ===== BREAKPOINTS MEDIA QUERIES ===== */
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+
+    /* ===== ESPACEMENTS SPÉCIFIQUES MEDIA QUERIES ===== */
+    --spacing-mq-xs: 1rem;
+    --spacing-mq-sm: 2rem;
+    --spacing-mq-md: 5%;
+    --spacing-mq-lg: 60vh;
+    --spacing-mq-xl: 120px;
+
+    /* ===== HAUTEURS SPÉCIFIQUES MEDIA QUERIES ===== */
+    --height-mq-banner-md: 60vh;
+    --height-mq-banner-responsive: auto;
+    --height-mq-banner-min: 60vh;
+    --height-mq-image-responsive: 60vh;
+    --height-mq-image-mobile: 50%;
+
+    /* ===== TYPOGRAPHIE SPÉCIFIQUE MEDIA QUERIES ===== */
+    --font-size-mq-tablet: 18px;
+
+    /* ===== COULEUR TEAL PRIMAIRE (utilisée par multiple composants) ===== */
+    /* 🔗 NOTE: Partagée par styleCredit, styleContact, styleAccueil */
+    --color-teal-primary: rgba(131, 181, 175, 1);
+    /* Alias pour compatibilité (voir styleAccueil) */
+    --color-teal-hover: var(--color-accueil-primary-hover);
+    --color-teal-light: var(--color-accueil-primary-light);
+
+    /* ===== COMPOSANT STYLECRDIT ===== */
+    /* 🔗 NOTE: Utilise aussi --color-white, --color-black, --color-border */
+    /* ✅ ANCIEN: --color-credit-primary utilise maintenant --color-teal-primary */
+    --color-credit-text: #86939e;
+    --color-credit-button: #7dc1df;
+    --card-width: 360px;
+    --card-height: 400px;
+    --input-height: 40px;
+
+    /* ===== COMPOSANT STYLECONTACT ===== */
+    /* 🔗 NOTE: Partage --color-teal-primary avec styleAccueil */
+    /* ✅ ANCIEN: --color-contact-primary utilise maintenant --color-teal-primary */
+    --color-contact-text: #014e79;
+    --color-contact-text-dark: rgb(50, 66, 61);
+    --color-contact-button: cornflowerblue;
+    --color-contact-button-hover: #014e79;
+
+    /* ===== ESPACEMENTS SPÉCIFIQUES STYLECONTACT ===== */
+    --spacing-contact-xs: 0.2%;
+    --spacing-contact-sm: 0.7em;
+    --spacing-contact-lg: 2%;
+    --spacing-contact-xl: 5%;
+
+    /* ===== RAYONS DE BORDURE SPÉCIFIQUES STYLECONTACT ===== */
+    --border-contact-sm: 3px;
+    --border-contact-md: 5px;
+    --border-contact-lg: 10px;
+    --border-contact-width: 1px;
+    --border-contact-width-lg: 2px;
+
+    /* ===== TYPOGRAPHIE SPÉCIFIQUE STYLECONTACT ===== */
+    --text-contact-base: 1em;
+    --text-contact-sm: 0.8em;
+    --text-contact-lg: 1.1em;
+    --text-contact-xl: 24px;
+
+    /* ===== TRANSITIONS SPÉCIFIQUE STYLECONTACT ===== */
+    --transition-contact: 0.5s;
+
+    /* ===== COMPOSANT STYLEACCUEIL ===== */
+    /*  NOTE: Partage --color-teal-primary avec styleContact */
+    --color-accueil-primary-hover: rgba(111, 161, 155, 1);
+    --color-accueil-primary-light: rgba(131, 181, 175, 0.1);
+    --color-accueil-text-primary: #2c3e50;
+    --color-accueil-text-secondary: #455a64;
+    --color-accueil-heading-primary: #1a237e;
+    --color-accueil-heading-secondary: #283593;
+    --color-accueil-heading-tertiary: #303f9f;
+
+    /* ===== TYPOGRAPHIE SPÉCIFIQUE STYLEACCUEIL ===== */
+    --font-size-h1-accueil: 2.5rem;
+    --font-size-h2-accueil: 2rem;
+    --font-size-h3-accueil: 1.5rem;
+    --font-size-lead: 1.25rem;
+
+    /* ===== OMBRES SPÉCIFIQUES STYLEACCUEIL ===== */
+    --shadow-sm-accueil: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-md-accueil: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg-accueil: 0 15px 30px rgba(0, 0, 0, 0.1);
+    --shadow-xl-accueil: 0 20px 40px rgba(0, 0, 0, 0.15);
+    --shadow-button-accueil: 0 4px 15px rgba(131, 181, 175, 0.3);
+    --shadow-button-hover-accueil: 0 6px 20px rgba(131, 181, 175, 0.4);
+
+    /* ===== RAYONS DE BORDURE SPÉCIFIQUES STYLEACCUEIL ===== */
+    --border-radius-lg-accueil: 50px;
+    --border-radius-xl-accueil: 200px;
+    --border-radius-xxl-accueil: 400px;
+
+    /* ===== TRANSITIONS SPÉCIFIQUES STYLEACCUEIL ===== */
+    --transition-base-accueil: all 0.3s ease;
+}

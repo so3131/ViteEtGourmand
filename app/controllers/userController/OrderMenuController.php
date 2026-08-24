@@ -13,6 +13,7 @@ use App\Managers\LieuManager;
 use App\Models\Order;
 use App\Managers\OrderManager;
 use App\Helpers\MailService;
+use App\Managers\MongoStatsManager;
 
 
 class OrderMenuController
@@ -56,7 +57,7 @@ class OrderMenuController
             switch ($step) {
 
                 case 0:
-                                            $menu = MenuManager::getById($db, $menuID);
+                    $menu = MenuManager::getById($db, $menuID);
 
                     // 1. Gestion du POST de l'étape 0
                     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -75,26 +76,26 @@ class OrderMenuController
                         $lieuId = (int)($_POST['lieu_id'] ?? 0);
 
                         $lieu = LieuManager::getById($db, $lieuId);
-      $menuInfo = MenuManager::getById($db, $menuID);
+                        $menuInfo = MenuManager::getById($db, $menuID);
                         if (!$menuInfo) {
                             error_message("Menu introuvable.");
                             header('Location: index.php?page=home');
                             exit();
                         }
                         try {
-                          $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
-$dateMinimale = new \DateTime('today');
-$dateMinimale->modify('+' . $delaiCommande . ' days');
+                            $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
+                            $dateMinimale = new \DateTime('today');
+                            $dateMinimale->modify('+' . $delaiCommande . ' days');
 
-$dateSelectionnee = new \DateTime($datePrestation);
-$dateSelectionnee->setTime(0, 0, 0);
+                            $dateSelectionnee = new \DateTime($datePrestation);
+                            $dateSelectionnee->setTime(0, 0, 0);
 
 
-if ($dateSelectionnee < $dateMinimale) {
-    error_message("La date de prestation doit être au minimum à J+" . $delaiCommande . ".");
-    header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
-    exit();
-}
+                            if ($dateSelectionnee < $dateMinimale) {
+                                error_message("La date de prestation doit être au minimum à J+" . $delaiCommande . ".");
+                                header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
+                                exit();
+                            }
                         } catch (\Exception $e) {
                             error_message("Format de date invalide.");
                             header('Location: index.php?page=order-menu&step=0');
@@ -165,26 +166,26 @@ if ($dateSelectionnee < $dateMinimale) {
                     );
 
                     // 4. Récupération de la quantité choisie par l'utilisateur
-      $quantite = (int)($_POST['nombre_personne'] ?? 0);
+                    $quantite = (int)($_POST['nombre_personne'] ?? 0);
 
-if ($menu->estQuantiteValide($quantite)) {
-    $_SESSION['current_order']['menu'] = [
-        'menu_id' => $menu->menu_id,
-        'titre' => $menu->titre,
-        'prix_unitaire' => $menu->prix_par_personne,
-        'quantite' => $quantite
-    ];
+                    if ($menu->estQuantiteValide($quantite)) {
+                        $_SESSION['current_order']['menu'] = [
+                            'menu_id' => $menu->menu_id,
+                            'titre' => $menu->titre,
+                            'prix_unitaire' => $menu->prix_par_personne,
+                            'quantite' => $quantite
+                        ];
 
-    $prixMenuTotal = $menu->calculerPrix($quantite);
-    $_SESSION['current_order']['menu']['prix_menu_total'] = $prixMenuTotal;
+                        $prixMenuTotal = $menu->calculerPrix($quantite);
+                        $_SESSION['current_order']['menu']['prix_menu_total'] = $prixMenuTotal;
 
-    header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=2');
-    exit();
-} else {
-    error_message("Minimum requis: " . $menu->getMinimumRequis());
-    header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=1');
-    exit();
-}
+                        header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=2');
+                        exit();
+                    } else {
+                        error_message("Minimum requis: " . $menu->getMinimumRequis());
+                        header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=1');
+                        exit();
+                    }
                     break;
 
                 case 2:
@@ -215,10 +216,10 @@ if ($menu->estQuantiteValide($quantite)) {
                     break;
 
                 case 3:
-                   
-                  
 
-                    
+
+
+
                 case 4:
 
 
@@ -228,66 +229,108 @@ if ($menu->estQuantiteValide($quantite)) {
                 case 5:
 
                     if (!isset($_SESSION['current_order'])) {
-        header('Location: index.php?page=home');
-        exit();
-    }
+                        header('Location: index.php?page=home');
+                        exit();
+                    }
 
-    // 1. RECONSTRUCTION DE L'OBJET USER
-    $user = (object) [
-        'user_id'   => $_SESSION['user_id'] ?? null,
-        'nom'       => $_SESSION['nom'] ?? 'Inconnu',
-        'prenom'    => $_SESSION['prenom'] ?? 'Inconnu',
-        'email'     => $_SESSION['email'] ?? ''
-    ];
+                    // 1. RECONSTRUCTION DE L'OBJET USER
+                    $user = (object) [
+                        'user_id'   => $_SESSION['user_id'] ?? null,
+                        'nom'       => $_SESSION['nom'] ?? 'Inconnu',
+                        'prenom'    => $_SESSION['prenom'] ?? 'Inconnu',
+                        'email'     => $_SESSION['email'] ?? ''
+                    ];
 
-    if (!$user->user_id) {
-        error_message("Session utilisateur invalide.");
-        header('Location: index.php?page=login');
-        exit();
-    }
+                    if (!$user->user_id) {
+                        error_message("Session utilisateur invalide.");
+                        header('Location: index.php?page=login');
+                        exit();
+                    }
 
-    $prestation = $_SESSION['current_order']['prestation'];
-    $menuData = $_SESSION['current_order']['menu'];
-    $totalCommande = $_SESSION['current_order']['total_final'];
+                    $prestation = $_SESSION['current_order']['prestation'];
+                    $menuData = $_SESSION['current_order']['menu'];
+                    $totalCommande = $_SESSION['current_order']['total_final'];
 
- // 4. PAIEMENT / ENREGISTREMENT AVEC GESTION D'ERREURS
-try {
-    if (OrderManager::createOrderFromData($db, $user, $menuData, $prestation, $totalCommande)) {
-        
-        // On tente d'envoyer l'email, mais on ne bloque pas la redirection si ça échoue
-        try {
-            $orderDetails = [
-                'nom' => $user->nom,
-    'prenom' => $user->prenom,
-    'menu'   => $menuData['titre'] ?? 'Menu inconnu',
-    'quantite' => $menuData['quantite'] ?? 0,
-    'prix_total' => $totalCommande,
-    'date_prestation' => $prestation['date_prestation'] ?? 'Non défini',
-    'heure_livraison' => $prestation['heure_livraison'] ?? 'Non défini',
-    'lieu' => $prestation['lieu']['ville'] ?? 'Non défini',
-];
+                    // 4. PAIEMENT / ENREGISTREMENT AVEC GESTION D'ERREURS
+                    try {
+                        if (OrderManager::createOrderFromData($db, $user, $menuData, $prestation, $totalCommande)) {
 
-// Appelle la fonction avec le tableau
-MailService::sendOrderConfirmationEmail($user->email, $orderDetails);
-        } catch (\Exception $mailError) {
-            // On log l'erreur mail sans arrêter le processus
-            error_log("Erreur envoi email confirmation : " . $mailError->getMessage());
-        }
+                            // === AJOUT MONGODB : Synchronisation des stats / historique ===
 
-        // On nettoie la session et on redirige
-        unset($_SESSION['current_order']);
-        header('Location: index.php?page=order-success');
-        exit();
-    }
-} catch (\Exception $e) {
-    // Erreur lors de la création de la commande (ex: stock insuffisant)
-    error_log("Echec création commande pour user " . $user->user_id . ": " . $e->getMessage());
-    
-    error_message($e->getMessage()); 
-    header('Location: index.php?page=order-menu&step=4&error=' . urlencode($e->getMessage()));
-    exit();
-}
-break;
+                            // === AJOUT MONGODB : Synchronisation des stats / historique ===
+                            try {
+                                // 1. Récupération des données depuis la session
+                                $prixMenus = ($menuData['prix_unitaire'] ?? 0) * ($menuData['quantite'] ?? 0);
+                                $fraisLivraison = $prestation['frais_livraison'] ?? 0.00; 
+                                
+                                // Récupération de la caution gérée à l'étape 2
+                                $montantCaution = $prestation['depot_garantie'] ?? 0.00;
+
+                                // 2. Calculs automatiques
+                                $caReelEntreprise = $prixMenus + $fraisLivraison ;
+                                $montantTotalPaye = $caReelEntreprise + $montantCaution;
+
+                                // 3. Insertion propre dans MongoDB
+                                $mongoManager = new MongoStatsManager();
+                                $mongoManager->insertOrderHistory([
+                                    'id' => null,
+                                    'client_nom' => $user->nom . ' ' . $user->prenom,
+                                    'client_email' => $user->email,
+                                    'items' => [
+                                        [
+                                            'menu_id' => $menuData['menu_id'],
+                                            'titre' => $menuData['titre'] ?? 'Menu',
+                                            'quantite' => $menuData['quantite'] ?? 0,
+                                            'prix_unitaire' => $menuData['prix_unitaire'] ?? 0,
+                                            'sous_total' => $prixMenus
+                                        ]
+                                    ],
+                                    'montant_details' => [
+                                        'prix_menus' => $prixMenus,
+                                        'frais_livraison' => $fraisLivraison,
+                                                                             'depot_garantie_caution' => $montantCaution
+                                    ],
+                                    'ca_reel_entreprise' => $caReelEntreprise,
+                                    'montant_total_paye_par_client' => $montantTotalPaye
+                                ]);
+                            } catch (\Exception $mongoError) {
+                                error_log("Erreur synchro MongoDB : " . $mongoError->getMessage());
+                            }
+
+                            // On tente d'envoyer l'email, mais on ne bloque pas la redirection si ça échoue
+                            try {
+                                $orderDetails = [
+                                    'nom' => $user->nom,
+                                    'prenom' => $user->prenom,
+                                    'menu'   => $menuData['titre'] ?? 'Menu inconnu',
+                                    'quantite' => $menuData['quantite'] ?? 0,
+                                    'prix_total' => $totalCommande,
+                                    'date_prestation' => $prestation['date_prestation'] ?? 'Non défini',
+                                    'heure_livraison' => $prestation['heure_livraison'] ?? 'Non défini',
+                                    'lieu' => $prestation['lieu']['ville'] ?? 'Non défini',
+                                ];
+
+                                // Appelle la fonction avec le tableau
+                                MailService::sendOrderConfirmationEmail($user->email, $orderDetails);
+                            } catch (\Exception $mailError) {
+                                // On log l'erreur mail sans arrêter le processus
+                                error_log("Erreur envoi email confirmation : " . $mailError->getMessage());
+                            }
+
+                            // On nettoie la session et on redirige
+                            unset($_SESSION['current_order']);
+                            header('Location: index.php?page=order-success');
+                            exit();
+                        }
+                    } catch (\Exception $e) {
+                        // Erreur lors de la création de la commande (ex: stock insuffisant)
+                        error_log("Echec création commande pour user " . $user->user_id . ": " . $e->getMessage());
+
+                        error_message($e->getMessage());
+                        header('Location: index.php?page=order-menu&step=4&error=' . urlencode($e->getMessage()));
+                        exit();
+                    }
+                    break;
             } // Fin du switch
         } // Fin du if(POST)
 
@@ -326,11 +369,11 @@ break;
         }
 
         // 2. PRÉPARATION DES VARIABLES POUR LA VUE
-   
-         if (!empty($orderData['menu']['quantite']) && $menu !== null) {
+
+        if (!empty($orderData['menu']['quantite']) && $menu !== null) {
             $Discount = $menu->hasDiscount((int)$orderData['menu']['quantite']);
         }
-        
+
         $data = [
             'step' => (int)($_GET['step'] ?? 0),
             'menuID' => $menuID,
@@ -371,18 +414,19 @@ break;
         }
         require_once ROOT_PATH . '/app/views/layout/footer.php';
     }
-    public static function ajaxFraisLivraison($db) {
+    public static function ajaxFraisLivraison($db)
+    {
         $lieuId = $_GET['lieu_id'] ?? 0;
-        
+
         if ($lieuId > 0) {
             // Utilisation de la méthode que tu as créée dans OrderManager
             $frais = OrderManager::EstimerFraisLivraison($db, (int)$lieuId);
-            
+
             header('Content-Type: application/json');
             echo json_encode(['frais' => number_format($frais, 2)]);
             exit();
         }
-        
+
         // Cas d'erreur ou lieu absent
         header('Content-Type: application/json');
         echo json_encode(['frais' => '0.00']);
@@ -400,7 +444,7 @@ break;
         // 1. On nettoie la session
         unset($_SESSION['current_order']);
         // Ajoute ici tes autres 'unset' si nécessaire (ex: $_SESSION['step'])
-                    
+
 
         // 2. On redirige
         header('Location: index.php?page=search');

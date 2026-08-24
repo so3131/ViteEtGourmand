@@ -1,5 +1,12 @@
+<?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
+    <div id="success-alert" class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
+        <i class="fa-solid fa-circle-check me-2"></i> Vos informations ont été mises à jour avec succès !
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<?php endif; ?>
 <main class="container-fluid py-4 px-lg-5">
-  <?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/dashboard.Profil.view.php'; ?>
+ 
+<?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/dashboard.Profil.view.php'; ?>
 
   <div class="row g-4 align-items-start">
     <aside class="col-12 col-lg-3">

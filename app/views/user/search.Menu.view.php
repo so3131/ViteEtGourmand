@@ -74,47 +74,64 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
         </aside>
 
 
-
+<!--  ON ARRETE ICI GESTION DES IMG SUR LES SEARCH, penser a verifier les données en dure aussi pas que les cards genere par JS  -->
 
 
 
         <section class="col-md-9">
-            <div class="row row-cols-1 row-cols-lg-3 g-4" id="menu-container">
+    <div class="row row-cols-1 row-cols-lg-3 g-4" id="menu-container">
 
-                <?php if (isset($menus) && !empty($menus)): ?>
-                    <?php foreach ($menus as $menu): ?>
-                        <div class="col">
-                            <div class="card h-100 shadow-sm">
-                                <img src="" alt="Illustration <?= htmlspecialchars($menu['titre']) ?>">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?= htmlspecialchars($menu['titre']) ?></h5>
-                                    <?php
-                                    $theme = $menu['vg_theme']['libelle'] ?? 'Thème non défini';
-                                    $regime = $menu['regime'] ?? 'Régime classique';
-                                    ?>
-                                    <h6 class="card-subtitle mb-2 text-muted">
-                                        <?= htmlspecialchars($theme) ?> - <?= htmlspecialchars($regime) ?>
-                                    </h6>
-                                    <p class="card-text text-muted small"><?= htmlspecialchars($menu['description_menu']) ?></p>
-                                    <ul class="list-unstyled small">
-                                        <li><strong>Minimum :</strong> <?= htmlspecialchars($menu['nombre_personne_minimum']) ?> personnes</li>
-                                        <li><strong>Prix :</strong> <?= number_format($menu['prix_par_personne'], 2) ?> € / pers.</li>
-                                    </ul>
-                                </div>
-                                <div class="card-footer bg-transparent border-0">
-                                    <a href="index.php?page=details-menu&menu_id=<?= $menu['menu_id'] ?>" class="btn btn-primary w-100">
-                                        Voir le détail
-                                    </a>
-                                </div>
-                            </div>
+        <?php if (isset($menus) && !empty($menus)): ?>
+            <?php foreach ($menus as $menu): ?>
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <?php
+             $plats = $menu['plats_structures'] ?? [];
+
+$platPrincipal = $plats['Plat']
+    ?? $plats['Entrée']
+    ?? $plats['Dessert']
+    ?? null;
+
+$photoUrl = !empty($platPrincipal['photo'])
+    ? $platPrincipal['photo']
+    : 'assets/img/plats/default.webp';
+?>
+
+<img src="<?= htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') ?>"
+     class="card-img-top"
+     alt="Illustration <?= htmlspecialchars($menu['titre'], ENT_QUOTES, 'UTF-8') ?>"
+     style="height: 300px; object-fit: cover;">
+
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($menu['titre']) ?></h5>
+                            <?php
+                            $theme = $menu['vg_theme']['libelle'] ?? 'Thème non défini';
+                            $regime = $menu['regime'] ?? 'Régime classique';
+                            ?>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <?= htmlspecialchars($theme) ?> - <?= htmlspecialchars($regime) ?>
+                            </h6>
+                            <p class="card-text text-muted small"><?= htmlspecialchars($menu['description_menu']) ?></p>
+                            <ul class="list-unstyled small">
+                                <li><strong>Minimum :</strong> <?= htmlspecialchars($menu['nombre_personne_minimum']) ?> personnes</li>
+                                <li><strong>Prix :</strong> <?= number_format($menu['prix_par_personne'], 2) ?> € / pers.</li>
+                            </ul>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="alert alert-info">Aucun menu disponible pour le moment.</div>
-                <?php endif; ?>
+                        <div class="card-footer bg-transparent border-0">
+                            <a href="index.php?page=details-menu&menu_id=<?= $menu['menu_id'] ?>" class="btn btn-primary w-100">
+                                Voir le détail
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <div class="col-12 alert alert-info">Aucun menu disponible pour le moment.</div>
+        <?php endif; ?>
 
-            </div>
-        </section>
+    </div>
+</section>
 
     </div>
 </main>

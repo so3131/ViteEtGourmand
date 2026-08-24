@@ -109,16 +109,50 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch((err) => console.error("Erreur de fetch : ", err));
     });
   }
+  function escapeHtml(value) {
+    const div = document.createElement("div");
+    div.textContent = value ?? "";
+    return div.innerHTML;
+  }
+  function getMenuPhoto(menu) {
+    const plats = menu.plats_structures || {};
+
+    const platPrincipal =
+      plats.Plat || plats["Entrée"] || plats.Dessert || null;
+
+    return platPrincipal && platPrincipal.photo
+      ? platPrincipal.photo
+      : "assets/img/plats/default.webp";
+  }
+
+
 
   // créer de façon dynamique les cartes de menus à partir des données récupérées de la base de données
   function createMenuCard(menu) {
     console.log("ID du menu :", menu.menu_id);
     const menuId = menu.menu_id || "#";
     const detailUrl = `index.php?page=details-menu&menu_id=${menu.menu_id}`;
+    const photoUrl = getMenuPhoto(menu);
+    const plats = menu.plats_structures || {};
+
+const platPrincipal =
+    plats.Plat ||
+    plats['Entrée'] ||
+    plats.Dessert ||
+    null;
+
+const photo = platPrincipal?.photo || 'assets/img/plats/default.webp';
+
+
+
+// Vérification
+console.log('Photo reçue :', photo);
+console.log('URL utilisée :', photoUrl);
     return `
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    <img src="assets/images/menu_default.jpg" class="card-img-top" alt="${menu.titre}">
+                    <img src="${photoUrl}"
+             class="card-img-top" alt="${menu.titre}"style="height: 300px; object-fit: cover;">
                     <div class="card-body">
                         <h5 class="card-title">${menu.titre}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">

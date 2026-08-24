@@ -3,14 +3,22 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // Ce fichier est le point d'entrée de l'application. Il reçoit toutes les requêtes, gère la session, et redirige vers le bon contrôleur en fonction de la page demandée.
-
+require_once dirname(__DIR__) . '/app/config/env.php';
 require_once dirname(__DIR__) . '/app/config/constants.php';
 require_once ROOT_PATH . '/app/Autoloader.php';
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once dirname(__DIR__) . '/app/Helpers/FormHelper.php';
+
+
 \App\Autoloader::register();
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
 require_once ROOT_PATH . '/app/config/Database.php';
 $db = (new Database())->connect();
 
@@ -19,7 +27,7 @@ $page = $_GET['page'] ?? 'home';
 
 if ($page === 'logout') {
     require_once ROOT_PATH . '/app/controllers/authController/logoutController.php';
-    \App\Controllers\AuthController\LogoutController::logOut($db);  //Le script s'arrête net ici en cas de deconnexion, pas de risque d'affichage fantôme
+    \App\Controllers\AuthController\LogoutController::logOut($db);
 }
 
 // 3. SÉCURITÉ GLOBALE
@@ -30,7 +38,9 @@ $pagesQuiExistent = $config['existante'];
 $pagesAdmin       = $config['admin'];
 $pagesEmployee    = $config['employee'];
 $pagesUser        = $config['user'];
-// Maintenant, tu appelles ta fonction avec ces variables
+$pagesStaff       = $config['staff'];
+// fonction avec ces variables
+
 $page = \App\Helpers\SecurityManager::checkAccess(
     $_GET['page'] ?? 'home',
     $_SESSION['role_id'] ?? null,
@@ -38,7 +48,8 @@ $page = \App\Helpers\SecurityManager::checkAccess(
     $pagesQuiExistent,
     $pagesAdmin,
     $pagesEmployee,
-    $pagesUser
+    $pagesUser,
+    $pagesStaff
 );
 $route = match ($page) {
     // Général
@@ -62,34 +73,78 @@ $route = match ($page) {
     // Utilisateur 
     'dashboard-user'     => ['class' => '\App\Controllers\UserController\DashboardUserController', 'action' => 'userDashboard'],
     'update-profil'     => ['class' => '\App\Controllers\AuthController\updateProfilController', 'action' => 'updateProfil'],
-    'erase-order' => ['class' => '\App\Controllers\UserController\EraseOrderController','params' => ['db', 'commande_id'], 'action' => 'eraseOrder'],
-    'edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController','params' => ['db', 'commande_id'], 'action' => 'editOrderView'],
+    'erase-order' => ['class' => '\App\Controllers\UserController\EraseOrderController', 'params' => ['db', 'commande_id'], 'action' => 'eraseOrder'],
+    'edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'params' => ['db', 'commande_id'], 'action' => 'editOrderView'],
     'recalculer-prix' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'action' => 'recalculerPrix'],
     'cancel-edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'action' => 'cancelEditOrder'],
     'update-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'params' => ['db', 'commande_id'], 'action' => 'updateOrder'],
 
     // Tunnel de commande
-    'order-menu'    => ['class' => '\App\Controllers\UserController\OrderMenuController',
-    'params' => ['db', 'menuID'], 'action' => 'orderMenu'],
+    'order-menu'    => [
+        'class' => '\App\Controllers\UserController\OrderMenuController',
+        'params' => ['db', 'menuID'],
+        'action' => 'orderMenu'
+    ],
     'order-success' => ['class' => '\App\Controllers\UserController\OrderMenuController', 'action' => 'orderSuccess'],
     'cancel-order'  => ['class' => '\App\Controllers\UserController\OrderMenuController', 'action' => 'cancelOrder'],
 
     // Admin
 
-    'dashboard-admin'    => ['class' => '\App\Controllers\Admin\DashboardAdminController', 'action' => 'adminDashboard'],
-    'stats-admin'        => ['class' => '\App\Controllers\Admin\StatsAdminController', 'action' => 'adminStats'],
-    'rh-admin'           => ['class' => '\App\Controllers\Admin\RHAdminController', 'action' => 'adminRH'],
-    'ban-user-admin'     => ['class' => '\App\Controllers\Admin\BanUserAdminController', 'action' => 'adminUserList'],
-    'ban-action-admin'   => ['class' => '\App\Controllers\Admin\BanUserAdminController', 'action' => 'banUser'],
-    'unban-action-admin' => ['class' => '\App\Controllers\Admin\BanUserAdminController', 'action' => 'unBanUser'],
-    'moderation-admin'   => ['class' => '\App\Controllers\Admin\ModerationAdminController', 'action' => 'adminModeration'],
-    'conflict-admin'     => ['class' => '\App\Controllers\Admin\ConflictAdminController', 'action' => 'adminConflicts'],
-    'tickets-admin'      => ['class' => '\App\Controllers\Admin\ticketsAdminController', 'action' => 'adminTickets'],
-    'delete-tickets-admin' => ['class' => '\App\Controllers\Admin\ticketsAdminController', 'action' => 'deleteTicket'],
+    'dashboard-admin'    => ['class' => '\App\Controllers\AdminController\DashboardAdminController', 'action' => 'adminDashboard'],
+    'stats-admin'        => ['class' => '\App\Controllers\AdminController\StatsAdminController', 'action' => 'adminStats'],
+    'rh-admin'           => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'adminRH'],
+    'rh-admin-create' => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'createEmploye'],
+    'rh-admin-delete' => [
+        'class' => '\App\Controllers\AdminController\RHAdminController',
+        'action' => 'deleteEmploye',
+        'params' => ['db', 'id']
+    ],
+    'rh-admin-toggle' => [
+        'class' => '\App\Controllers\AdminController\RHAdminController',
+        'action' => 'toggleEmployeStatus',
+        'params' => ['db', 'id']
+    ],
+    'ban-user-admin'     => ['class' => '\App\Controllers\AdminController\BanUserAdminController', 'action' => 'adminUserList'],
+    'ban-action-admin'   => ['class' => '\App\Controllers\AdminController\BanUserAdminController', 'action' => 'banUser'],
+    'unban-action-admin' => ['class' => '\App\Controllers\AdminController\BanUserAdminController', 'action' => 'unBanUser'],
+
+
+
     // Employé
-    'dashboard-employee' => ['class' => '\App\Controllers\Employee\DashboardEmployeeController', 'action' => 'employeeDashboard'],
-    'conflict-employee'  => ['class' => '\App\Controllers\Employee\ConflictEmployeeController', 'action' => 'employeeConflict'],
-    'moderation-employee' => ['class' => '\App\Controllers\Employee\ModerationEmployeeController', 'action' => 'employeeModeration'],
+    'dashboard-employee' => ['class' => '\App\Controllers\EmployeeController\DashboardEmployeeController', 'action' => 'employeeDashboard'],
+
+
+    // Admin et Employee
+    'moderation'   => ['class' => '\App\Controllers\StaffCommon\ModerationController', 'action' => 'moderation'],
+    'conflict'     => ['class' => '\App\Controllers\StaffCommon\ConflictController', 'action' => 'Conflicts'],
+    // 'tickets'      => ['class' => '\App\Controllers\StaffCommon\ticketsController', 'action' => 'Tickets'],
+    // 'delete-tickets-' => ['class' => '\App\Controllers\StaffCommon\ticketsController', 'action' => 'deleteTicket'],
+    'order-management'     => ['class' => '\App\Controllers\StaffCommon\OrderManagementController', 'action' => 'OrderManagement'],
+    'menu-management'      => ['class' => '\App\Controllers\StaffCommon\MenuManagementController', 'action' => 'MenuManagement'],
+    'cancel-order-common'   => ['class' => '\App\Controllers\StaffCommon\OrderManagementController', 'action' => 'cancelOrder'],
+    'edit-order-common'     => ['class' => '\App\Controllers\StaffCommon\EditOrderController', 'action' => 'renderEditForm'],
+    'recalculer-prix-common' => ['class' => '\App\Controllers\StaffCommon\EditOrderController', 'action' => 'recalculerPrix'],
+    'cancel-edit-order-common' => ['class' => '\App\Controllers\StaffCommon\EditOrderController', 'action' => 'cancelEditOrder'],
+    'update-order-common'   => [
+        'class' => '\App\Controllers\StaffCommon\EditOrderController',
+        'action' => 'processUpdate',
+        'params' => ['db', 'commande_id']
+    ],
+    'edit-menu' => [
+        'class' => '\App\Controllers\StaffCommon\EditMenuController',
+        'action' => 'editMenu',
+        'params' => ['db', 'menu_id']
+    ],
+    'update-menu-process'  => ['class' => '\App\Controllers\StaffCommon\EditMenuController', 'action' => 'updateMenu'],
+    'add-menu-process' => [
+        'class' => '\App\Controllers\StaffCommon\MenuManagementController',
+        'action' => 'addMenu'
+    ],
+    'delete-menu' => [
+        'class' => '\App\Controllers\StaffCommon\MenuManagementController',
+        'action' => 'deleteMenu',
+        'params' => ['db', 'menu_id']
+    ],
 
     // Default 404
     default         => ['class' => '\App\Controllers\ErrorController', 'action' => 'notFound'],
