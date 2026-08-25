@@ -88,6 +88,18 @@ $route = match ($page) {
     'order-success' => ['class' => '\App\Controllers\UserController\OrderMenuController', 'action' => 'orderSuccess'],
     'cancel-order'  => ['class' => '\App\Controllers\UserController\OrderMenuController', 'action' => 'cancelOrder'],
 
+    // Avis'
+    'review' => [
+    'class' => '\App\Controllers\UserController\ReviewController',
+    'action' => 'submitReview',
+    'params' => ['db']
+],
+'store-review' => [
+    'class' => '\App\Controllers\UserController\ReviewController',
+    'action' => 'storeReview',
+    'params' => ['db']
+],
+
     // Admin
 
     'dashboard-admin'    => ['class' => '\App\Controllers\AdminController\DashboardAdminController', 'action' => 'adminDashboard'],
@@ -104,9 +116,8 @@ $route = match ($page) {
         'action' => 'toggleEmployeStatus',
         'params' => ['db', 'id']
     ],
-    'ban-user-admin'     => ['class' => '\App\Controllers\AdminController\BanUserAdminController', 'action' => 'adminUserList'],
-    'ban-action-admin'   => ['class' => '\App\Controllers\AdminController\BanUserAdminController', 'action' => 'banUser'],
-    'unban-action-admin' => ['class' => '\App\Controllers\AdminController\BanUserAdminController', 'action' => 'unBanUser'],
+   'ban-user'           => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'banUser'],
+'unban-user'         => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'unBanUser'],
 
 
 
@@ -115,8 +126,7 @@ $route = match ($page) {
 
 
     // Admin et Employee
-    'moderation'   => ['class' => '\App\Controllers\StaffCommon\ModerationController', 'action' => 'moderation'],
-    'conflict'     => ['class' => '\App\Controllers\StaffCommon\ConflictController', 'action' => 'Conflicts'],
+   
     // 'tickets'      => ['class' => '\App\Controllers\StaffCommon\ticketsController', 'action' => 'Tickets'],
     // 'delete-tickets-' => ['class' => '\App\Controllers\StaffCommon\ticketsController', 'action' => 'deleteTicket'],
     'order-management'     => ['class' => '\App\Controllers\StaffCommon\OrderManagementController', 'action' => 'OrderManagement'],
@@ -124,12 +134,21 @@ $route = match ($page) {
     'cancel-order-common'   => ['class' => '\App\Controllers\StaffCommon\OrderManagementController', 'action' => 'cancelOrder'],
     'edit-order-common'     => ['class' => '\App\Controllers\StaffCommon\EditOrderController', 'action' => 'renderEditForm'],
     'recalculer-prix-common' => ['class' => '\App\Controllers\StaffCommon\EditOrderController', 'action' => 'recalculerPrix'],
-    'cancel-edit-order-common' => ['class' => '\App\Controllers\StaffCommon\EditOrderController', 'action' => 'cancelEditOrder'],
     'update-order-common'   => [
         'class' => '\App\Controllers\StaffCommon\EditOrderController',
         'action' => 'processUpdate',
         'params' => ['db', 'commande_id']
     ],
+    'update-order-status' => [
+    'class' => '\App\Controllers\StaffCommon\OrderManagementController',
+    'action' => 'updateStatus',
+    'params' => ['db']
+],
+ 'contact-material-client' => [
+    'class' => '\App\Controllers\StaffCommon\OrderManagementController',
+    'action' => 'contactMaterialClient',
+    'params' => ['db']
+],
     'edit-menu' => [
         'class' => '\App\Controllers\StaffCommon\EditMenuController',
         'action' => 'editMenu',
@@ -144,6 +163,16 @@ $route = match ($page) {
         'class' => '\App\Controllers\StaffCommon\MenuManagementController',
         'action' => 'deleteMenu',
         'params' => ['db', 'menu_id']
+    ],
+    'review-management' => [
+        'class' => '\App\Controllers\StaffCommon\ReviewManagementController',
+        'action' => 'manageReview',
+        'params' => ['db']
+    ],
+    'update-review-status' => [
+        'class' => '\App\Controllers\StaffCommon\ReviewManagementController',
+        'action' => 'updateReviewStatus',
+        'params' => ['db']
     ],
 
     // Default 404

@@ -12,19 +12,21 @@ document.querySelectorAll('input, select').forEach(el => {
         }
 
         try {
-            
-            const response = await fetch('index.php?page=recalculer-prix', {
+            const response = await fetch('index.php?page=recalculer-prix-common', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
             
-            const result = await response.json();
+            const textResponse = await response.text(); // Récupère en texte brut d'abord
+            console.log("Réponse brute du serveur :", textResponse); // Pour voir si des warnings s'incrustent
+
+            const result = JSON.parse(textResponse);
             
-            // Affiche le nouveau montant
             const totalDisplay = document.getElementById('total-display');
             if (totalDisplay && result.nouveau_prix) {
-                totalDisplay.innerText = result.nouveau_prix + ' €';
+                // Formate proprement avec 2 décimales si besoin
+                totalDisplay.innerText = parseFloat(result.nouveau_prix).toFixed(2) + ' €';
             }
         } catch (err) {
             console.error("Erreur lors du calcul du prix :", err);

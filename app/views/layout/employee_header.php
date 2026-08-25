@@ -71,7 +71,7 @@ if ($current_page === '' || $current_page === '/') {
 
                     <!-- 3. Modération & Avis -->
                     <li class="nav-item">
-                        <a href="?page=moderation" class="nav-link <?php echo $current_page === 'moderation' ? 'active' : ''; ?>">
+                        <a href="?page=review-management" class="nav-link <?php echo $current_page === 'review-management' ? 'active' : ''; ?>">
                             <i class="fa-solid fa-user-check me-2"></i> Modération des avis
                         </a>
                     </li>

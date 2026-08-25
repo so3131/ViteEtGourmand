@@ -217,17 +217,17 @@ if ((int)$userRole === ROLE_ADMIN) {
         $frais = OrderManager::EstimerFraisLivraison($db, $lieu_id);
 
         $menu = new Menu(
-            (int)$menuData['menu_id'],
-            (int)$menuData['nombre_personne_minimum'],
-            (string)$menuData['titre'],
-            (string)$menuData['description_menu'],
-            (float)$menuData['prix_par_personne'],
-            (int)$menuData['quantite_restante'],
-            (int)$menuData['theme_id'],
-            (int)$menuData['regime_id'],
-            $menuData['theme_libelle'] ?? '',
-            $menuData['regime_libelle'] ?? ''
-        );
+        (int)$menuData['menu_id'],
+        (int)$menuData['nombre_personne_minimum'],
+        (string)$menuData['titre'],
+        (string)$menuData['description_menu'],
+        (float)$menuData['prix_par_personne'],
+        (int)$menuData['quantite_restante'],
+        isset($menuData['theme_id']) ? (int)$menuData['theme_id'] : null,
+        isset($menuData['regime_id']) ? (int)$menuData['regime_id'] : null,
+        $menuData['theme_libelle'] ?? '',
+        $menuData['regime_libelle'] ?? ''
+    );
 
         $total = $menu->calculerTotal($quantite, (float)$frais, $montant_depot);
 

@@ -46,28 +46,31 @@
         </div>
     </section>
 
-    <section class="mb-5">
-        <h2 class="text-center mb-4">Ce que nos clients disent de nous</h2>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0 h-100">
-                    <p>"Une prestation pour Pâques incroyable. Un savoir-faire qui traverse les années."</p>
-                    <strong>- Marc D.</strong>
+    <section class="container py-5">
+    <h2 class="text-center mb-4">Ce que nos clients disent de nous</h2>
+    
+    <div class="row">
+        <?php if (!empty($approvedReviews)): ?>
+            <?php foreach ($approvedReviews as $review): ?>
+                <div class="col-md-4 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($review['client_name'] ?? 'Client Anonyme') ?></h5>
+                            <div class="text-warning mb-2">
+                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                    <?= $i <= ($review['rating'] ?? 5) ? '★' : '☆' ?>
+                                <?php endfor; ?>
+                            </div>
+                            <p class="card-text"><?= nl2br(htmlspecialchars($review['comment'] ?? '')) ?></p>
+                            <small class="text-muted">Publié le <?= date('d/m/Y', $review['created_at']->toDateTime()->getTimestamp()) ?></small>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0 h-100">
-                    <p>"Leur nouvelle application est très pratique ! Les menus sont toujours alléchants."</p>
-                    <strong>- Sophie L.</strong>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card p-3 shadow-sm border-0 h-100">
-                    <p>"Nous faisons appel à Vite & Gourmand pour tous nos événements d'entreprise."</p>
-                    <strong>- Cabinet Martin</strong>
-                </div>
-            </div>
-        </div>
-    </section>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p class="text-center text-muted">Aucun avis pour le moment. Soyez le premier à donner le vôtre !</p>
+        <?php endif; ?>
+    </div>
+</section>
 
 </main>

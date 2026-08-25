@@ -34,14 +34,18 @@ return [
         'mention',
         '404',
         'error-ban',
+        'ban-user',
+        'unban-user',
         'forgot-password',
         'reset-password',
         'update-profil',
         'edit-order',
-        'recalculer-prix',
+        'recalculer-prix-common',
         'cancel-edit-order',
         'update-order',
         'dashboard-user',
+        'review',
+        'store-review',
 
         'dashboard-employee',
        
@@ -54,7 +58,9 @@ return [
         'ban-user-admin',
         'ban-action-admin',
         'unban-action-admin',
-        'moderation',
+         'ban-user',
+        'unban-user',
+        
         
 
         'menu-management',
@@ -62,11 +68,15 @@ return [
         'cancel-order-common',
         'edit-order-common',
         'update-order-common',
+        'update-order-status',
         'edit-menu',
         'update-menu-process',
         'add-menu-process',
         'delete-menu',
-        'erase-order'
+        'erase-order',
+        'review-management',
+        'update-review-status',
+        'contact-material-client'
     ],
 
     'admin' => [
@@ -79,6 +89,8 @@ return [
         'ban-user-admin',
         'ban-action-admin',
         'unban-action-admin',
+         'ban-user',
+        'unban-user',
        ],
 
     'employee' => [
@@ -87,8 +99,7 @@ return [
     ],
 
     'staff' => [
-        'moderation',
-        'conflict',
+       
         'tickets',
         'delete-tickets',
         'menu-management',
@@ -96,10 +107,16 @@ return [
         'cancel-order-common',
         'edit-order-common',
         'update-order-common',
+        'update-order-status',
         'edit-menu',
         'update-menu-process',
         'add-menu-process',
-        'delete-menu'
+        'delete-menu',
+        'review-management',
+        'update-review-status',
+        'recalculer-prix-common',
+        'error-ban',
+        'contact-material-client'
     ],
 
     'user' => [
@@ -112,6 +129,8 @@ return [
         'edit-order',
         'recalculer-prix',
         'cancel-edit-order',
-        'update-order'
+        'update-order',
+        'review',
+        'store-review'
     ],
 ];

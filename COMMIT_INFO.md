@@ -1,10 +1,9 @@
-# Commit 15: Crash de Xamp / Recuperation DB / Assets IMG/ modifications espace ADMIN /Composer /MongoDB
+# Commit 16 : Correction des routes / mise en place des avis/ changement des statuts de commandes
 
-À cette étape:
-Supprimer le format BLOB trop consequent a l'import / export SQL.
-Refactor pour recuperer les photos depuis les adresses en DB.
-Logique de modification des commandes et de suppression.
-Logique de modification des menus et gestion des commandes part II
-Installer et config MongoDB(ATLAS).
-Installer Composer
-Creer et lier cluster MongoDB Atlas au projet.
+À cette étape :
+
+
+ Corriger les routes employé.
+ Corriger et tester la modification des commandes.
+ Finaliser la modération des avis.
+Vérifier les statuts et l'historique des commandes.

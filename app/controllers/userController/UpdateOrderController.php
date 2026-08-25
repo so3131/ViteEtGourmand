@@ -150,22 +150,34 @@ $dateSelectionnee->setTime(0, 0, 0);
     }
 
     public static function recalculerPrix(\PDO $db)
-    {
+{
+    // Nettoie tout buffer de sortie précédent pour éviter du HTML parasite
+    if (ob_get_length()) {
+        ob_clean();
+    }
 
-        $data = json_decode(file_get_contents('php://input'), true);
+    header('Content-Type: application/json; charset=utf-8');
+
+    try {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        if (!$data) {
+            echo json_encode(['nouveau_prix' => '0.00', 'error' => 'Données JSON invalides']);
+            exit();
+        }
+
         $pret_materiel = !empty($data['pret_materiel']) ? 1 : 0;
         $montant_depot = ($pret_materiel === 1) ? DEPOT_GARANTIE_MATERIEL : 0.0;
-        error_log(print_r($data, true));
+        
         $lieu_id = (int)($data['lieu_prestation_id'] ?? 0);
         $quantite = (int)($data['nombre_personne'] ?? 0);
         $menu_id = (int)($data['menu_id'] ?? 0);
 
         $menuData = MenuManager::getById($db, $menu_id);
 
-
-        // Vérification AVANT d'utiliser $menuData
         if (!$menuData) {
-            echo json_encode(['nouveau_prix' => '0.00']);
+            echo json_encode(['nouveau_prix' => '0.00', 'error' => 'Menu introuvable']);
             exit();
         }
 
@@ -178,8 +190,8 @@ $dateSelectionnee->setTime(0, 0, 0);
             (string)$menuData['description_menu'],
             (float)$menuData['prix_par_personne'],
             (int)$menuData['quantite_restante'],
-            (int)$menuData['theme_id'],
-            (int)$menuData['regime_id'],
+            isset($menuData['theme_id']) ? (int)$menuData['theme_id'] : null,
+            isset($menuData['regime_id']) ? (int)$menuData['regime_id'] : null,
             $menuData['theme_libelle'] ?? '',
             $menuData['regime_libelle'] ?? ''
         );
@@ -188,7 +200,13 @@ $dateSelectionnee->setTime(0, 0, 0);
 
         echo json_encode(['nouveau_prix' => number_format($total, 2, '.', '')]);
         exit();
+
+    } catch (\Exception $e) {
+        // En cas d'erreur PHP, on renvoie un JSON avec l'erreur au lieu d'un HTML
+        echo json_encode(['nouveau_prix' => '0.00', 'error' => $e->getMessage()]);
+        exit();
     }
+}
     public static function cancelEditOrder(\PDO $db)
     {
         //Si l'utilisateur appuie sur le bouton annuler la modification, on le redirige vers le dashboard

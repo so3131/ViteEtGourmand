@@ -137,9 +137,9 @@ public static function getOrdersByUser(\PDO $db, int $userId)
 
  
 public static function getAllOrders(\PDO $db, $filters = []) {
-    // 1. Initialisation de la requête de base avec les JOIN
-    $sql = "SELECT c.*, u.nom as client_nom, m.titre as menu_titre, 
-                   l.adresse as adresse_prestation, l.ville as ville_prestation, DATE_ADD(date_prestation, INTERVAL 10 DAY) AS date_limite_restitution
+    // 1. Initialisation de la requête de base avec les JOIN (on rajoute u.email)
+    $sql = "SELECT c.*, u.nom as client_nom, u.email as client_email, m.titre as menu_titre, 
+                    l.adresse as adresse_prestation, l.ville as ville_prestation, DATE_ADD(date_prestation, INTERVAL 10 DAY) AS date_limite_restitution
             FROM vg_commande c 
             JOIN vg_utilisateur u ON c.utilisateur_id = u.utilisateur_id 
             JOIN vg_menu m ON c.menu_id = m.menu_id 
@@ -168,5 +168,20 @@ public static function getAllOrders(\PDO $db, $filters = []) {
 
     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 }
-    }
+public static function getOrderById(\PDO $db, int $commandeId)
+    {
+        $sql = "SELECT c.*, u.nom as client_nom, u.email as client_email, m.titre as menu_titre, 
+                       l.adresse as adresse_prestation, l.ville as ville_prestation, 
+                       DATE_ADD(date_prestation, INTERVAL 10 DAY) AS date_limite_restitution
+                FROM vg_commande c 
+                JOIN vg_utilisateur u ON c.utilisateur_id = u.utilisateur_id 
+                JOIN vg_menu m ON c.menu_id = m.menu_id 
+                JOIN vg_lieu_prestation l ON c.lieu_prestation_id = l.id 
+                WHERE c.commande_id = :commande_id";
 
+        $stmt = $db->prepare($sql);
+        $stmt->execute([':commande_id' => $commandeId]);
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+    }
+}

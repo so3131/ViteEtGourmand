@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\UserController;
 require_once dirname(__DIR__, 2) . '/config/Constants.php';
+ use App\Managers\MongoReviewManager;
 
 // class qu'on appelle pour afficher la page depuis l'index.php
 class HomeController
@@ -9,6 +10,11 @@ class HomeController
     {
         $pdo = $db;
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+       
+
+
+$mongoReviewManager = new MongoReviewManager();
+$approvedReviews = $mongoReviewManager->getApprovedReviews(6);
         $title = "Accueil - EcoRide";
 
         $specific_fonts = ["https://fonts.googleapis.com/css?family=Lexend&display=swap"];

@@ -18,13 +18,9 @@
         <div class="tab-content" id="ordersTabContent">
             <?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/dashboard.command.tracking.view.php'; ?>
         </div>
-        
-        <div class="row g-4 mb-4 mt-2">
-            <div class="col-12">
-              <?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/dashboard.add.review.view.php'; ?>
-            </div>
-        </div>
-    </section>
+    
+</section>
+       
   </div>
  <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
   <div class="modal-dialog">

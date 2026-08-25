@@ -56,7 +56,7 @@ Les méthodes existent déjà : `addMenu()` et `deleteMenu()`.
 - [x] Ajouter le paramètre `menu_id`.
 - [x] Vérifier les droits administrateur/employé.
 - [x] Tester l’ajout et la suppression d’un menu.
-- [ ] Remplacer les liens de suppression en `GET` par un formulaire `POST`.
+- [x ] Remplacer les liens de suppression en `GET` par un formulaire `POST`.
 
 Test : créer un menu de test, vérifier qu'il apparaît, puis le supprimer.
 
@@ -70,9 +70,9 @@ Fichiers concernés :
 
 À faire :
 
-- [ ] Remplacer `page=conflict-employee` par `page=conflict`.
-- [ ] Remplacer `page=moderation-employee` par `page=moderation`.
-- [ ] Vérifier que les routes `conflict` et `moderation` sont autorisées pour l'employé.
+
+- [ x] Remplacer `page=moderation-employee` par `page=review-management`.
+- [x ] Vérifier que les routes `conflict` et `moderation` sont autorisées pour l'employé.
 - [ ] Vérifier que les pages s'ouvrent sans erreur 404.
 
 Test : se connecter avec un compte employé et ouvrir les deux pages.
@@ -88,11 +88,11 @@ Fichiers concernés :
 
 À faire :
 
-- [ ] Dans `EditOrderCommon.js`, remplacer `page=recalculer-prix` par `page=recalculer-prix-common`.
-- [ ] Ajouter `recalculer-prix-common` dans les routes autorisées pour l'employé.
-- [ ] Ajouter `cancel-edit-order-common` dans les routes autorisées pour l'employé.
-- [ ] Vérifier que `commande_id` est transmis.
-- [ ] Vérifier que l'employé ne peut modifier que les commandes autorisées.
+- [ x] Dans `EditOrderCommon.js`, remplacer `page=recalculer-prix` par `page=recalculer-prix-common`.
+- [x ] Ajouter `recalculer-prix-common` dans les routes autorisées pour l'employé.
+- [ x] Ajouter `cancel-edit-order-common` dans les routes autorisées pour l'employé.
+- [ x] Vérifier que `commande_id` est transmis.
+- [ x] Vérifier que l'employé ne peut modifier que les commandes autorisées.
 
 Test : ouvrir une commande employé, modifier le nombre de personnes et vérifier le nouveau prix.
 
@@ -107,12 +107,12 @@ Fichiers concernés :
 
 À faire :
 
-- [ ] Créer ou relier une méthode pour charger les avis à modérer.
-- [ ] Ajouter la route `validate-review`.
-- [ ] Ajouter la route `delete-review`.
-- [ ] Ajouter la route `contact-client` ou retirer ce formulaire si cette fonction n'est pas prévue.
-- [ ] Vérifier que seuls l'administrateur et l'employé peuvent modérer.
-- [ ] Vérifier qu'un avis validé s'affiche sur l'accueil.
+- [x ] Créer ou relier une méthode pour charger les avis à modérer.
+- [ x] Ajouter la route `validate-review`.
+- [x ] Ajouter la route `delete-review`.
+- [ x] Ajouter la route `contact-client` ou retirer ce formulaire si cette fonction n'est pas prévue.
+- [x ] Vérifier que seuls l'administrateur et l'employé peuvent modérer.
+- [x ] Vérifier qu'un avis validé s'affiche sur l'accueil.
 
 Test : créer un avis de test, le valider, puis vérifier son affichage sur l'accueil.
 
@@ -124,15 +124,7 @@ Fichiers concernés :
 - `public/index.php`
 - `app/views/admin/ban.admin.view.php`
 
-À faire :
 
-- [ ] Décommenter ou réécrire la classe `BanUserAdminController`.
-- [ ] Utiliser les tables `vg_utilisateur` et `vg_role`.
-- [ ] Implémenter l'affichage de la liste des utilisateurs.
-- [ ] Implémenter le bannissement avec `est_actif = 0`.
-- [ ] Implémenter le débannissement avec `est_actif = 1`.
-- [ ] Vérifier que seul l'administrateur peut réaliser ces actions.
-- [ ] Utiliser des formulaires `POST` protégés par CSRF.
 
 Test : désactiver un compte utilisateur, tenter de se connecter avec lui, puis le réactiver.
 

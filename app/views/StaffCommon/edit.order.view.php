@@ -4,7 +4,7 @@
     </div>
 <?php else : ?>
     <div class="container mt-5">
-        <h2>Modifier ma commande #<?= $commande['commande_id'] ?></h2>
+        <h2>Modifier la commande #<?= $commande['commande_id'] ?></h2>
     
    <form id="updateOrderForm"
       action="index.php?page=update-order-common&commande_id=<?= (int)$commande['commande_id'] ?>"
@@ -81,7 +81,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
-        <a href="index.php?page=dashboard-admin" class="btn btn-secondary">Annuler</a>
+        <a href="index.php?page=order-management" class="btn btn-secondary">Annuler</a>
     </form>
     </div>
 <?php endif; ?>
