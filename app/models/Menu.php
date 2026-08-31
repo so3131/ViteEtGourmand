@@ -11,7 +11,7 @@ class Menu
     public ?int $menu_id;
     public string $titre;
     public int $nombre_personne_minimum;
-     public float $prix_par_personne;
+    public float $prix_par_personne;
     public string $description_menu;
     public int $quantite_restante;
     public ?int $theme_id;
@@ -32,11 +32,11 @@ class Menu
         int $quantite_restante,
         ?int $theme_id,
         ?int $regime_id,
-         string $libelle_theme = '',
+        string $libelle_theme = '',
         string $libelle_regime = '',
         int $plat_id = 0,
-         int $allergene_id = 0,
-         string $libelle_allergene = ''
+        int $allergene_id = 0,
+        string $libelle_allergene = ''
     ) {
         $this->menu_id = $menu_id;
         $this->nombre_personne_minimum = $nombre_personne_minimum;
@@ -52,35 +52,42 @@ class Menu
         $this->allergene_id = $allergene_id;
         $this->libelle_allergene = $libelle_allergene;
     }
-     public function estQuantiteValide(int $nombrePersonne): bool 
+    //function pour vérifier si la quantité commandée est valide par rapport au nombre de personnes minimum requis pour le menu
+    public function estQuantiteValide(int $nombrePersonne): bool
     {
         // La règle métier est ici, dans le modèle
         return $nombrePersonne >= $this->nombre_personne_minimum;
     }
-    public function getMinimumRequis(): int {
-    return $this->nombre_personne_minimum;
-}
-public function calculerPrix(int $quantite): float {
-    // 1. Calcul de base
-    $prixTotal = $this->prix_par_personne * $quantite;
-
-    // 2. Application de la réduction (10% si quantité >= min + 5)
-    if ($quantite >= ($this->nombre_personne_minimum + 5)) {
-        $prixTotal = $prixTotal * 0.9;
+    //function pour vérifier le nombre de personnes minimum requis pour le menu
+    public function getMinimumRequis(): int
+    {
+        return $this->nombre_personne_minimum;
     }
+    //function pour calculer le prix total en fonction de la quantité commandée, avec application d'une réduction si applicable
+    public function calculerPrix(int $quantite): float
+    {
+        // 1. Calcul de base
+        $prixTotal = $this->prix_par_personne * $quantite;
 
-    return $prixTotal;
-}
-public function calculerTotal(int $quantite, float $fraisLivraison = 0, float $depotGarantie = 0): float 
-{
-    // On appelle votre logique de prix de base (avec les -10%)
-    $prixMenu = $this->calculerPrix($quantite);
-    
-    // On ajoute le reste
-    return $prixMenu + $fraisLivraison + $depotGarantie;
-}
-public function hasDiscount(int $quantite): bool 
-{
-    return $quantite >= ($this->nombre_personne_minimum + 5);
-}
+        // 2. Application de la réduction (10% si quantité >= min + 5)
+        if ($quantite >= ($this->nombre_personne_minimum + 5)) {
+            $prixTotal = $prixTotal * 0.9;
+        }
+
+        return $prixTotal;
+    }
+    //function pour calculer le prix total en incluant les frais de livraison et le dépôt de garantie
+    public function calculerTotal(int $quantite, float $fraisLivraison = 0, float $depotGarantie = 0): float
+    {
+        // On appelle votre logique de prix de base (avec les -10%)
+        $prixMenu = $this->calculerPrix($quantite);
+
+        // On ajoute le reste
+        return $prixMenu + $fraisLivraison + $depotGarantie;
+    }
+    //function pour vérifier si le menu est éligible à une réduction en fonction de la quantité commandée
+    public function hasDiscount(int $quantite): bool
+    {
+        return $quantite >= ($this->nombre_personne_minimum + 5);
+    }
 }

@@ -29,7 +29,7 @@
     <h3>Informations de prestation</h3>
     <p>Date : <?= htmlspecialchars($orderData['prestation']['date_prestation'] ?? 'Non défini') ?></p>
     <p>Heure : <?= htmlspecialchars($orderData['prestation']['heure_livraison'] ?? 'Non défini') ?></p>
-    <p>Lieu : <?= htmlspecialchars($orderData['prestation']['lieu']['ville'] ?? 'Non défini') ?></p>
+    <p>Lieu : <?= htmlspecialchars($orderData['prestation']['ville'] ?? 'Non défini') ?></p>
 
     <h3>Détails du menu</h3>
     <p>Menu : <?= htmlspecialchars($orderData['prestation']['nom_menu'] ?? 'Non défini') ?></p>

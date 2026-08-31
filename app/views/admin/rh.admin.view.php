@@ -1,56 +1,55 @@
 <?php 
 // Messages flash globaux
 if (isset($_SESSION['success_message'])): ?>
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show py-2 mb-3" role="alert">
         <?= $_SESSION['success_message'] ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <?php unset($_SESSION['success_message']); ?>
 <?php endif; ?>
 
-<div class="container-fluid my-4">
+<div class="container-fluid px-4 py-3">
     
     <!-- ========================================== -->
     <!-- SECTION 1 : GESTION DES EMPLOYÉS (RH)     -->
     <!-- ========================================== -->
     <div class="admin-section mb-5">
-        <div class="section-header mb-4">
-            <h2><i class="fa-solid fa-user-shield"></i> Gestion de l'équipe</h2>
-            <p class="text-muted">Ajoutez de nouveaux employés et gérez les accès de votre équipe actuelle.</p>
+        <div class="section-header mb-3">
+            <h3 class="mb-1"><i class="fa-solid fa-user-shield"></i> Gestion de l'équipe</h3>
+            <p class="text-muted small mb-0">Ajoutez de nouveaux employés et gérez les accès de votre équipe actuelle.</p>
         </div>
 
-        <!-- Bloc 1A : Formulaire d'ajout d'employé -->
-        <div class="card shadow-sm p-4 mb-4">
-            <div class="section-header mb-3">
-                <h4><i class="fa-solid fa-user-plus"></i> Ajouter un employé</h4>
-            </div>
-
+        <!-- Bloc Formulaire d'ajout-->
+        <div class="card shadow-sm p-3 mb-4">
+            <h6 class="fw-bold mb-3"><i class="fa-solid fa-user-plus"></i> Ajouter un employé</h6>
             <form action="index.php?page=rh-admin-create" method="POST" autocomplete="off">
-                <!-- Champ Email -->
-                <?php render_form_input('email', 'Email de l\'employé (Username)', 'email', 'Entrez l\'email...', ''); ?>
-
-                <!-- Champ Mot de passe -->
-                <?php render_form_input('password', 'Mot de passe temporaire', 'password', 'Entrez le mot de passe...', ''); ?>
-
-                <button type="submit" class="btn btn-primary mt-2">Créer l'employé</button>
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-5">
+                        <?php render_form_input('email', 'Email (Username)', 'email', 'Entrez l\'email...', ''); ?>
+                    </div>
+                    <div class="col-md-5">
+                        <?php render_form_input('password', 'Mot de passe temporaire', 'password', 'Mot de passe...', ''); ?>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-sm w-100 py-2">Créer</button>
+                    </div>
+                </div>
             </form>
         </div>
 
-        <!-- Bloc 1B : Liste de l'équipe actuelle -->
-        <div class="card shadow-sm p-4">
-            <div class="section-header mb-3">
-                <h4><i class="fa-solid fa-users"></i> Équipe actuelle</h4>
-            </div>
-
-            <div class="table-container">
-                <table class="table-admin table align-middle" id="employesTable">
+        <!-- Bloc Liste de l'équipe actuelle (Pleine largeur) -->
+        <div class="card shadow-sm p-3">
+            <h6 class="fw-bold mb-3"><i class="fa-solid fa-users"></i> Équipe actuelle</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-admin align-middle mb-0" id="employesTable">
                     <thead>
                         <tr>
                             <th>Employé</th>
                             <th>Email</th>
-                            <th>Date d'arrivée</th>
+                            <th>Arrivée</th>
                             <th>Statut</th>
-                            <th>Actions</th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -63,50 +62,35 @@ if (isset($_SESSION['success_message'])): ?>
                                 <tr>
                                     <td>
                                         <div class="user-info d-flex align-items-center gap-2">
-                                            <div class="user-avatar"><?= $initiales ?></div>
-                                            <strong><?= htmlspecialchars($emailParts[0]) ?></strong>
+                                            <div class="user-avatar-sm"><?= $initiales ?></div>
+                                            <strong class="small"><?= htmlspecialchars($emailParts[0]) ?></strong>
                                         </div>
                                     </td>
-                                    <td><?= htmlspecialchars($emp['email']) ?></td>
-                                    <td><?= isset($emp['created_at']) ? date('d/m/Y', strtotime($emp['created_at'])) : 'N/C' ?></td>
+                                    <td class="small"><?= htmlspecialchars($emp['email']) ?></td>
+                                    <td class="small"><?= isset($emp['created_at']) ? date('d/m/Y', strtotime($emp['created_at'])) : 'N/C' ?></td>
                                     <td>
                                         <?php if (isset($emp['est_actif']) && $emp['est_actif'] == 1): ?>
-                                            <span class="badge bg-success">Actif</span>
+                                            <span class="badge bg-success font-xs">Actif</span>
                                         <?php else: ?>
-                                            <span class="badge bg-danger">Inactif</span>
+                                            <span class="badge bg-danger font-xs">Inactif</span>
                                         <?php endif; ?>
                                     </td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-secondary btn-icon" title="Réinitialiser le MDP"><i class="fa-solid fa-key"></i></button>
-                                        
-                                        <?php if (isset($emp['est_actif']) && $emp['est_actif'] == 1): ?>
-                                            <a href="index.php?page=rh-admin-toggle&id=<?= $emp['utilisateur_id'] ?>" 
-                                               class="btn btn-sm btn-outline-danger btn-icon" 
-                                               title="Désactiver le compte" 
-                                               onclick="return confirm('Voulez-vous vraiment désactiver cet employé ?');">
-                                               <i class="fa-solid fa-user-lock"></i>
-                                            </a>
-                                        <?php else: ?>
-                                            <a href="index.php?page=rh-admin-toggle&id=<?= $emp['utilisateur_id'] ?>" 
-                                               class="btn btn-sm btn-outline-success btn-icon" 
-                                               title="Réactiver le compte" 
-                                               onclick="return confirm('Voulez-vous réactiver cet employé ?');">
-                                               <i class="fa-solid fa-user-check"></i>
-                                            </a>
-                                        <?php endif; ?>
-                                            
-                                        <a href="index.php?page=rh-admin-delete&id=<?= $emp['utilisateur_id'] ?>" 
-                                           class="btn btn-sm btn-outline-danger btn-icon" 
-                                           title="Supprimer" 
-                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet employé ?');">
-                                           <i class="fa-solid fa-user-slash"></i>
-                                        </a>
+                                    <td class="text-end">
+                                        <div class="d-flex gap-1 justify-content-end">
+                                            <button class="btn btn-xs btn-outline-secondary" title="Réinitialiser MDP"><i class="fa-solid fa-key"></i></button>
+                                            <?php if (isset($emp['est_actif']) && $emp['est_actif'] == 1): ?>
+                                                <a href="index.php?page=rh-admin-toggle&id=<?= $emp['utilisateur_id'] ?>" class="btn btn-xs btn-outline-danger" title="Désactiver" onclick="return confirm('Désactiver cet employé ?');"><i class="fa-solid fa-user-lock"></i></a>
+                                            <?php else: ?>
+                                                <a href="index.php?page=rh-admin-toggle&id=<?= $emp['utilisateur_id'] ?>" class="btn btn-xs btn-outline-success" title="Réactiver" onclick="return confirm('Réactiver cet employé ?');"><i class="fa-solid fa-user-check"></i></a>
+                                            <?php endif; ?>
+                                            <a href="index.php?page=rh-admin-delete&id=<?= $emp['utilisateur_id'] ?>" class="btn btn-xs btn-outline-danger" title="Supprimer" onclick="return confirm('Supprimer cet employé ?');"><i class="fa-solid fa-user-slash"></i></a>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-3">Aucun employé enregistré pour le moment.</td>
+                                <td colspan="5" class="text-center text-muted small py-3">Aucun employé enregistré.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
@@ -115,28 +99,26 @@ if (isset($_SESSION['success_message'])): ?>
         </div>
     </div>
 
-
-    <hr class="my-5">
-
+    <hr class="my-4">
 
     <!-- ========================================== -->
     <!-- SECTION 2 : MODÉRATION GLOBALE DES USERS  -->
     <!-- ========================================== -->
     <div class="admin-section">
         <div class="section-header mb-3">
-            <h2><i class="fas fa-users-gear"></i> Modération des clients & utilisateurs</h2>
-            <p class="text-muted">Recherchez un utilisateur pour gérer ses accès et son statut sur le site.</p>
+            <h3 class="mb-1"><i class="fas fa-users-gear"></i> Modération des clients & utilisateurs</h3>
+            <p class="text-muted small mb-0">Recherchez un utilisateur pour gérer ses accès et son statut sur le site.</p>
         </div>
 
-        <!-- Barre de recherche et filtres -->
-        <div class="search-bar-container card shadow-sm p-3 mb-4">
+        <!-- Barre de recherche et filtres compacte -->
+        <div class="search-bar-container card shadow-sm p-3 mb-3">
             <form class="search-ban-form d-flex gap-2 align-items-center flex-wrap" action="index.php?page=ban-user-admin" method="GET">
                 <input type="hidden" name="page" value="ban-user-admin">
                 <div class="search-input-group flex-grow-1">
-                    <input type="text" class="form-control" placeholder="Rechercher par nom, prénom ou email..." name="search-user" value="<?= htmlspecialchars($_GET['search-user'] ?? '') ?>">
+                    <input type="text" class="form-control form-control-sm" placeholder="Rechercher par nom ou email..." name="search-user" value="<?= htmlspecialchars($_GET['search-user'] ?? '') ?>">
                 </div>
 
-                <select name="filter-role" class="search-select form-select w-auto">
+                <select name="filter-role" class="search-select form-select form-select-sm w-auto">
                     <option value="">Tous les rôles</option>
                     <?php foreach ($listeRoles ?? [] as $role): ?>
                         <option value="<?= $role['role_id'] ?>" <?= (isset($_GET['filter-role']) && $_GET['filter-role'] == $role['role_id']) ? 'selected' : '' ?>>
@@ -144,55 +126,54 @@ if (isset($_SESSION['success_message'])): ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
-                <button type="submit" class="btn btn-primary">Rechercher</button>
+                <button type="submit" class="btn btn-primary btn-sm">Rechercher</button>
                 <?php if (!empty($_GET['search-user']) || !empty($_GET['filter-role'])): ?>
-                    <a href="index.php?page=ban-user-admin" class="btn btn-secondary">Afficher tout</a>
+                    <a href="index.php?page=ban-user-admin" class="btn btn-outline-secondary btn-sm">Effacer</a>
                 <?php endif; ?>
             </form>
         </div>
 
-        <!-- Tableau des utilisateurs -->
-        <div class="card shadow-sm p-4">
-            <div class="table-container">
-                <table class="table-admin table align-middle">
+        <!-- Tableau des utilisateurs condensé -->
+        <div class="card shadow-sm p-3">
+            <div class="table-responsive">
+                <table class="table table-sm table-admin align-middle mb-0">
                     <thead>
                         <tr>
                             <th>Utilisateur</th>
-                            <th>Rôle</th>
                             <th>Email</th>
-                            <th>Actions</th>
+                            <th>Rôle</th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (!empty($listeUtilisateurs)): ?>
                             <?php foreach ($listeUtilisateurs as $user): ?>
-    <tr>
-        <td><?= htmlspecialchars($user['nom']) ?></td>
-        <td><?= htmlspecialchars($user['email']) ?></td>
-        <td><?= htmlspecialchars($user['role_nom']) ?></td>
-        <td>
-            <!-- On vérifie si l'utilisateur n'est PAS un administrateur (supposons role_id = 1 pour l'admin) -->
-            <?php if ($user['role_id'] != 1): ?>
-                <?php if ($user['est_actif'] == 1): ?>
-                    <form action="index.php?page=ban-action-admin" method="POST" style="display:inline;">
-                        <input type="hidden" name="id" value="<?= $user['utilisateur_id'] ?>">
-                        <button type="submit" class="btn btn-danger btn-sm">Désactiver</button>
-                    </form>
-                <?php else: ?>
-                    <form action="index.php?page=unban-action-admin" method="POST" style="display:inline;">
-                        <input type="hidden" name="id" value="<?= $user['utilisateur_id'] ?>">
-                        <button type="submit" class="btn btn-success btn-sm">Réactiver</button>
-                    </form>
-                <?php endif; ?>
-            <?php else: ?>
-                <span class="badge bg-secondary">Protégé</span>
-            <?php endif; ?>
-        </td>
-    </tr>
-<?php endforeach; ?>
+                                <tr>
+                                    <td class="small fw-semibold"><?= htmlspecialchars($user['nom']) ?></td>
+                                    <td class="small"><?= htmlspecialchars($user['email']) ?></td>
+                                    <td><span class="badge bg-secondary font-xs"><?= htmlspecialchars($user['role_nom']) ?></span></td>
+                                    <td class="text-end">
+                                        <?php if ($user['role_id'] != 1): ?>
+                                            <?php if ($user['est_actif'] == 1): ?>
+                                                <form action="index.php?page=ban-action-admin" method="POST" class="d-inline">
+                                                    <input type="hidden" name="id" value="<?= $user['utilisateur_id'] ?>">
+                                                    <button type="submit" class="btn btn-danger btn-xs">Désactiver</button>
+                                                </form>
+                                            <?php else: ?>
+                                                <form action="index.php?page=unban-action-admin" method="POST" class="d-inline">
+                                                    <input type="hidden" name="id" value="<?= $user['utilisateur_id'] ?>">
+                                                    <button type="submit" class="btn btn-success btn-xs">Réactiver</button>
+                                                </form>
+                                            <?php endif; ?>
+                                        <?php else: ?>
+                                            <span class="badge bg-light text-dark border">Protégé</span>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-3">Aucun utilisateur trouvé.</td>
+                                <td colspan="4" class="text-center text-muted small py-3">Aucun utilisateur trouvé.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

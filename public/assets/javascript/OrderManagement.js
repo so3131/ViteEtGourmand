@@ -1,3 +1,4 @@
+// DataTables French translation
 $(document).ready(function() {
        var frLanguage = {
         "emptyTable": "Aucune donnée disponible dans le tableau",

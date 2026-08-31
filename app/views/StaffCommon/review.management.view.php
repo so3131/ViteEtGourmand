@@ -2,46 +2,56 @@
 $reviews = $reviews ?? [];
 ?>
 <?php foreach ($reviews as $review): ?>
-    <div class="list-group-item mb-3 shadow-sm rounded p-3">
+    <div class="card bg-white border-0 shadow-sm mb-2 rounded p-2 px-3">
         <div class="d-flex w-100 justify-content-between align-items-center">
-            <h5 class="mb-1"><?= htmlspecialchars($review['author_name'] ?? 'Client') ?></h5>
-            <small class="text-muted">Commande n°<?= htmlspecialchars($review['commande_id'] ?? '') ?></small>
+            <h6 class="mb-0 fw-bold"><?= htmlspecialchars($review['author_name'] ?? 'Client') ?></h6>
+            <small class="text-muted font-xs">Réf n°:<?= htmlspecialchars($review['numero_commande'] ?? $review['commande_id'] ?? '') ?></small>
         </div>
 
-        <p class="mb-1">
-            <strong>Note :</strong> <?= str_repeat('⭐', (int)($review['rating'] ?? 0)) ?> (<?= $review['rating'] ?? 0 ?>/5)
-        </p>
-        <p class="mb-2"><?= nl2br(htmlspecialchars($review['comment'] ?? '')) ?></p>
+        <div class="d-flex align-items-center gap-2 my-1">
+            <span class="text-warning font-xs"><?= str_repeat('⭐', (int)($review['rating'] ?? 0)) ?></span>
+            <span class="text-muted font-xs">(<?= $review['rating'] ?? 0 ?>/5)</span>
+        </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-2">
-            <div>
-                <strong>Statut actuel :</strong>
-                <?php
-                $status = $review['status'] ?? 'pending';
-                $badgeClass = match ($status) {
-                    'approved' => 'bg-success',
-                    'rejected' => 'bg-danger',
-                    default => 'bg-warning text-dark'
-                };
-                ?>
-                <span class="badge <?= $badgeClass ?>"><?= htmlspecialchars($status) ?></span>
+        <p class="mb-2 small text-secondary"><?= nl2br(htmlspecialchars($review['comment'] ?? '')) ?></p>
+
+        <div class="d-flex justify-content-between align-items-center pt-1 border-top">
+            <div class="d-flex flex-column">
+                <div class="d-flex align-items-center gap-1">
+                    <span class="text-muted font-xs">Statut :</span>
+                    <?php
+                    $status = $review['status'] ?? 'pending';
+                    $badgeClass = match ($status) {
+                        'approved' => 'bg-success',
+                        'rejected' => 'bg-danger',
+                        default => 'bg-warning text-dark'
+                    };
+                    ?>
+                    <span class="badge <?= $badgeClass ?> font-xs px-2 py-1"><?= htmlspecialchars($status) ?></span>
+                </div>
+
+                <!-- Affichage de la traçabilité -->
+                <?php if (!empty($review['validated_by_name'])): ?>
+                    <small class="text-muted font-xs mt-1">
+                        <i class="fa-solid fa-user-check"></i> Traité par <strong><?= htmlspecialchars($review['validated_by_name']) ?></strong>
+                        <?php if (isset($review['validated_at'])): ?>
+                            <br>le <?= date('d/m/Y à H:i', $review['validated_at']->toDateTime()->getTimestamp()) ?>
+                        <?php endif; ?>
+                    </small>
+                <?php endif; ?>
             </div>
 
             <!-- Formulaires d'action pour Valider ou Refuser -->
             <?php
-
             $currentStatus = $review['status'] ?? 'pending';
-
-            // Récupération du rôle via la session (adapte le nom de la clé si ce n'est pas 'role')
             $userRole = $_SESSION['role_id'] ?? '';
             $isAdmin = ($userRole === ROLE_ADMIN);
             $isProcessed = ($currentStatus !== 'pending');
             ?>
 
-            <div class="btn-group" role="group">
-                <!-- Si c'est un employé (et non admin) et que l'avis a déjà été traité -->
+            <div class="btn-group btn-group-sm" role="group">
                 <?php if (!$isAdmin && $isProcessed): ?>
-                    <span class="badge bg-secondary align-self-center p-2">
+                    <span class="badge bg-secondary font-xs px-2 py-1 align-self-center">
                         <?= $currentStatus === 'approved' ? 'Approuvé (Déjà traité)' : 'Refusé (Déjà traité)' ?>
                     </span>
                 <?php else: ?>
@@ -49,7 +59,7 @@ $reviews = $reviews ?? [];
                     <form action="index.php?page=update-review-status" method="POST" class="me-1">
                         <input type="hidden" name="review_id" value="<?= (string)$review['_id'] ?>">
                         <input type="hidden" name="status" value="approved">
-                        <button type="submit" class="btn btn-sm btn-success <?= $currentStatus === 'approved' ? 'disabled' : '' ?>">
+                        <button type="submit" class="btn btn-xs btn-success <?= $currentStatus === 'approved' ? 'disabled' : '' ?>">
                             Valider
                         </button>
                     </form>
@@ -58,7 +68,7 @@ $reviews = $reviews ?? [];
                     <form action="index.php?page=update-review-status" method="POST">
                         <input type="hidden" name="review_id" value="<?= (string)$review['_id'] ?>">
                         <input type="hidden" name="status" value="rejected">
-                        <button type="submit" class="btn btn-sm btn-outline-danger <?= $currentStatus === 'rejected' ? 'disabled' : '' ?>">
+                        <button type="submit" class="btn btn-xs btn-outline-danger <?= $currentStatus === 'rejected' ? 'disabled' : '' ?>">
                             Refuser
                         </button>
                     </form>

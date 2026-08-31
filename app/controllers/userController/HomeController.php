@@ -3,9 +3,8 @@ namespace App\Controllers\UserController;
 require_once dirname(__DIR__, 2) . '/config/Constants.php';
  use App\Managers\MongoReviewManager;
 
-// class qu'on appelle pour afficher la page depuis l'index.php
 class HomeController
-{
+{//function pour afficher la page d'accueil avec les avis approuvés depuis la base de données MongoDB
     public static function home(\PDO $db)
     {
         $pdo = $db;
@@ -15,7 +14,7 @@ class HomeController
 
 $mongoReviewManager = new MongoReviewManager();
 $approvedReviews = $mongoReviewManager->getApprovedReviews(6);
-        $title = "Accueil - EcoRide";
+        $title = " Accueil - Vite & Gourmand";
 
         $specific_fonts = ["https://fonts.googleapis.com/css?family=Lexend&display=swap"];
 
@@ -26,7 +25,7 @@ $approvedReviews = $mongoReviewManager->getApprovedReviews(6);
 
         // Pareil pour le JS
         $specific_scripts = [
-            "assets/javascript/gestionBDR.js",
+            "",
         ];
 
         require_once ROOT_PATH . '/app/views/layout/header.php';

@@ -42,14 +42,16 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
                         <input type="number" class="form-control" name="nombre_personne_minimum" min="15" max="150" placeholder="Min 15 Personnes">
                     </div>
 
-                    <div class="accordion accordion-flush" id="filterAccordion">
+                                        <div class="accordion accordion-flush" id="filterAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header"><button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#theme">Thèmes</button></h2>
                             <div id="theme" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
 
                                 <div class="accordion-body">
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="1" id="t1"><label class="form-check-label" for="t1">Noël</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="2" id="t2"><label class="form-check-label" for="t2">Pâques</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="4" id="t4"><label class="form-check-label" for="t4">Noël</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="5" id="t5"><label class="form-check-label" for="t5">Pâques</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="1" id="t1"><label class="form-check-label" for="t1">Gastronomique</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="2" id="t2"><label class="form-check-label" for="t2">Traditionnel</label></div>
                                 </div>
 
                             </div>
@@ -59,8 +61,9 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
                             <h2 class="accordion-header"><button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#regime">Régimes</button></h2>
                             <div id="regime" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
                                 <div class="accordion-body">
-                                    <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="1" id="r1"><label class="form-check-label" for="r1">Vegan</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="2" id="r2"><label class="form-check-label" for="r2">Végétarien</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="1" id="r1"><label class="form-check-label" for="r1">Végétarien</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="2" id="r2"><label class="form-check-label" for="r2">Vegan</label></div>
+                                    <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="3" id="r3"><label class="form-check-label" for="r3">Classique</label></div>
                                 </div>
                             </div>
                         </div>
@@ -74,64 +77,63 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
         </aside>
 
 
-<!--  ON ARRETE ICI GESTION DES IMG SUR LES SEARCH, penser a verifier les données en dure aussi pas que les cards genere par JS  -->
 
 
 
         <section class="col-md-9">
-    <div class="row row-cols-1 row-cols-lg-3 g-4" id="menu-container">
+            <div class="row row-cols-1 row-cols-lg-3 g-4" id="menu-container">
 
-        <?php if (isset($menus) && !empty($menus)): ?>
-            <?php foreach ($menus as $menu): ?>
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <?php
-             $plats = $menu['plats_structures'] ?? [];
+                <?php if (isset($menus) && !empty($menus)): ?>
+                    <?php foreach ($menus as $menu): ?>
+                        <div class="col">
+                            <div class="card h-100 shadow-sm">
+                                <?php
+                                $plats = $menu['plats_structures'] ?? [];
 
-$platPrincipal = $plats['Plat']
-    ?? $plats['Entrée']
-    ?? $plats['Dessert']
-    ?? null;
+                                $platPrincipal = $plats['Plat']
+                                    ?? $plats['Entrée']
+                                    ?? $plats['Dessert']
+                                    ?? null;
 
-$photoUrl = !empty($platPrincipal['photo'])
-    ? $platPrincipal['photo']
-    : 'assets/img/plats/default.webp';
-?>
+                                $photoUrl = !empty($platPrincipal['photo'])
+                                    ? $platPrincipal['photo']
+                                    : 'assets/img/plats/default.webp';
+                                ?>
 
-<img src="<?= htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') ?>"
-     class="card-img-top"
-     alt="Illustration <?= htmlspecialchars($menu['titre'], ENT_QUOTES, 'UTF-8') ?>"
-     style="height: 300px; object-fit: cover;">
+                                <img src="<?= htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') ?>"
+                                    class="card-img-top"
+                                    alt="Illustration <?= htmlspecialchars($menu['titre'], ENT_QUOTES, 'UTF-8') ?>"
+                                    style="height: 300px; object-fit: cover;">
 
-                        <div class="card-body">
-                            <h5 class="card-title"><?= htmlspecialchars($menu['titre']) ?></h5>
-                            <?php
-                            $theme = $menu['vg_theme']['libelle'] ?? 'Thème non défini';
-                            $regime = $menu['regime'] ?? 'Régime classique';
-                            ?>
-                            <h6 class="card-subtitle mb-2 text-muted">
-                                <?= htmlspecialchars($theme) ?> - <?= htmlspecialchars($regime) ?>
-                            </h6>
-                            <p class="card-text text-muted small"><?= htmlspecialchars($menu['description_menu']) ?></p>
-                            <ul class="list-unstyled small">
-                                <li><strong>Minimum :</strong> <?= htmlspecialchars($menu['nombre_personne_minimum']) ?> personnes</li>
-                                <li><strong>Prix :</strong> <?= number_format($menu['prix_par_personne'], 2) ?> € / pers.</li>
-                            </ul>
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= htmlspecialchars($menu['titre']) ?></h5>
+                                    <?php
+                                    $theme = $menu['vg_theme']['libelle'] ?? 'Thème non défini';
+                                    $regime = $menu['regime'] ?? 'Régime classique';
+                                    ?>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        <?= htmlspecialchars($theme) ?> - <?= htmlspecialchars($regime) ?>
+                                    </h6>
+                                    <p class="card-text text-muted small"><?= htmlspecialchars($menu['description_menu']) ?></p>
+                                    <ul class="list-unstyled small">
+                                        <li><strong>Minimum :</strong> <?= htmlspecialchars($menu['nombre_personne_minimum']) ?> personnes</li>
+                                        <li><strong>Prix :</strong> <?= number_format($menu['prix_par_personne'], 2) ?> € / pers.</li>
+                                    </ul>
+                                </div>
+                                <div class="card-footer bg-transparent border-0">
+                                    <a href="index.php?page=details-menu&menu_id=<?= $menu['menu_id'] ?>" class="btn btn-primary w-100">
+                                        Voir le détail
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-footer bg-transparent border-0">
-                            <a href="index.php?page=details-menu&menu_id=<?= $menu['menu_id'] ?>" class="btn btn-primary w-100">
-                                Voir le détail
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <div class="col-12 alert alert-info">Aucun menu disponible pour le moment.</div>
-        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="col-12 alert alert-info">Aucun menu disponible pour le moment.</div>
+                <?php endif; ?>
 
-    </div>
-</section>
+            </div>
+        </section>
 
     </div>
 </main>

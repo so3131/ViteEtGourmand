@@ -15,6 +15,10 @@ class UpdateProfilController
         $error = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // 🛡️ Vérification CSRF
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+                $error = "Session expirée ou requête invalide. Veuillez recharger la page.";
+            }
             $updates = [];
             $params = ['id' => $_SESSION['user_id']];
 
@@ -65,7 +69,7 @@ exit();
         // ===== PRÉPARATION VUE =====
         $title = "Modifier profil - Vite&Gourmand";
         $specific_styles = [];
-        $specific_scripts = [];
+        $specific_scripts = ["../public/assets/javascript/auth.js",];
 
         require_once ROOT_PATH . '/app/views/layout/header.php';
         require_once ROOT_PATH . '/app/views/auth/update.profile.view.php';

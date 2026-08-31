@@ -20,7 +20,7 @@ class Timetable
         $this->heure_ouverture = $heure_ouverture;
         $this->heure_fermeture = $heure_fermeture;
     }
-
+//function pour récupérer tous les horaires depuis la base de données SQL
     public static function ShowTimetable(\PDO $db, array $timetables = [])
     {
         try {

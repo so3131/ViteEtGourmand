@@ -8,9 +8,7 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
 
 class ReviewController
 {
-    /**
-     * Affiche le formulaire d'avis (en GET)
-     */
+ //function pour afficher le formulaire d'avis pour une commande spécifique après vérification de l'état de la commande
     public static function submitReview(\PDO $db)
     {
         Auth::check([ROLE_USER]);
@@ -30,19 +28,10 @@ class ReviewController
 
     }
 
-    /**
-     * Traite l'enregistrement de l'avis dans MongoDB (en POST)
-     */
+//function pour stocker un avis dans la base de données MongoDB après validation du formulaire
     public static function storeReview(\PDO $db)
     {
         Auth::check([ROLE_USER]);
-// Test de passage : est-ce qu'on arrive bien ici ?
-    echo "Je suis bien dans storeReview !<br>";
-    var_dump($_POST);
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: index.php?page=dashboard-user&error=invalid_method');
-            exit();
-        }
 
         // Vérification CSRF
         if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
@@ -60,39 +49,45 @@ class ReviewController
         $nom = $_SESSION['nom'] ?? '';
         $author_name = trim("$prenom $nom") !== '' ? trim("$prenom $nom") : 'Client';
 
-        // Double vérification en BDD MySQL
+  // Double vérification en BDD MySQL (assure-toi que ta requête récupère bien numero_commande)
         $stmt = $db->prepare("SELECT * FROM vg_commande WHERE commande_id = ? AND utilisateur_id = ? AND statut = 'terminee'");
         $stmt->execute([$commande_id, $utilisateur_id]);
         $order = $stmt->fetch();
 
-$reviewManager = new \App\Managers\MongoReviewManager();
+        $reviewManager = new \App\Managers\MongoReviewManager();
         if ($reviewManager->alreadyReviewedOrder($commande_id)) {
             header('Location: index.php?page=dashboard-user&error=already_reviewed');
             exit();
         }
+        
         if (!$order || $commande_id <= 0 || $rating < 1 || $rating > 5 || empty($comment)) {
             header('Location: index.php?page=dashboard-user&error=invalid_data');
             exit();
         }
 
-      try {
-    $mongoManager = new \App\Managers\MongoReviewManager();
-    
-    $mongoManager->insertReview([
-        'commande_id' => $commande_id,
-        'user_id' => $utilisateur_id,
-        'author_name' => $author_name,
-        'rating' => $rating,
-        'comment' => htmlspecialchars($comment),
-        'status' => 'pending',
-        'created_at' => new \MongoDB\BSON\UTCDateTime()
-    ]);
+        // On récupère le vrai numéro de commande lisible (ou on se replie sur l'ID technique si vide)
+        $numeroCommande = $order['numero_commande'] ?? $commande_id;
 
-    header('Location: index.php?page=dashboard-user&success=review_sent');
-    exit();
-} catch (\Exception $e) {
-    header('Location: index.php?page=dashboard-user&error=review_failed');
-    exit();
-}
+        try {
+            $mongoManager = new \App\Managers\MongoReviewManager();
+            
+            // Insertion avec le bon champ pour l'affichage
+            $mongoManager->insertReview([
+                'commande_id' => $commande_id,         // Gardé pour la logique technique
+                'numero_commande' => $numeroCommande, // Stocke le numéro lisible pour l'affichage
+                'user_id' => $utilisateur_id,
+                'author_name' => $author_name,
+                'rating' => $rating,
+                'comment' => htmlspecialchars($comment),
+                'status' => 'pending',
+                'created_at' => new \MongoDB\BSON\UTCDateTime()
+            ]);
+
+            header('Location: index.php?page=dashboard-user&success=review_sent');
+            exit();
+        } catch (\Exception $e) {
+            header('Location: index.php?page=dashboard-user&error=review_failed');
+            exit();
+        }
     }
 }

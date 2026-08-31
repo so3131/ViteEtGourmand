@@ -11,6 +11,7 @@ abstract class BaseManager
      * @param array $params Paramètres 
      * @return array Résultats ou array vide en cas d'erreur
      */
+    //function pour exécuter une requête SQL sécurisée
     protected static function executeQuery(\PDO $db, string $sql, array $params = []): array
     {
         try {
@@ -23,9 +24,7 @@ abstract class BaseManager
         }
     }
 
-    /**
-     * Récupère une seule ligne
-     */
+   //function pour exécuter une requête SQL sécurisée et récupérer un seul résultat
     protected static function fetchOne(\PDO $db, string $sql, array $params = []): ?array
     {
         try {
@@ -38,9 +37,7 @@ abstract class BaseManager
         }
     }
 
-    /**
-     * Exécute une requête INSERT/UPDATE/DELETE
-     */
+   //function pour exécuter une requête SQL sécurisée sans récupérer de résultats (INSERT, UPDATE, DELETE)
     protected static function execute(\PDO $db, string $sql, array $params = []): bool
     {
         try {

@@ -9,7 +9,8 @@ use App\Managers\MongoStatsManager;
 use App\Managers\MenuManager; // Gardé uniquement pour alimenter le <select> du formulaire HTML si les noms des menus y sont stockés, ou tu peux aussi les lister via Mongo si tu préfères.
 
 class StatsAdminController
-{
+{ 
+    //function pour afficher la page de statistiques admin
     public static function adminStats(\PDO $db)
     {
         $pdo = $db;
@@ -52,8 +53,6 @@ $totalOrders = $periodStats['totalOrders'];
         $menus = MenuManager::get($db, null, [], true);
         // 6. Compteurs structurels (Thèmes, Régimes, etc.) depuis le SQL
      $statsSql = \App\Managers\StatAdminManager::getStatsFromSQL($db);
-$totalThemes = $statsSql['total_themes'] ?? 0;
-$totalRegimes = $statsSql['total_regimes'] ?? 0;
         
 
         $title = "Statistiques - Vite&Gourmand";

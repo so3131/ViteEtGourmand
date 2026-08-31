@@ -4,6 +4,7 @@ namespace App\Managers;
 
 class StatAdminManager
 {
+    //function pour récupérer les statistiques globales depuis la base de données SQL
     public static function getStatsFromSQL(\PDO $db)
     {
         $sql = "SELECT 
@@ -14,7 +15,8 @@ class StatAdminManager
                     (SELECT COUNT(*) FROM vg_commande WHERE statut = 'terminee') AS finished_orders,
                     (SELECT COUNT(*) FROM vg_utilisateur) AS total_utilisateurs,
                     (SELECT COUNT(*) FROM vg_theme) AS total_themes,
-                    (SELECT COUNT(*) FROM vg_regime) AS total_regimes";
+                    (SELECT COUNT(*) FROM vg_regime) AS total_regimes,
+                    (SELECT COUNT(*) FROM vg_utilisateur) AS total_users";
                     
         $stmt = $db->query($sql);
         return $stmt->fetch(\PDO::FETCH_ASSOC);

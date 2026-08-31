@@ -18,6 +18,7 @@ document.querySelectorAll('.btn-erase-order').forEach(btn => {
         }
     });
 });
+// Gestion de l'affichage de l'alerte de succès
 document.addEventListener("DOMContentLoaded", function() {
     const alertElement = document.getElementById('success-alert');
     

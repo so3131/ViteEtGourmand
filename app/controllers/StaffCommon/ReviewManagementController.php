@@ -8,7 +8,8 @@ use App\Controllers\AuthController\Auth;
 
 // fonction qu'on appelle pour afficher la page depuis l'index.php
 class ReviewManagementController
-{
+{ 
+    //function pour afficher la page de gestion des avis
     public static function manageReview(\PDO $db)
     {
         // Sécurité : Réservé aux administrateurs et employés
@@ -47,6 +48,7 @@ class ReviewManagementController
             require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
         }
     }
+     //function pour mettre à jour le statut d'un avis
     public static function updateReviewStatus()
 {
     Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -74,19 +76,23 @@ class ReviewManagementController
         header('Location: index.php?page=review-management&error=unauthorized_action');
         exit();
     }
+// Récupération des informations de l'utilisateur connecté pour la traçabilité
+$userId = $_SESSION['user_id'] ?? $_SESSION['id'] ?? null;
+$userName = trim(($_SESSION['prenom'] ?? '') . ' ' . ($_SESSION['nom'] ?? ''));
 
-    try {
-        $success = $reviewManager->updateReviewStatus($reviewId, $newStatus);
+try {
+    // On passe l'ID et le nom au manager
+    $success = $reviewManager->updateReviewStatus($reviewId, $newStatus, $userId, $userName);
 
-        if ($success) {
-            header('Location: index.php?page=review-management&success=review_updated');
-        } else {
-            header('Location: index.php?page=review-management&error=update_failed');
-        }
-        exit();
-    } catch (\Exception $e) {
-        header('Location: index.php?page=review-management&error=server_error');
-        exit();
+    if ($success) {
+        header('Location: index.php?page=review-management&success=review_updated');
+    } else {
+        header('Location: index.php?page=review-management&error=update_failed');
     }
+    exit();
+} catch (\Exception $e) {
+    header('Location: index.php?page=review-management&error=server_error');
+    exit();
+}
 }
 }

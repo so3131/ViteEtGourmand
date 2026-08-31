@@ -1,17 +1,11 @@
-<!-- Step 0 sur 4: Récupération des infos client, date, lieu et frais de livraison. -->
 <?php
 /** @var int $menuID */
-/** @var string $nom */
-/** @var string $prenom */
+/** @var array $menuInfo */
+/** @var array $tousLesLieux */
+/** @var string|null $dateMinimale */
+/** @var int $delaiCommande */
 ?>
-<?php
-$delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
-$dateMinimale = null;
 
-if ($delaiCommande > 0) {
-    $dateMinimale = (new DateTime('today'))->modify('+' . $delaiCommande . ' days')->format('Y-m-d');
-}
-?>
 <?php if (!empty($_SESSION['flash_error'])): ?>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <?= htmlspecialchars($_SESSION['flash_error']) ?>
@@ -19,10 +13,12 @@ if ($delaiCommande > 0) {
     </div>
     <?php unset($_SESSION['flash_error']); ?>
 <?php endif; ?>
+
 <div class="container mt-4">
     <h1 class="mb-4">Informations de livraison</h1>
-    <h2>Vous avez choisis le menu : <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?></h2>
+    <h2>Vous avez choisi le <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?></h2>
 
+    <!-- Étapes de commande -->
     <div class="d-flex justify-content-between mb-4 bg-light p-3 rounded">
         <span class="badge bg-primary">0. Détails</span>
         <span class="badge bg-secondary">1. Quantité</span>
@@ -31,83 +27,84 @@ if ($delaiCommande > 0) {
     </div>
 
     <div class="card p-4 shadow-sm">
-        <form action="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=0" method="POST">
+        <form action="index.php?page=order-menu&menu_id=<?= (int)$menuID ?>&step=0" method="POST" id="form-livraison">
 
             <div class="row">
+                <!-- Informations client -->
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Votre nom</label>
-                    <input type="text" name="nom" class="form-control" disabled required
-                        value="<?= $_SESSION['nom'] ?? '' ?>">
+                    <input type="text" class="form-control" readonly value="<?= htmlspecialchars($_SESSION['nom'] ?? '') ?>">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Votre prénom</label>
-                    <input type="text" name="prenom" class="form-control" disabled required
-                        value="<?= $_SESSION['prenom'] ?? '' ?>">
+                    <input type="text" class="form-control" readonly value="<?= htmlspecialchars($_SESSION['prenom'] ?? '') ?>">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Votre Email</label>
-                    <input type="email" name="email" class="form-control" disabled required
-                        value="<?= $_SESSION['email'] ?? '' ?>">
+                    <input type="email" class="form-control" readonly value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>">
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Votre GSM</label>
-                    <input type="text" name="gsm" class="form-control" disabled required
-                        value="<?= $_SESSION['telephone'] ?? '' ?>">
+                    <input type="text" class="form-control" readonly value="<?= htmlspecialchars($_SESSION['telephone'] ?? '') ?>">
                 </div>
+
+                <!-- Date de prestation -->
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Date de prestation</label>
+                    <label class="form-label">Date de prestation <span class="text-danger">*</span></label>
                     <input type="date" name="date_prestation" class="form-control" required
-                        min="<?= htmlspecialchars($dateMinimale ?? '') ?>"
-                        value="<?= $_SESSION['current_order']['prestation']['date_prestation'] ?? '' ?>">
-                    <?php if ($dateMinimale): ?>
+                           min="<?= htmlspecialchars($dateMinimale ?? '') ?>"
+                           value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['date_prestation'] ?? '') ?>">
+                    <?php if (!empty($dateMinimale)): ?>
                         <small class="text-muted d-block mt-1">
                             Date minimale autorisée : <?= htmlspecialchars(date('d/m/Y', strtotime($dateMinimale))) ?>
                             (<?= $delaiCommande ?> jour<?= $delaiCommande > 1 ? 's' : '' ?> après la commande)
                         </small>
                     <?php endif; ?>
                 </div>
+
+                <!-- Heure de livraison -->
                 <div class="col-md-6 mb-3">
-                    <label class="form-label">Heure de livraison</label>
-                    <input type="time" name="heure_livraison" class="form-control" required
-                        value="<?= $_SESSION['current_order']['prestation']['heure_livraison'] ?? '' ?>">
-                </div>
-
-                <div class="mb-3">
-                    <label for="lieu_id" class="form-label">Ville de livraison</label>
-                    <select name="lieu_id" id="lieu_id" class="form-select" required>
-                        <option value="">-- Sélectionnez une ville --</option>
-                        <?php
-                        global $db;
-                        $tousLesLieux = \App\Managers\LieuManager::getAll($db);
-
-                        // On récupère l'ID en session pour le test
-                        $lieuSessionId = $_SESSION['current_order']['prestation']['lieu']['id'] ?? null;
-
-                        foreach ($tousLesLieux as $lieu):
-                            // On ajoute l'attribut "selected" si l'ID correspond
-                            $isSelected = ($lieu['id'] == $lieuSessionId) ? 'selected' : '';
+                    <label for="heure_livraison" class="form-label">Heure de livraison <span class="text-danger">*</span></label>
+                    <select name="heure_livraison" id="heure_livraison" class="form-select" required>
+                        <option value="" disabled selected>-- Choisissez une heure --</option>
+                        <?php 
+                        $valeurActuelle = $_SESSION['current_order']['prestation']['heure_livraison'] ?? '';
+                        $creneaux = [
+                            '09:00', '10:00', '10:30' ,'11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '16:00', '17:00', '17:30', '18:00', '18:30', '19:00'
+                        ];
+                        foreach ($creneaux as $heure): 
+                            $selected = ($valeurActuelle === $heure) ? 'selected' : '';
                         ?>
-                            <option value="<?= $lieu['id'] ?>" data-km="<?= $lieu['distance_bordeaux'] ?>" <?= $isSelected ?>>
-                                <?= htmlspecialchars($lieu['ville']) ?>
-                            </option>
+                            <option value="<?= $heure ?>" <?= $selected ?>><?= $heure ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <div class="mb-3 p-3 bg-light border rounded">
-                        <strong>Frais de livraison estimés : </strong>
-                        <span id="affichage_frais"><?= htmlspecialchars(number_format((float)($_SESSION['current_order']['prestation']['frais_livraison'] ?? 0), 2, '.', '')) ?></span> €
-                        <small class="text-muted d-block mt-1">
-                            (Calculé automatiquement selon la distance de votre ville par rapport à Bordeaux)
-                        </small>
+                </div>
+
+                <!-- Adresse de livraison / Recherche -->
+                <div class="col-md-12 mb-3 position-relative">
+                    <label for="adresse_livraison" class="form-label">Adresse de livraison complète <span class="text-danger">*</span></label>
+                    <input type="text" name="adresse_livraison" id="adresse_livraison" class="form-control" 
+                           placeholder="Commencez à taper votre adresse..." 
+                           value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['adresse_livraison'] ?? '') ?>" autocomplete="off" required>
+                    <div class="form-text">Entrez votre adresse pour le calcul automatique des frais de livraison.</div>
+                    
+                    <!-- Conteneur pour les suggestions d'adresses (Autocomplete) -->
+                    <div id="suggestions-adresse" class="list-group position-absolute w-100 shadow-sm" style="z-index: 1000; display: none;"></div>
+                </div>
+
+                <!-- Résultat du calcul en direct -->
+                <div class="col-md-12 mb-3" id="info-livraison" style="display: none;">
+                    <div class="alert alert-info py-2 mb-0">
+                        Frais de livraison estimés : <strong id="montant-frais">0.00</strong> €
                     </div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="adresse_precise" class="form-label">Adresse de livraison</label>
-                    <input type="text" name="adresse_precise" id="adresse_precise" class="form-control"
-                        placeholder="Ex: 12 rue de la Paix" required
-                        value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['adresse_precise'] ?? '') ?>">
-                </div>
+                <!-- Champs cachés pour stocker la ville, la latitude et la longitude envoyés au contrôleur -->
+                <input type="hidden" name="ville" id="ville" required value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['ville'] ?? '') ?>">
+                <input type="hidden" name="lat" id="lat" required value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['lat'] ?? '') ?>">
+                <input type="hidden" name="lon" id="lon" required value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['lon'] ?? '') ?>">
 
+                <!-- Boutons d'action -->
                 <div class="d-flex justify-content-end mt-3">
                     <a href="index.php?page=search" class="btn btn-secondary me-2">Annuler</a>
                     <button type="submit" class="btn btn-primary">Valider et choisir la quantité</button>

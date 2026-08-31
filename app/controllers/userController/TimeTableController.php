@@ -5,6 +5,7 @@ use App\Models\Timetable;
 
 class TimeTableController
 {
+    //function pour afficher les horaires d'ouverture depuis la base de données SQL
     public static function timetable(\PDO $db)
     {
         try {

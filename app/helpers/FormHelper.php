@@ -1,7 +1,8 @@
 <?php
  
 /* 
-* Genere un champ de formulaire standardisé pour l'application */  
+*function pour générer un champ de formulaire standardisé */
+  
 function render_form_input(string $name, string $label, string $type = 'text', string $placeholder = '', string $value = '', string $autocomplete = 'off')
 {
 ?>
@@ -18,13 +19,35 @@ function render_form_input(string $name, string $label, string $type = 'text', s
     </div>
 <?php
 }
-    
+
+//*function pour générer un champ de mot de passe avec un bouton pour afficher/masquer le mot de passe */
+
+function render_password_input(string $name, string $label, string $value = '')
+{
+?>
+    <div class="mb-3">
+        <label for="input_<?= $name ?>" class="form-label fw-bold"><?= $label ?></label>
+        <div class="input-group">
+            <input type="password"
+                class="form-control"
+                id="input_<?= $name ?>"
+                name="<?= $name ?>"
+                value="<?= htmlspecialchars($value) ?>"
+                placeholder="Votre mot de passe"
+                autocomplete="current-password"
+                required>
+            <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn">
+                👁️
+            </button>
+        </div>
+    </div>
+    <?php
+}
+
 /*
- * Génère un champ de formulaire standardisé pour l'application avec gestion d'erreur optionnelle*/
+ *function pour générer un champ de formulaire standardisé avec gestion d'erreur optionnelle*/
 function render_standard_field(string $name, string $label, string $type = 'text', string $placeholder = '', string $value = '', string $errorId = '', array $errors = [])
 {
-    // On n'utilise PAS global $errors ici. 
-    // On utilise directement le tableau $errors reçu en argument !
     
     $isInvalid = (isset($errors[$name])) ? 'is-invalid' : '';
     $errorMessage = $errors[$name] ?? '';
@@ -45,19 +68,25 @@ function render_standard_field(string $name, string $label, string $type = 'text
 <?php
 }
 
-/*
- * Génère un textarea standardisé pour l'application avec gestion d'erreur optionnelle */
-function render_textarea_field(string $name, string $placeholder = '', int $rows = 6, string $errorId = '')
+//*function pour générer un champ de zone de texte standardisé avec gestion d'erreur optionnelle
+
+function render_textarea_field(string $name, string $placeholder = '', int $rows = 6, string $errorId = '', string $value = '', array $errors = [])
 {
+    $isInvalid = (isset($errors[$name])) ? 'is-invalid' : '';
+    $errorMessage = $errors[$name] ?? '';
 ?>
     <div class="mb-3">
-        <textarea class="form-control"
+        <textarea class="form-control <?= $isInvalid ?>"
             id="<?= $name ?>"
             name="<?= $name ?>"
             rows="<?= $rows ?>"
             placeholder="<?= htmlspecialchars($placeholder) ?>"
-            required></textarea>
-        <?php if ($errorId): ?>
+            required><?= htmlspecialchars($value) ?></textarea>
+            
+        <?php if (!empty($errorMessage)): ?>
+            <div id="<?= $errorId ?>" class="text-danger small mt-1"><?= $errorMessage ?></div>
+        <?php elseif ($errorId): ?>
+            <!-- Fallback si tu gères l'erreur en JS -->
             <div id="<?= $errorId ?>" class="erreurMessage text-danger small mt-1"></div>
         <?php endif; ?>
     </div>
@@ -65,7 +94,7 @@ function render_textarea_field(string $name, string $placeholder = '', int $rows
 }
 
 /*
- *  Génère un menu déroulant <select> standardisé pour l'application*/
+ *function pour générer un menu déroulant <select> standardisé */
 function render_select_field(string $name, string $label, array $options, string $selectedValue = '')
 {
 ?>

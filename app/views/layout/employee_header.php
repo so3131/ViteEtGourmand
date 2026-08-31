@@ -94,7 +94,7 @@ if ($current_page === '' || $current_page === '/') {
 
         <main class="main-content flex-grow-1">
             <header class="top-bar">
-             <?php
+               <?php
     $pageTitles = require ROOT_PATH . '/app/config/titles.php';
     $pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
 ?>
@@ -109,4 +109,6 @@ if ($current_page === '' || $current_page === '/') {
                 </div>
             </header>
 
-            <section class="content-body">
+            <!-- Ajout d'un conteneur Bootstrap pour stabiliser les largeurs et éviter l'effet "étiré" -->
+            <div class="container-fluid px-4 py-2">
+                <section class="content-body">

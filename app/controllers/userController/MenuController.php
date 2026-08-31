@@ -6,7 +6,7 @@ use App\Managers\MenuManager;
 
 class MenuController
 {
-    // page de recherche
+    //function pour afficher la page de recherche de menu et gérer les filtres dynamiques
     public static function searchMenu(\PDO $db)
     {
         $nomMenu = isset($_GET['nomMenu']) ? trim($_GET['nomMenu']) : '';
@@ -26,7 +26,7 @@ class MenuController
         // Variables pour la vue
         $title = "Rechercher un menu - Vite Gourmand";
         $specific_fonts = ["https://fonts.googleapis.com/css?family=Lexend&display=swap"];
-        $specific_styles = ["assets/css/styleSearch.css"];
+        $specific_styles = ["assets/css/styleSearch.css", "assets/css/trame.css"];
         $specific_scripts = ["assets/javascript/recherche.js"];
 
         // Chargement des composants
@@ -35,7 +35,7 @@ class MenuController
         require_once ROOT_PATH . '/app/views/layout/footer.php';
     }
 
-    //(Filtres dynamiques)
+    //function pour filtrer les menus en JSON pour l'interface utilisateur
     public static function filterJson(\PDO $db)
     {
         // Si select a une valeur, l'utiliser. Sinon utiliser le slider.
@@ -65,6 +65,7 @@ class MenuController
         echo $json;
         exit;
     }
+    //function pour afficher les détails d'un menu spécifique avec ses plats et allergènes
     public static function showMenuDetails(\PDO $db)
     {
         $canOrder = (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_USER);

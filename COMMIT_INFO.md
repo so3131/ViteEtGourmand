@@ -1,9 +1,6 @@
-# Commit 16 : Correction des routes / mise en place des avis/ changement des statuts de commandes
+# Commit 17 : Mise an place de Brevo a la place de mailHog
 
 À cette étape :
-
-
- Corriger les routes employé.
- Corriger et tester la modification des commandes.
- Finaliser la modération des avis.
-Vérifier les statuts et l'historique des commandes.
+ Modification du MailService pour configurer Brevo.
+ Securisation des données
+ Test en tant qu'user : passer une order /Modifier order / cancel order / inscription / 

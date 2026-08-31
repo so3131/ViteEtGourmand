@@ -22,7 +22,7 @@ class MongoStatsManager {
             error_log("Erreur de connexion MongoDB : " . $e->getMessage());
         }
     }
-
+//function pour insérer l'historique d'une commande dans la collection MongoDB
     public function insertOrderHistory(array $orderData): bool {
         if ($this->mongoClient === null) {
             return false;
@@ -55,6 +55,8 @@ class MongoStatsManager {
         return false;
     }
 }
+//function pour avoir le nombre total de commandes dans MongoDB
+    
 public function getTotalOrdersFromMongoDB(): int {
     if ($this->mongoClient === null) return 0;
 
@@ -69,6 +71,7 @@ public function getTotalOrdersFromMongoDB(): int {
         return 0;
     }
 }
+//function pour récupérer les statistiques par menu depuis MongoDB, avec des filtres optionnels sur la période et le menu
 public function getStatsByMenuFromMongoDB($dateDebut = null, $dateFin = null, $menuId = null): array {
     if ($this->mongoClient === null) return [];
 
@@ -130,9 +133,7 @@ public function getStatsByMenuFromMongoDB($dateDebut = null, $dateFin = null, $m
     }
 }
 
-    /**
-     * Récupère le CA global de l'entreprise
-     */
+//function pour récupérer le chiffre d'affaires total depuis MongoDB
     public function getSalesFromMongoDB(): float {
         if ($this->mongoClient === null) return 0.0;
 
@@ -156,6 +157,7 @@ public function getStatsByMenuFromMongoDB($dateDebut = null, $dateFin = null, $m
             return 0.0;
         }
     }
+//function pour récupérer le chiffre d'affaires et le nombre de commandes filtrés depuis MongoDB
    public function getSalesFilteredFromMongoDB($dateDebut = null, $dateFin = null, $menuId = null): float {
     if ($this->mongoClient === null) return 0.0;
 
@@ -214,6 +216,7 @@ public function getStatsByMenuFromMongoDB($dateDebut = null, $dateFin = null, $m
         return 0.0;
     }
 }
+    //function pour récupérer les ventes et le nombre de commandes d'aujourd'hui depuis MongoDB
     public function getTodaySalesAndOrdersFromMongoDB(): array {
     if ($this->mongoClient === null) return ['orders' => 0, 'sales' => 0.0];
 
@@ -254,6 +257,7 @@ public function getStatsByMenuFromMongoDB($dateDebut = null, $dateFin = null, $m
         return ['orders' => 0, 'sales' => 0.0];
     }
 }
+//function pour récupérer un résumé des statistiques globales depuis MongoDB
     public function getSummaryStats(): array {
         return [
             'totalOrders' => $this->getTotalOrdersFromMongoDB(),
@@ -262,6 +266,7 @@ public function getStatsByMenuFromMongoDB($dateDebut = null, $dateFin = null, $m
             'statsByMenu' => $this->getStatsByMenuFromMongoDB()
         ];
     }
+    //function pour récupérer le chiffre d'affaires et le nombre de commandes filtrés depuis MongoDB, avec des filtres optionnels sur la période et le menu
     public function getCountFilteredFromMongoDB($dateDebut = null, $dateFin = null, $menuId = null): int {
     if ($this->mongoClient === null) return 0;
 
@@ -299,7 +304,7 @@ public function getStatsByMenuFromMongoDB($dateDebut = null, $dateFin = null, $m
         return 0;
     }
 }
-// Compter le nombre de thèmes dans MongoDB
+//function pour recuperer le nombre total de themes et de régimes depuis MongoDB
 public function getTotalThemesFromMongoDB(): int {
     if ($this->mongoClient === null) return 0;
     try {
@@ -320,7 +325,7 @@ public function getTotalRegimesFromMongoDB(): int {
         return 0;
     }
 }
-// Récupérer le CA et le nombre de commandes global mais filtré par période
+//function pour récupérer le chiffre d'affaires et le nombre de commandes filtrés depuis MongoDB, avec des filtres optionnels sur la période
 public function getSalesAndOrdersByPeriodFromMongoDB($dateDebut = null, $dateFin = null): array {
     if ($this->mongoClient === null) return ['totalCA' => 0.0, 'totalOrders' => 0];
 

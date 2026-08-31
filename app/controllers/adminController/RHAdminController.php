@@ -6,10 +6,11 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
 
 use App\Controllers\AuthController\Auth;
 use App\Managers\UserAdminManager;
+use App\Helpers\MailService;
 
 class RhAdminController
 {
-    // Affiche la page principale combinée (RH en haut, Modération des users en bas)
+     //function pour afficher la page de gestion des employés et des utilisateurs
     public static function adminRH(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
@@ -58,12 +59,20 @@ class RhAdminController
         require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
     }
 
-    // Traite la soumission du formulaire de création d'employé
-    public static function createEmploye(\PDO $db)
+     //function pour créer un employé
+        public static function createEmploye(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            // 🛡️ Vérification CSRF
+            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+                $_SESSION['error'] = "Session expirée ou requête invalide. Veuillez recharger la page.";
+                header('Location: ?page=rh-admin');
+                exit;
+            }
+            
             $email = trim($_POST['email'] ?? '');
             $password = $_POST['password'] ?? '';
 
@@ -76,13 +85,7 @@ class RhAdminController
                     $success = $stmt->execute([$email, $hashedPassword, $roleId]);
 
                     if ($success) {
-                        $to = $email;
-                        $subject = "Création de votre compte Vite & Gourmand";
-                        $message = "Bonjour,\n\nUn compte employé vient d'être créé pour vous sur Vite & Gourmand.\nVotre identifiant est : " . $email . "\n\nVeuillez vous rapprocher de votre administrateur pour obtenir votre mot de passe.\n\nCordialement,\nL'équipe Vite & Gourmand";
-                        $headers = "From: no-reply@vite-gourmand.com";
-
-                        @mail($to, $subject, $message, $headers);
-
+                        MailService::sendAccountCreationEmail($email);
                         $_SESSION['success'] = "L'employé a été créé avec succès et averti par mail.";
                     }
                 } catch (\PDOException $e) {
@@ -97,7 +100,7 @@ class RhAdminController
         exit;
     }
 
-    // Supprime un employé
+     //function pour supprimer un employé
     public static function deleteEmploye(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
@@ -118,7 +121,7 @@ class RhAdminController
         exit;
     }
 
-    // Alterne le statut actif/inactif d'un employé
+    //function pour activer/désactiver un employé
     public static function toggleEmployeStatus(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
@@ -139,7 +142,7 @@ class RhAdminController
         exit();
     }
 
-    // Désactive (Bannit) un utilisateur globalement
+    //function pour désactiver un utilisateur
     public static function banUser(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);

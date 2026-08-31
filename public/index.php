@@ -1,5 +1,6 @@
 <?php
 ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Ce fichier est le point d'entrée de l'application. Il reçoit toutes les requêtes, gère la session, et redirige vers le bon contrôleur en fonction de la page demandée.
@@ -75,7 +76,11 @@ $route = match ($page) {
     'update-profil'     => ['class' => '\App\Controllers\AuthController\updateProfilController', 'action' => 'updateProfil'],
     'erase-order' => ['class' => '\App\Controllers\UserController\EraseOrderController', 'params' => ['db', 'commande_id'], 'action' => 'eraseOrder'],
     'edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'params' => ['db', 'commande_id'], 'action' => 'editOrderView'],
-    'recalculer-prix' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'action' => 'recalculerPrix'],
+    'recalculer-prix' => [
+        'class' => '\App\Controllers\UserController\UpdateOrderController', 
+        'action' => 'recalculerPrix', 
+        'params' => ['db', 'commande_id']
+    ],
     'cancel-edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'action' => 'cancelEditOrder'],
     'update-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'params' => ['db', 'commande_id'], 'action' => 'updateOrder'],
 
@@ -127,8 +132,7 @@ $route = match ($page) {
 
     // Admin et Employee
    
-    // 'tickets'      => ['class' => '\App\Controllers\StaffCommon\ticketsController', 'action' => 'Tickets'],
-    // 'delete-tickets-' => ['class' => '\App\Controllers\StaffCommon\ticketsController', 'action' => 'deleteTicket'],
+
     'order-management'     => ['class' => '\App\Controllers\StaffCommon\OrderManagementController', 'action' => 'OrderManagement'],
     'menu-management'      => ['class' => '\App\Controllers\StaffCommon\MenuManagementController', 'action' => 'MenuManagement'],
     'cancel-order-common'   => ['class' => '\App\Controllers\StaffCommon\OrderManagementController', 'action' => 'cancelOrder'],
@@ -159,9 +163,19 @@ $route = match ($page) {
         'class' => '\App\Controllers\StaffCommon\MenuManagementController',
         'action' => 'addMenu'
     ],
+    'create-plat-ajax' => [
+        'class' => '\App\Controllers\StaffCommon\MenuManagementController',
+        'action' => 'createPlatAjax',
+        'params' => ['db']
+    ],
     'delete-menu' => [
         'class' => '\App\Controllers\StaffCommon\MenuManagementController',
         'action' => 'deleteMenu',
+        'params' => ['db', 'menu_id']
+    ],
+    'activate-menu' => [
+        'class' => '\App\Controllers\StaffCommon\MenuManagementController',
+        'action' => 'activateMenu',
         'params' => ['db', 'menu_id']
     ],
     'review-management' => [

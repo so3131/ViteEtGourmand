@@ -13,7 +13,7 @@
                     <?php foreach ($orders as $order): ?>
                         <?php if ($order['statut'] === 'terminee'): ?>
                             <option value="<?= $order['commande_id'] ?>">
-                                Commande n°<?= htmlspecialchars($order['numero_commande']) ?> du <?= date('d/m/Y', strtotime($order['date_commande'])) ?>
+                                Commande n°<?= htmlspecialchars($commande['numero_commande']) ?> du <?= date('d/m/Y', strtotime($order['date_commande'])) ?>
                             </option>
                         <?php endif; ?>
                     <?php endforeach; ?>

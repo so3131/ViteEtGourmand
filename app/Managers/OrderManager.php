@@ -3,24 +3,31 @@
 namespace App\Managers;
 
 use App\Models\Order;
-use App\Managers\LieuManager;
 
 
 
 
 class OrderManager
 {
+    //function pour creer une commande à partir des données fournies, en gérant la transaction et la mise à jour du stock
     public static function createOrderFromData(\PDO $db, object $user, array $menuData, array $prestation, float $totalCommande)
 
     {
         try {
             // 1. On ouvre la transaction
             $db->beginTransaction();
-
+$lieuPrestationId = LieuManager::getOrInsert(
+    $db,
+    $prestation['adresse_livraison'] ?? '',
+    $prestation['code_postal'] ?? '',
+    $prestation['ville'] ?? '',
+    $prestation['lat'] ?? null,
+    $prestation['lon'] ?? null
+);
             // 2. On crée l'objet
             $order = new Order(
                 commande_id: null,
-                numero_commande: uniqid('CMD_'),
+                numero_commande: 'CMD-' . date('Ymd') . '-' . rand(1000, 9999),
                 date_commande: date('Y-m-d'),
                 date_prestation: $prestation['date_prestation'],
                 heure_livraison: $prestation['heure_livraison'] ?? '12:00',
@@ -34,7 +41,7 @@ class OrderManager
                 depot_garantie: (float)$prestation['depot_garantie'],
                 utilisateur_id: (int)$user->user_id,
                 menu_id: (int)$menuData['menu_id'],
-                lieu_prestation_id: (int)$prestation['lieu']['id']
+                lieu_prestation_id: (int)$lieuPrestationId
 
             );
 
@@ -66,6 +73,7 @@ class OrderManager
             throw $e;
         }
     }
+    //function pour créer une commande dans la base de données à partir d'un objet Order
     public static function create(\PDO $db, Order $order)
     {
         // On ne liste QUE les colonnes présentes dans ta table vg_commande
@@ -96,6 +104,7 @@ class OrderManager
         ]);
     }
 
+    //function pour récupérer toutes les commandes d'un utilisateur
 public static function getOrdersByUser(\PDO $db, int $userId)
 {
     $sql = "SELECT c.*, 
@@ -125,17 +134,9 @@ public static function getOrdersByUser(\PDO $db, int $userId)
     }
     return $orders;
 }
-    public static function EstimerFraisLivraison(\PDO $db, int $lieu_id): float
-    {
-        // 1. Récupération des données du lieu
-        $lieu = LieuManager::getById($db, $lieu_id);
-
-        // 2. Appel de ton modèle Order pour le calcul
-        return Order::calculerFraisLivraison($lieu['ville'], $lieu['distance_bordeaux']);
-    }
 
 
- 
+ //function pour récupérer toutes les commandes avec des filtres optionnels pour le dashboard staff
 public static function getAllOrders(\PDO $db, $filters = []) {
     // 1. Initialisation de la requête de base avec les JOIN (on rajoute u.email)
     $sql = "SELECT c.*, u.nom as client_nom, u.email as client_email, m.titre as menu_titre, 
@@ -168,6 +169,7 @@ public static function getAllOrders(\PDO $db, $filters = []) {
 
     return $stmt->fetchAll(\PDO::FETCH_ASSOC);
 }
+//function pour récupérer une commande spécifique par son ID, avec les détails du client, du menu et du lieu de prestation
 public static function getOrderById(\PDO $db, int $commandeId)
     {
         $sql = "SELECT c.*, u.nom as client_nom, u.email as client_email, m.titre as menu_titre, 
@@ -183,5 +185,44 @@ public static function getOrderById(\PDO $db, int $commandeId)
         $stmt->execute([':commande_id' => $commandeId]);
 
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
+    }
+    //function pour récupérer l'historique des statuts d'une commande spécifique
+    public static function getOrderHistory(\PDO $db, int $commande_id): array {
+    $stmt = $db->prepare("SELECT * FROM vg_commande_statut_historique WHERE commande_id = ? ORDER BY date_changement ASC");
+    $stmt->execute([$commande_id]);
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+}
+// function pour vérifier si l'on peut changer de statut sans reculer dans le workflow
+    public static function canUpdateStatus(string $oldStatus, string $newStatus): bool
+    {
+        // Définition de l'ordre hiérarchique des statuts
+        $workflow = [
+            'en_attente' => 1,
+            'acceptee' => 2,
+            'en_preparation' => 3,
+            'en_cours_livraison' => 4,
+            'livree' => 5,
+            'en_attente_retour_materiel' => 6,
+            'terminee' => 7,
+            'annulee' => 0 
+        ];
+
+        // Si l'un des statuts n'existe pas dans le tableau, on bloque
+        if (!isset($workflow[$oldStatus]) || !isset($workflow[$newStatus])) {
+            return false;
+        }
+
+        // Si la commande est déjà terminée ou annulée, on ne peut plus modifier son statut
+        if ($oldStatus === 'terminee' || $oldStatus === 'annulee') {
+            return false;
+        }
+
+        // Autoriser le passage à "annulee" depuis n'importe quel statut actif
+        if ($newStatus === 'annulee') {
+            return true;
+        }
+
+        // Règle principale : Le nouveau statut doit avancer dans le workflow, pas reculer
+        return $workflow[$newStatus] >= $workflow[$oldStatus];
     }
 }

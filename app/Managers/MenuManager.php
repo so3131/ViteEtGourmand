@@ -7,6 +7,7 @@ namespace App\Managers;
 //* Logique de stockage.
 class MenuManager
 {
+    //function pour récupérer les menus avec des filtres optionnels et un formatage des résultats
     public static function get(\PDO $db, ?int $id = null, array $filters = [], bool $format = false)
     {
         try {
@@ -129,6 +130,7 @@ class MenuManager
         }
     }
 
+    //function pour récupérer un menu par son ID
     public static function getById(\PDO $db, int $menuID): ?array
     {
         try {
@@ -166,6 +168,8 @@ class MenuManager
                         'quantite_restante' => $row['quantite_restante'] ?? 0,
                         'delai_commande' => $row['delai_commande'] ?? '24h',
                         'conditions_stockage' => $row['conditions_stockage'] ?? 'Aucune précaution particulière',
+                        'theme_id' => $row['theme_id'] ?? null,   // <-- Ajouté ici
+                        'regime_id' => $row['regime_id'] ?? null, // <-- Ajouté ici
                         'vg_theme' => ['libelle' => $row['theme_libelle'] ?? 'Non défini'],
                         'regime' => $row['regime_libelle'] ?? 'Non défini',
                         'plats_structures' => [
@@ -197,6 +201,7 @@ class MenuManager
             return null;
         }
     }
+    //function pour récupérer les plats d'un menu par son ID
     public static function getPlatsByMenuId(\PDO $db, int $menu_id)
     {
         try {
@@ -213,7 +218,19 @@ class MenuManager
             return false;
         }
     }
-
+// Fonction pour récupérer TOUS les allergènes disponibles
+    public static function getAllAllergenes(\PDO $db)
+    {
+        try {
+            $sql = "SELECT * FROM vg_allergene";
+            $stmt = $db->query($sql);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            error_log("Erreur lors de la récupération de tous les allergènes : " . $e->getMessage());
+            return [];
+        }
+    }
+    //function pour récupérer les allergènes d'un menu par son ID
     public static function getAllergenesByMenuId(\PDO $db, int $menu_id)
     {
         try {

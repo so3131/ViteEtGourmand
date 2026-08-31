@@ -9,6 +9,7 @@ use App\Managers\StatAdminManager;
 
 class DashboardAdminController
 {
+     //function pour afficher la page du tableau de bord admin
     public static function adminDashboard(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);

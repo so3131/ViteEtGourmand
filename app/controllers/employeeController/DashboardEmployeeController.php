@@ -6,7 +6,7 @@ use App\Controllers\AuthController\Auth;
 use App\Managers\MongoReviewManager;
 
 class DashboardEmployeeController
-{
+{    //function pour afficher la page du tableau de bord employé
     public static function employeeDashboard(\PDO $db)
     { 
         Auth::check([ROLE_EMPLOYE]);

@@ -11,6 +11,7 @@ Application web PHP MVC de présentation et de commande de menus pour événemen
 - MongoDB installé localement ou une instance MongoDB accessible.
 - L'extension PHP `pdo_mysql` activée.
 - L'extension PHP `mongodb` activée pour les statistiques et les fonctionnalités MongoDB.
+https://account.heigit.org/manage/key?first_visit=true aussi
 
 ## Installation locale
 

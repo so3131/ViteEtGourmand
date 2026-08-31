@@ -11,6 +11,7 @@
             <?php endif; ?>
 
             <form action="index.php?page=update-profil" method="POST">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                 <div class="row g-3">
                     <!-- Prénom -->
                     <div class="col-md-6">

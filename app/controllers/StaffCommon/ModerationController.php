@@ -8,6 +8,7 @@ use App\Controllers\AuthController\Auth;
 
 class ModerationController
 {
+     //function pour afficher la page de gestion de la modération
     public static function moderation(\PDO $db)
     {
 

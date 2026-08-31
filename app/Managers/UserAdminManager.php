@@ -4,7 +4,7 @@ namespace App\Managers;
 
 class UserAdminManager
 {
-    // Récupérer tous les utilisateurs avec leur rôle
+//function pour récupérer tous les utilisateurs avec leur rôle
     public static function findAll(\PDO $pdo)
     {
         $stmt = $pdo->query("SELECT u.*, r.libelle AS role_nom 
@@ -14,8 +14,7 @@ class UserAdminManager
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    // Désactiver (bannir) un utilisateur proprement
-    // Désactiver (bannir) un utilisateur proprement
+ //function pour desactiver un utilisateur (bannir) en vérifiant d'abord qu'il n'est pas administrateur
 public static function ban(\PDO $pdo, int $id)
 {
     try {
@@ -42,7 +41,7 @@ public static function ban(\PDO $pdo, int $id)
     }
 }
 
-    // Réactiver un utilisateur
+  //function pour réactiver un utilisateur (unban)
     public static function unBan(\PDO $pdo, int $id)
     {
         try {
@@ -56,7 +55,7 @@ public static function ban(\PDO $pdo, int $id)
         }
     }
 
-    // Rechercher / Filtrer les utilisateurs
+//function pour rechercher des utilisateurs par nom, prénom, email ou rôle avec des filtres optionnels
     public static function search(\PDO $pdo, string $searchTerm, ?int $roleId = null)
     {
         $sql = "SELECT u.*, r.libelle AS role_nom 

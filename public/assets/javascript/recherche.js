@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
         from: (value) => Math.round(value),
       },
     });
-
+// 2. Fonction pour mettre à jour la plage du slider
     function updateSliderRange(max) {
       slider.noUiSlider.updateOptions({
         range: { min: 0, max: max },
@@ -109,11 +109,13 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch((err) => console.error("Erreur de fetch : ", err));
     });
   }
+  // Fonction pour échapper les caractères HTML
   function escapeHtml(value) {
     const div = document.createElement("div");
     div.textContent = value ?? "";
     return div.innerHTML;
   }
+  // Fonction pour obtenir la photo principale d'un menu
   function getMenuPhoto(menu) {
     const plats = menu.plats_structures || {};
 

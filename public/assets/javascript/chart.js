@@ -1,3 +1,6 @@
+
+
+// Initialisation des graphiques
 document.addEventListener('DOMContentLoaded', function() {
     if (typeof statsData === 'undefined') {
         console.error("Les données statsData ne sont pas disponibles");

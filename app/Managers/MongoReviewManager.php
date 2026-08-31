@@ -22,7 +22,7 @@ class MongoReviewManager {
             error_log("Erreur de connexion MongoDB (Reviews) : " . $e->getMessage());
         }
     }
-
+//function pour insérer un nouvel avis dans la collection MongoDB
     public function insertReview(array $data) 
     {
         if ($this->mongoClient) {
@@ -32,9 +32,7 @@ class MongoReviewManager {
         }
         throw new \RuntimeException("Client MongoDB non initialisé.");
     }
-    /**
-     * Vérifie si un avis existe déjà pour une commande
-     */
+//function pour vérifier si une commande a déjà un avis associé
     public function alreadyReviewedOrder(int $commandeId): bool 
     {
         if ($this->mongoClient === null) {
@@ -54,9 +52,7 @@ class MongoReviewManager {
             return false;
         }
     }
-    /**
-     * Récupère tous les avis clients, triés du plus récent au plus ancien
-     */
+//function pour récupérer tous les avis, avec un filtre optionnel sur le statut
 public function getAllReviews(?string $status = null): array
     {
         if ($this->mongoClient === null) {
@@ -90,34 +86,40 @@ return $reviews;
             return [];
         }
     }
-    /**
-     * Met à jour le statut d'un avis (ex: 'approved', 'rejected', etc.)
-     */
-    public function updateReviewStatus(string $reviewId, string $status): bool
-    {
-        if ($this->mongoClient === null) {
-            return false;
-        }
-
-        try {
-            $database = $this->mongoClient->selectDatabase('vite_gourmand');
-            $collection = $database->selectCollection('reviews');
-
-            $result = $collection->updateOne(
-                ['_id' => new \MongoDB\BSON\ObjectId($reviewId)],
-                ['$set' => ['status' => $status]]
-            );
-
-            // On accepte si ça a modifié ou si c'était déjà dans le bon état (matched)
-            return $result->getMatchedCount() > 0;
-        } catch (\Exception $e) {
-            error_log("Erreur mise à jour statut avis MongoDB : " . $e->getMessage());
-            return false;
-        }
+    //function pour mettre à jour le statut d'un avis par son ID MongoDB et enregistrer la traçabilité si un employé est connecté
+public function updateReviewStatus(string $reviewId, string $status, ?int $userId = null, ?string $userName = null): bool
+{
+    if ($this->mongoClient === null) {
+        return false;
     }
-    /**
-     * Récupère un avis unique par son ID MongoDB
-     */
+
+    try {
+        $database = $this->mongoClient->selectDatabase('vite_gourmand');
+        $collection = $database->selectCollection('reviews');
+
+        $updateData = [
+            'status' => $status
+        ];
+
+        // Ajout de la traçabilité si les infos sont fournies
+        if ($userId !== null) {
+            $updateData['validated_by'] = $userId;
+            $updateData['validated_by_name'] = $userName;
+            $updateData['validated_at'] = new UTCDateTime();
+        }
+
+        $result = $collection->updateOne(
+            ['_id' => new ObjectId($reviewId)],
+            ['$set' => $updateData]
+        );
+
+        return $result->getMatchedCount() > 0;
+    } catch (\Exception $e) {
+        error_log("Erreur mise à jour statut avis MongoDB : " . $e->getMessage());
+        return false;
+    }
+}
+//function pour récupérer un avis par son ID MongoDB
     public function getReviewById(string $reviewId)
     {
         if ($this->mongoClient === null) {
@@ -134,6 +136,7 @@ return $reviews;
             return null;
         }
     }
+//function pour récupérer les derniers avis approuvés, avec une limite sur le nombre d'avis retournés
     public function getApprovedReviews(int $limit = 6): array
     {
         if ($this->mongoClient === null) {
@@ -149,6 +152,7 @@ return $reviews;
                 ['status' => 'approved'], 
                 [
                     'sort' => ['created_at' => -1],
+                    
                     'limit' => $limit // Limite par exemple aux 6 derniers avis
                 ]
             );

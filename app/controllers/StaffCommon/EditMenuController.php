@@ -7,6 +7,7 @@ use App\Managers\MenuManager;
 
 class EditMenuController
 {
+     //function pour afficher la page d'édition d'un menu
     public static function editMenu(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -31,6 +32,10 @@ class EditMenuController
         // 2. Récupérer TOUS les plats disponibles pour les cases à cocher de la vue
         $stmtPlats = $db->query("SELECT * FROM vg_plat ORDER BY titre_plat ASC");
         $all_plats = $stmtPlats->fetchAll(\PDO::FETCH_ASSOC);
+
+        // 2ire. Récupérer les thèmes et régimes pour les listes déroulantes de la vue
+        $all_themes = $db->query("SELECT * FROM vg_theme ORDER BY libelle ASC")->fetchAll(\PDO::FETCH_ASSOC);
+        $all_regimes = $db->query("SELECT * FROM vg_regime ORDER BY libelle ASC")->fetchAll(\PDO::FETCH_ASSOC);
 
         // 3. Récupérer les plats associés à ce menu précis pour pré-cocher les cases
         $platsAssocies = MenuManager::getPlatsByMenuId($db, (int)$menu_id);
@@ -64,6 +69,7 @@ class EditMenuController
             require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
         }
     }
+     //function pour mettre à jour un menu
     public static function updateMenu(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -79,16 +85,27 @@ class EditMenuController
             $titre = $_POST['titre'] ?? '';
             $prix = $_POST['prix'] ?? 0;
             $quantite = $_POST['quantite'] ?? 0;
-            $plats = $_POST['plats'] ?? []; // Tableau des IDs des plats cochés
+            $nb_min = $_POST['nombre_personne_minimum'] ?? null;
+            $description = $_POST['description_menu'] ?? '';
+            $theme_id = !empty($_POST['theme_id']) ? $_POST['theme_id'] : null;
+            $regime_id = !empty($_POST['regime_id']) ? $_POST['regime_id'] : null;
+            $delai = $_POST['delai_commande'] ?? 0;
+            $stockage = $_POST['conditions_stockage'] ?? null;
+            $plats = $_POST['plats'] ?? [];
 
             try {
                 $db->beginTransaction();
 
-                // 1. Mettre à jour les informations principales du menu
                 $sql = "UPDATE vg_menu 
                         SET titre = :titre, 
                             prix_par_personne = :prix, 
-                            quantite_restante = :quantite 
+                            quantite_restante = :quantite,
+                            nombre_personne_minimum = :nb_min,
+                            description_menu = :description,
+                            theme_id = :theme_id,
+                            regime_id = :regime_id,
+                            delai_commande = :delai,
+                            conditions_stockage = :stockage
                         WHERE menu_id = :id";
 
                 $stmt = $db->prepare($sql);
@@ -96,10 +113,16 @@ class EditMenuController
                     'titre' => $titre,
                     'prix' => $prix,
                     'quantite' => $quantite,
+                    'nb_min' => $nb_min,
+                    'description' => $description,
+                    'theme_id' => $theme_id,
+                    'regime_id' => $regime_id,
+                    'delai' => $delai,
+                    'stockage' => $stockage,
                     'id' => $menu_id
                 ]);
 
-                // 2. Mettre à jour les plats associés (Supprimer les anciens, insérer les nouveaux)
+                // Mise à jour des plats associés
                 $stmtDelete = $db->prepare("DELETE FROM vg_menu_plat WHERE menu_id = :id");
                 $stmtDelete->execute(['id' => $menu_id]);
 
@@ -114,8 +137,6 @@ class EditMenuController
                 }
 
                 $db->commit();
-
-                // Succès
                 $_SESSION['success'] = "Le menu a été modifié avec succès !";
                 header('Location: index.php?page=menu-management');
                 exit();

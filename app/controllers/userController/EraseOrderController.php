@@ -8,12 +8,12 @@ use App\Controllers\AuthController\Auth;
 
 
 
-//! reprendre la requete sql ( ne recupere pas orderID) a corriger
+
 
 
 
 class EraseOrderController
-{
+{//function pour annuler une commande depuis le tableau de bord de l'utilisateur
     public static function eraseOrder(\PDO $db, ?int $commande_id)
     {
         //verif de secu
@@ -29,8 +29,8 @@ class EraseOrderController
             $pdo = $db;
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             try {
-                // Vérifier que la commande appartient à l'utilisateur connecté et que statut = 'en_attente'
-                $sqlCheck = "SELECT c.utilisateur_id, c.statut, m.titre as menu_titre, 
+                               // 1. Récupérer les infos nécessaires (avec menu_id et nombre_personne)
+                $sqlCheck = "SELECT c.utilisateur_id, c.statut, c.menu_id, c.nombre_personne, m.titre as menu_titre, 
                     c.prix_total, 
                     c.date_prestation, c.heure_livraison, 
                     l.adresse, l.ville, l.code_postal
@@ -46,15 +46,22 @@ class EraseOrderController
                     throw new \Exception("Commande non trouvée ou accès refusé.");
                 }
 
-                //double securité pour éviter les annulations intempestives
                 if ($result['statut'] !== 'en_attente') {
-                    throw new \Exception("Seules les commandes en attente peuvent être supprimées.");
+                    throw new \Exception("Seules les commandes en attente peuvent être annulées.");
                 }
 
-                // Supprimer la commande de la db vg_commande
+                // 2. Annuler la commande
                 $sqlUpdate = "UPDATE vg_commande SET statut = 'annulee' WHERE commande_id = :orderID";
                 $stmtUpdate = $pdo->prepare($sqlUpdate);
                 $stmtUpdate->execute(['orderID' => $commande_id]);
+
+                // 3. ✅ Restituer le stock du menu
+                $sqlRestituer = "UPDATE vg_menu SET quantite_restante = quantite_restante + :quantite WHERE menu_id = :menu_id";
+                $stmtRestituer = $pdo->prepare($sqlRestituer);
+                $stmtRestituer->execute([
+                    'quantite' => (int)$result['nombre_personne'],
+                    'menu_id'  => (int)$result['menu_id']
+                ]);
 try {
     $orderDetails = [
         'commande_id'     => $commande_id,

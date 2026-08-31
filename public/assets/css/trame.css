@@ -1,92 +1,38 @@
-html, body {
+/* importation des variabes CSS */
+@import url('variables.css');
+
+/*  ==========================================================================
+   1. CONFIGURATION GLOBALE & RESET
+   ========================================================================== */
+
+  html {
+    font-size: 13px; /* Réduit uniformément tout ton site (polices, marges, padding basés sur le rem) */
+}
+html,
+body {
     max-width: 100%;
 }
+
 body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    margin: 0; /* Important : remet à zéro les marges par défaut */
-    padding: 0; /* Important : enlève le padding qu'on va gérer différemment */
-    color: #212529;
+    margin: 0;
+    padding: 0;
+    background-color: var(--color-bg-light, #f8f9fa);
+    color: var(--color-dark, #212529);
+    font-family: var(--font-family, sans-serif);
 }
-main {
+
+/* main {
     flex: 1;
     overflow-x: hidden;
-    padding-left: 2rem;
-    padding-right: 2rem;
-}
-/* S'assure que les images restent dans leur parent */
+    padding: 2rem;
+} */
+
 img {
     max-width: 100%;
     height: auto;
-}
-/* Message erreur */
-
-.erreurMessage {
-    color: #dc3545; 
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
-}
-
-
-/* Formulaires */
-.form-label {
-    margin-bottom: 0.5rem;
-    color: #333;
-}
-
-.form-control, .form-select {
-    border: 1px solid #dee2e6;
-    border-radius: 6px;
-    padding: 0.75rem;
-    transition: border-color 0.2s;
-}
-
-.form-control:focus {
-    border-color: #B8825C;
-    box-shadow: 0 0 0 0.2rem rgba(184, 130, 92, 0.25);
-}
-
-/* Photos de l'equipe */
-.team-img {
-    width: 150px; 
-    height: 150px; 
-    object-fit: cover;
-}
-
-.team-img:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s;
-}
-.dropdown-toggle {
-    position: relative !important;
-    z-index: 9999 !important;
-    pointer-events: auto !important;
-    cursor: pointer !important;
-}
-/* Utilisation de couleurs ayant un contraste suffisant (ratio > 4.5:1) */
-.navbar-frosted {
-    background: rgba(216, 66, 66, 0.5); 
-    backdrop-filter: blur(10px);
-    border-bottom: 2px solid #dee2e6; 
-  }
-
-/* État focus pour la navigation au clavier */
-.nav-link:focus, 
-.dropdown-item:focus {
-    outline: 3px solid #0d6efd;
-    outline-offset: 2px;
-}
-
-/* Texte sombre pour garantir le contraste sur fond clair */
-.navbar-nav .nav-link {
-    color: #212529 !important;
-} 
-
-.navbar-nav .nav-link.active {
-    text-decoration: underline;
-    text-underline-offset: 6px;
-    font-weight: bold;
 }
 
 .container-fluid {
@@ -94,4 +40,189 @@ img {
     padding-right: 0;
 }
 
+/* ==========================================================================
+   2. FORMULAIRES & MESSAGES D'ERREUR
+   ========================================================================== */
+.erreurMessage {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
 
+.form-label {
+    margin-bottom: 0.5rem;
+    color: var(--color-dark, #333);
+}
+
+.form-control,
+.form-select {
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius-sm, 6px);
+    padding: 0.75rem;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--color-gold, #DAA520);
+    box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+}
+select {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+
+/* ==========================================================================
+   3. NAVIGATION (NAVBAR FROSTED & DORÉE)
+   ========================================================================== */
+.dropdown-toggle {
+    position: relative !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+.navbar-frosted {
+    background-color: rgba(218, 165, 32, 0.9); 
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-base);
+}
+
+.navbar-nav .nav-link {
+    color: var(--color-dark, #212529) !important;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--color-olive, #556B2F) !important;
+}
+
+.navbar-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: var(--color-olive, #556B2F);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+    width: 0;
+}
+
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+    width: 80%;
+}
+
+.navbar-nav .custom-login-btn {
+    border: 1px solid var(--color-olive, #556B2F) !important;
+    border-radius: var(--border-radius-md, 8px) !important;
+    color: var(--color-dark, #212529) !important;
+    transition: all 0.3s ease !important;
+}
+
+.navbar-nav .custom-login-btn:hover {
+    background-color: var(--color-olive, #556B2F) !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.navbar-nav .custom-login-btn::after {
+    display: none !important;
+}
+.dropdown-menu {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-item {
+    transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    transform: translateX(3px);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   5. FOOTER
+   ========================================================================== */
+footer.container-fluid {
+    background-color: #ffffff;
+    border-top: 3px solid var(--color-gold);
+    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.02);
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+}
+
+footer h5 {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    color: var(--color-olive); /* Rappel vert olive pour les titres du footer */
+}
+
+footer ul li, 
+footer dl dd {
+    margin-bottom: 0.5rem;
+}
+
+footer a {
+    text-decoration: none;
+    color: var(--color-dark);
+    transition: color 0.2s ease-in-out, padding-left 0.2s ease-in-out;
+}
+
+footer a:hover {
+    color: var(--color-gold) !important;
+    padding-left: 3px;
+}
+
+footer .text-danger {
+    font-weight: 600;
+}
+
+/* Sécurité absolue anti-débordement sur mobile */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body, html {
+    overflow-x: hidden; /* Empêche tout défilement horizontal intempestif */
+}
+
+.form-control, .form-select {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+
+@media (max-width: 768px) {
+    /* Empêche le conteneur sticky de bloquer le rendu de la liste mobile */
+    aside .card {
+        position: relative !important;
+        top: 0 !important;
+    }
+    
+    /* Force le select à utiliser une taille neutre acceptée par le système */
+    #price-max-select {
+        font-size: 16px !important;
+    }
+}

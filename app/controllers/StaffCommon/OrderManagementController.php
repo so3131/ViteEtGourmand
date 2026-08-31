@@ -8,7 +8,7 @@ use App\Helpers\MailService;
 class OrderManagementController
 {
 
-
+     //function pour afficher la page de gestion des commandes
     public static function OrderManagement(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -48,7 +48,8 @@ class OrderManagementController
             require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
         }
     }
-    public static function cancelOrder(\PDO $db)
+     //function pour annuler une commande
+   public static function cancelOrder(\PDO $db)
 {
     Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
 
@@ -70,9 +71,42 @@ class OrderManagementController
 
     if ($commande_id > 0) {
         try {
-            // Ton code de mise à jour du statut en "annulée" en base de données...
+            // 3. Mettre à jour le statut en "annulée" en base de données
             $stmt = $db->prepare("UPDATE vg_commande SET statut = 'annulee', motif_annulation = ?, mode_contact = ? WHERE commande_id = ?");
             $stmt->execute([$motif, $mode_contact, $commande_id]);
+
+            // 4. Récupérer les informations nécessaires pour envoyer l'e-mail au client
+            $sqlDetails = "SELECT c.*, u.email, u.prenom, u.nom, m.titre as menu_titre 
+                           FROM vg_commande c
+                           JOIN vg_utilisateur u ON c.utilisateur_id = u.utilisateur_id
+                           JOIN vg_menu m ON c.menu_id = m.menu_id
+                           WHERE c.commande_id = :id";
+            
+            $stmtDetails = $db->prepare($sqlDetails);
+            $stmtDetails->execute(['id' => $commande_id]);
+            $orderData = $stmtDetails->fetch(\PDO::FETCH_ASSOC);
+ // 5. Restituer le stock du menu annulé par le staff
+            if ($orderData) {
+                $stmtRestituer = $db->prepare("UPDATE vg_menu SET quantite_restante = quantite_restante + :quantite WHERE menu_id = :menu_id");
+                $stmtRestituer->execute([
+                    'quantite' => (int)$orderData['nombre_personne'],
+                    'menu_id'  => (int)$orderData['menu_id']
+                ]);
+            }
+            // 6. Envoyer l'e-mail d'annulation si le client a un e-mail valide
+            if ($orderData && !empty($orderData['email'])) {
+                // Structurer le tableau de détails attendu par ton MailService
+                $orderDetails = [
+                    'commande_id' => $orderData['commande_id'],
+                    'prenom' => $orderData['prenom'],
+                    'menu' => [
+                        'titre' => $orderData['menu_titre']
+                    ]
+                ];
+
+                // Appel du service de mail avec le motif de l'équipe en commentaire
+                MailService::sendOrderCancellationEmail($orderData['email'], $orderDetails, $motif);
+            }
 
             header('Location: index.php?page=order-management&success=order_cancelled');
             exit();
@@ -85,7 +119,7 @@ class OrderManagementController
         exit();
     }
 }
-
+ //function pour mettre à jour le statut d'une commande
 public static function updateStatus(\PDO $db)
 {
     Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -127,10 +161,63 @@ public static function updateStatus(\PDO $db)
     }
 
     try {
+        // 1. Récupérer la commande actuelle pour connaître son ancien statut
+        $order = OrderManager::getOrderById($db, $commande_id);
+        if (!$order) {
+            header('Location: index.php?page=order-management&error=order_not_found');
+            exit();
+        }
+
+        // 2. Vérifier si le changement de statut est autorisé (interdit de reculer)
+        if (!OrderManager::canUpdateStatus($order['statut'], $nouveauStatut)) {
+            header('Location: index.php?page=order-management&error=status_progression_invalid');
+            exit();
+        }
+
+        // 3. Mise à jour du statut en base
         $stmt = $db->prepare(
             'UPDATE vg_commande SET statut = ? WHERE commande_id = ?'
         );
         $stmt->execute([$nouveauStatut, $commande_id]);
+
+        $stmtHistorique = $db->prepare(
+            "INSERT INTO vg_commande_statut_historique (commande_id, statut) VALUES (?, ?)"
+        );
+        $stmtHistorique->execute([$commande_id, $nouveauStatut]);
+
+        // ENVOI DES MAILS SELON LE STATUT (on réutilise les données de $order déjà récupérées)
+        if (!empty($order['client_email'])) {
+            $orderDetails = [
+                'commande_id' => $commande_id,
+                'prenom' => $order['prenom'] ?? $order['client_prenom'] ?? 'client'
+            ];
+
+            // 1. Cas particulier : Retour de matériel
+            if ($nouveauStatut === 'en_attente_retour_materiel') {
+                MailService::sendMaterialReturnReminderEmail(
+                    $order['client_email'],
+                    $order,
+                    ''
+                );
+            } 
+            // 2. Cas particulier : Commande terminée
+            elseif ($nouveauStatut === 'terminee') {
+                MailService::sendReviewEmail(
+                    $order['client_email'],
+                    $orderDetails,
+                    $orderDetails['prenom']
+                );
+            } 
+            // 3. Pour tous les autres statuts
+            else {
+                MailService::sendOrderStatusUpdateEmail(
+                    $order['client_email'], 
+                    $orderDetails, 
+                    $nouveauStatut, 
+                    $orderDetails['prenom']
+                );
+            }
+        }
 
         header('Location: index.php?page=order-management&success=status_updated');
         exit();
@@ -140,6 +227,7 @@ public static function updateStatus(\PDO $db)
         exit();
     }
 }
+ //function pour contacter le client pour le retour du matériel
 public static function contactMaterialClient(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);

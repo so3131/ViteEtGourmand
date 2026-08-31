@@ -2,8 +2,8 @@
 namespace App\Controllers\AuthController;
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 require_once __DIR__ . '/Auth.php';
-
-use App\Controllers\AuthController\Auth; // On importe la classe Auth pour pouvoir utiliser la méthode setUserSession() après une connexion réussie
+use App\Helpers\MailService;
+use App\Controllers\AuthController\Auth; 
 class SigninController
 {
     // fonction qu'on appelle pour afficher la page depuis l'index.php puis s'inscrire
@@ -19,7 +19,11 @@ class SigninController
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         $error = null;
 
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+             if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+                $errors['general'] = "Session expirée ou requête invalide. Veuillez recharger la page.";
+            }
             $email = trim($_POST['email']);
             $password = $_POST['password'] ?? '';
             $password_confirm = $_POST['password_confirm'] ?? '';
@@ -119,7 +123,7 @@ exit();
         ];
 
         // Pareil pour le JS
-        $specific_scripts = [];
+        $specific_scripts = ["../public/assets/javascript/auth.js",];
         $errors = $errors ?? [];
         require_once ROOT_PATH . '/app/views/layout/header.php';
         require_once ROOT_PATH . '/app/views/Auth/signin.view.php';

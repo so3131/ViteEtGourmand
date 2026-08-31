@@ -16,5 +16,49 @@
     height: auto;
     object-fit: cover;
 }
+/* 1. Bouton "Voir le détail" de vos cartes de menu */
+.card .btn-primary {
+    background-color: var(--color-gold, #ffc107)  !important;
+    border-color: var(--color-teal-primary, #83b5af) !important;
+    color: #ffffff !important;
+    border-radius: var(--border-radius-md, 8px);
+    transition: var(--transition-base, all 0.3s ease);
+}
 
-/* S'assure que le container principal ne déborde jamais */
+.card .btn-primary:hover {
+    background-color: var(--color-teal-hover, #6f619b) !important;
+    border-color: var(--color-teal-hover, #6f619b) !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-button, 0 4px 15px rgba(131, 181, 175, 0.3));
+}
+
+/* 2. Bouton principal "Appliquer les filtres" dans le formulaire de gauche */
+#filterForm > button[type="submit"] {
+    background-color: var(--color-teal-primary, #83b5af) !important;
+    border-color: var(--color-teal-primary, #83b5af) !important;
+    color: #ffffff !important;
+    font-weight: 500;
+    transition: var(--transition-base, all 0.3s ease);
+}
+
+#filterForm > button[type="submit"]:hover {
+    background-color: var(--color-gold, #ffc107)  !important;
+    border-color: var(--color-teal-hover, #6f619b) !important;
+}
+/* ==========================================================================
+   CORRECTION GLOBALE DES SELECTS SUR MOBILE
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Empêche le body et le html de perturber le positionnement des fenêtres natives du téléphone */
+    body {
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    /* Force tous les form-select du site à garder une taille standard lisible par le système mobile */
+    .form-select {
+        font-size: 16px !important; /* Évite les bugs de zoom et de positionnement natif */
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+}

@@ -4,9 +4,10 @@ namespace App\Controllers;
 require_once dirname(__DIR__) . '/config/constants.php';
 class ErrorController
 {
+     //function pour afficher la page d'erreur 404
 public static function notFound(\PDO $db)
 {
-    $title = "Page introuvable - EcoRide";
+    $title = "Page introuvable - Vite & Gourmand";
     $pdo = $db;
     $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 

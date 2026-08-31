@@ -1,27 +1,127 @@
+/* importation des variabes CSS */
+@import url('variables.css');
+
 body {
-    /* Ajoute un filtre sombre sur l'image pour que le texte blanc soit lisible */
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                url('../images/photo7.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed; /* L'image reste fixe lors du scroll */
+    background-color: #FDFBF7;
+    color: #212529;
+    font-family: var(--font-family, sans-serif);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
-    color: #ffffff; /* Texte blanc pour contraster avec le fond sombre */
+    overflow-x: hidden; /* Sécurité ultime pour couper net tout dépassement horizontal */
 }
-.section,
-.hero-section{
-    /* Ajoute un filtre sombre sur l'image pour que le texte soit lisible */background-color: rgba(255, 255, 255, 0.5); 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed; 
-    border-radius: 30px;
+
+/* Section pleine largeur propre et sans scroll horizontal */
+section.full-width-section {
+    width: 100%;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    transform: translateX(-50%);
+    background-color: #343a40; 
+    color: #ffffff;
+    margin-top: var(--spacing-xs);
+    padding-top: 4rem;
+    padding-bottom: 4rem;
 }
+
+/* Le bloc de l'équipe redevient une belle carte blanche distincte */
+section.bg-light {
+    background-color: #ffffff !important;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: 3rem 2rem;
+}
+
+/* Les autres sections (équipe, avis) ont un fond blanc totalement opaque et net */
+.section {
+    background-color: var(--color-white, #ffffff);
+    border-radius: var(--border-radius-lg, 30px);
+    padding: 3rem 2rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
+    color: var(--color-text, #212529);
+}
+
+/* Style de l'image dans la hero section */
 .hero-img {
-    max-width: 80%; /* L'image occupera au maximum 80% de la largeur de sa colonne */
+    max-width: 100%;
     height: auto;
-    display: block;
-    margin: 0 auto; /* Centre l'image horizontalement */
-    
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+}
+
+.team-img:hover {
+    transform: scale(1.05);
+}
+/* ==========================================================================
+   4. PERSONNALISATION DES SECTIONS ACCUEIL (ÉQUIPE & PRÉSENTATION)
+   ========================================================================== */
+section.bg-dark {
+    background-color: var(--color-dark) !important;
+}
+
+section.bg-dark h2 {
+    color: var(--color-gold);
+    font-weight: 700;
+}
+
+.plat-presentation-img {
+    max-height: 350px;
+    width: 100%;
+    object-fit: cover;
+    border: 2px solid var(--color-gold);
+}
+
+.bg-light.rounded {
+    background-color: var(--color-bg-light) !important;
+    border-top: 4px solid var(--color-olive);
+}
+
+#equipe h2, 
+.team-img + h5 {
+    color: var(--color-dark);
+}
+
+.team-img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--color-gold);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease, border-color 0.3s ease;
+    background-color: #e9ecef;
+}
+.team-role{
+    border-radius: 50%;
+    border: 2px solid var(--color-gold);
+}
+
+.team-img:hover {
+    transform: scale(1.05);
+    border-color: var(--color-gold); /* Devient doré au survol */
+}
+
+/* 
+/* 
+/*
+==========================================================================
+   5. AVIS CLIENTS ET ÉTOILES
+   ========================================================================== */
+.reviews-section .text-warning {
+    color: var(--color-gold, #ffc107) !important;
+}
+
+.card {
+    border: none !important;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
 }

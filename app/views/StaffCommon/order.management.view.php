@@ -15,16 +15,16 @@
         <div class="col-md-4">
             <label class="form-label">Statut</label>
             <select name="status" class="form-select">
-        <option value="">Tous les statuts</option>
-        <option value="en_attente" <?php echo (($_GET['status'] ?? '') === 'en_attente') ? 'selected' : ''; ?>>En attente</option>
-        <option value="acceptee" <?php echo (($_GET['status'] ?? '') === 'acceptee') ? 'selected' : ''; ?>>Acceptée</option>
-        <option value="en_preparation" <?php echo (($_GET['status'] ?? '') === 'en_preparation') ? 'selected' : ''; ?>>En préparation</option>
-        <option value="en_cours_livraison" <?php echo (($_GET['status'] ?? '') === 'en_cours_livraison') ? 'selected' : ''; ?>>En cours de livraison</option>
-        <option value="livree" <?php echo (($_GET['status'] ?? '') === 'livree') ? 'selected' : ''; ?>>Livrée</option>
-        <option value="en_attente_retour_materiel" <?php echo (($_GET['status'] ?? '') === 'en_attente_retour_materiel') ? 'selected' : ''; ?>>En attente retour matériel</option>
-        <option value="terminee" <?php echo (($_GET['status'] ?? '') === 'terminee') ? 'selected' : ''; ?>>Terminée</option>
-        <option value="annulee" <?php echo (($_GET['status'] ?? '') === 'annulee') ? 'selected' : ''; ?>>Annulée</option>
-    </select>
+                <option value="">Tous les statuts</option>
+                <option value="en_attente" <?php echo (($_GET['status'] ?? '') === 'en_attente') ? 'selected' : ''; ?>>En attente</option>
+                <option value="acceptee" <?php echo (($_GET['status'] ?? '') === 'acceptee') ? 'selected' : ''; ?>>Acceptée</option>
+                <option value="en_preparation" <?php echo (($_GET['status'] ?? '') === 'en_preparation') ? 'selected' : ''; ?>>En préparation</option>
+                <option value="en_cours_livraison" <?php echo (($_GET['status'] ?? '') === 'en_cours_livraison') ? 'selected' : ''; ?>>En cours de livraison</option>
+                <option value="livree" <?php echo (($_GET['status'] ?? '') === 'livree') ? 'selected' : ''; ?>>Livrée</option>
+                <option value="en_attente_retour_materiel" <?php echo (($_GET['status'] ?? '') === 'en_attente_retour_materiel') ? 'selected' : ''; ?>>En attente retour matériel</option>
+                <option value="terminee" <?php echo (($_GET['status'] ?? '') === 'terminee') ? 'selected' : ''; ?>>Terminée</option>
+                <option value="annulee" <?php echo (($_GET['status'] ?? '') === 'annulee') ? 'selected' : ''; ?>>Annulée</option>
+            </select>
         </div>
         <div class="col-md-2">
             <button type="submit" class="btn btn-primary w-100">Filtrer</button>
@@ -46,12 +46,29 @@
                     <th>Statut</th>
                     <th>Total</th>
                     <th>Date Limite Restitution</th>
-                     <th>Actions</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (!empty($orders) && is_array($orders)): ?>
                     <?php foreach ($orders as $order): ?>
+                        <?php
+                        // Définition des poids du workflow
+                        $workflow = [
+                            'en_attente' => 1,
+                            'acceptee' => 2,
+                            'en_preparation' => 3,
+                            'en_cours_livraison' => 4,
+                            'livree' => 5,
+                            'en_attente_retour_materiel' => 6,
+                            'terminee' => 7,
+                            'annulee' => 0
+                        ];
+                        $currentWeight = $workflow[$order['statut']] ?? 0;
+                        $isLocked = ($order['statut'] === 'terminee' || $order['statut'] === 'annulee');
+                        // Annulation autorisée uniquement si non annulé et poids <= 4 (en_cours_livraison)
+                        $canCancel = ($order['statut'] !== 'annulee' && $currentWeight <= 4);
+                        ?>
                         <tr>
                             <td><?php echo htmlspecialchars($order['client_nom'] ?? 'N/A'); ?></td>
                             <td><?php echo htmlspecialchars($order['date_commande'] ?? 'N/A'); ?></td>
@@ -59,177 +76,192 @@
                             <td><?php echo htmlspecialchars($order['menu_titre'] ?? 'N/A'); ?></td>
                             <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($order['date_prestation'] ?? 'now')) . ' à ' . substr($order['heure_livraison'] ?? '00:00', 0, 5)); ?></td>
                             <td>
-                                <span class="badge <?php echo ($order['statut'] == 'annulee') ? 'bg-danger' : 'bg-info'; ?>">
-                                    <?php echo htmlspecialchars($order['statut']); ?>
+                                <?php 
+                                    $statutLabels = [
+                                        'en_attente' => 'En attente',
+                                        'acceptee' => 'Acceptée',
+                                        'en_preparation' => 'En préparation',
+                                        'en_cours_livraison' => 'En livraison',
+                                        'livree' => 'Livrée',
+                                        'en_attente_retour_materiel' => 'Retour matériel',
+                                        'terminee' => 'Terminée',
+                                        'annulee' => 'Annulée'
+                                    ];
+
+                                    $badgeClass = match ($order['statut']) {
+                                        'annulee' => 'bg-danger',
+                                        'terminee', 'livree' => 'bg-success',
+                                        'en_attente' => 'bg-warning',
+                                        default => 'bg-info'
+                                    };
+                                ?>
+                                <span class="badge <?php echo $badgeClass; ?>">
+                                    <?php echo $statutLabels[$order['statut']] ?? htmlspecialchars($order['statut']); ?>
                                 </span>
                             </td>
                             <td><?php echo htmlspecialchars($order['prix_total'] ?? 'N/A'); ?> €</td>
                             <?php
-                            $dateLimite = new DateTime($order['date_limite_restitution']);
+                            $dateLimite = !empty($order['date_limite_restitution']) ? new DateTime($order['date_limite_restitution']) : null;
                             $aujourdhui = new DateTime();
-                            $estEnRetard = ($aujourdhui > $dateLimite && $order['restitution_materiel'] == 0);
+                            $estEnRetard = ($dateLimite && $aujourdhui > $dateLimite && $order['restitution_materiel'] == 0);
                             ?>
 
                             <td class="<?= $estEnRetard ? 'text-danger fw-bold' : '' ?>">
-                                <?= $estEnRetard ? 'RETARD' : date('d/m/Y', strtotime($order['date_limite_restitution'])) ?>
+                                <?= $estEnRetard ? 'RETARD' : ($dateLimite ? $dateLimite->format('d/m/Y') : 'N/A') ?>
                             </td>
-                           <td>
-    <div class="d-flex flex-wrap gap-2 align-items-center">
-        <!-- 1. Bouton "Voir" (Ouvre la modale de détails) -->
-        <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modal-<?php echo $order['commande_id']; ?>" title="Voir les détails">
-            <i class="fa-solid fa-eye"></i> Voir
-        </button>
+                            <td>
+                                <div class="d-flex flex-wrap gap-2 align-items-center">
+                                    <!-- 1. Bouton "Voir" -->
+                                    <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modal-<?php echo $order['commande_id']; ?>" title="Voir les détails">
+                                        <i class="fa-solid fa-eye"></i> Voir
+                                    </button>
 
-        <!-- 2. Bouton "Modification" (Page dédiée) -->
-        <a href="index.php?page=edit-order-common&commande_id=<?php echo urlencode($order['commande_id']); ?>"
-            class="btn btn-sm btn-warning" title="Modifier">Modif.</a>
+                                    <!-- 2. Bouton "Modification" -->
+                                    <a href="index.php?page=edit-order-common&commande_id=<?php echo urlencode($order['commande_id']); ?>"
+                                        class="btn btn-sm btn-warning" title="Modifier">Modif.</a>
 
-      <!-- 3. Formulaire de changement rapide de statut -->
-        <form action="index.php?page=update-order-status" method="POST" class="d-inline m-0">
-            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-            <input type="hidden" name="commande_id" value="<?= $order['commande_id'] ?>">
-            
-            <select name="nouveau_statut" class="form-select form-select-sm d-inline-block" style="width: 140px;" onchange="this.form.submit()">
-                <option value="en_attente" <?= $order['statut'] === 'en_attente' ? 'selected' : '' ?>>En attente</option>
-                <option value="acceptee" <?= $order['statut'] === 'acceptee' ? 'selected' : '' ?>>Acceptée</option>
-                <option value="en_preparation" <?= $order['statut'] === 'en_preparation' ? 'selected' : '' ?>>En préparation</option>
-                <option value="en_cours_livraison" <?= $order['statut'] === 'en_cours_livraison' ? 'selected' : '' ?>>En livraison</option>
-                <option value="livree" <?= $order['statut'] === 'livree' ? 'selected' : '' ?>>Livrée</option>
-                <option value="en_attente_retour_materiel" <?= $order['statut'] === 'en_attente_retour_materiel' ? 'selected' : '' ?>>Retour matériel</option>
-                
-                <!-- On n'autorise à passer en "Terminée" que si aucun matériel n'a été prêté OU si le matériel a été restitué -->
-                <?php if ($order['pret_materiel'] == 0 || $order['restitution_materiel'] == 1): ?>
-                    <option value="terminee" <?= $order['statut'] === 'terminee' ? 'selected' : '' ?>>Terminée</option>
-                <?php endif; ?>
-            </select>
-        </form>
+                                    <!-- 3. Formulaire de changement rapide de statut -->
+                                    <form action="index.php?page=update-order-status" method="POST" class="d-inline m-0">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="commande_id" value="<?= $order['commande_id'] ?>">
+                                        
+                                        <select name="nouveau_statut" class="form-select form-select-sm d-inline-block" style="width: 140px;" onchange="this.form.submit()" <?= $isLocked ? 'disabled' : '' ?>>
+                                            <?php
+                                            $optionsList = [
+                                                'en_attente' => 'En attente',
+                                                'acceptee' => 'Acceptée',
+                                                'en_preparation' => 'En préparation',
+                                                'en_cours_livraison' => 'En livraison',
+                                                'livree' => 'Livrée',
+                                                'en_attente_retour_materiel' => 'Retour matériel',
+                                                'terminee' => 'Terminée',
+                                                'annulee' => 'Annulée'
+                                            ];
 
-        <!-- Bouton de "Prendre contact" si le matériel est en attente de retour -->
-        <?php if ($order['statut'] === 'en_attente_retour_materiel' && $order['pret_materiel'] == 1): ?>
-            <button type="button" class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#contactModal<?= $order['commande_id'] ?>" title="Prendre contact pour le matériel">
-                <i class="fa-solid fa-phone"></i> Contact
-            </button>
-        <?php endif; ?>
+                                            foreach ($optionsList as $key => $label):
+                                                $optionWeight = $workflow[$key] ?? 0;
+                                                $isDisabled = ($optionWeight < $currentWeight && $key !== $order['statut'] && $key !== 'annulee');
+                                            ?>
+                                                <option value="<?= $key ?>" <?= ($order['statut'] === $key) ? 'selected' : '' ?> <?= $isDisabled ? 'disabled class="text-muted"' : '' ?>>
+                                                    <?= $label ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </form>
 
-        <!-- 4. Bouton "Annuler" (Déclenche la modale d'annulation) -->
-        <?php if ($order['statut'] !== 'annulee'): ?>
-            <button type="button" class="btn btn-sm btn-danger"
-                data-bs-toggle="modal"
-                data-bs-target="#cancelModal<?= $order['commande_id'] ?>" title="Annuler la commande">
-                Annuler
-            </button>
-        <?php endif; ?>
-    </div>
-</td>
+                                    <!-- 4. Bouton "Annuler" conditionné -->
+                                    <?php if ($canCancel): ?>
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#cancelModal<?= $order['commande_id'] ?>" title="Annuler la commande">
+                                            Annuler
+                                        </button>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
                         </tr>
-
-
                     <?php endforeach; ?>
-               
                 <?php endif; ?>
             </tbody>
         </table>
     </div>
-    </div>
-    <!-- PLACEMENT DES MODALES : TOUTES DANS LA BOUCLE -->
-    <?php if (!empty($orders) && is_array($orders)): ?>
-        <?php foreach ($orders as $order): ?>
+</div>
 
-            <!-- 1. Modale Détails -->
-            <div class="modal fade" id="modal-<?= $order['commande_id'] ?>" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Détails commande</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>Adresse :</strong> <?php echo htmlspecialchars(($order['adresse_prestation'] ?? 'N/A') . ', ' . ($order['ville_prestation'] ?? 'N/A')); ?></p>
-                            <p><strong>Quantité :</strong> <?php echo htmlspecialchars($order['nombre_personne'] ?? 'N/A'); ?> personnes</p>
-                            <p><strong>Montant Commande :</strong> <?php echo htmlspecialchars($order['prix_menu'] ?? 'N/A'); ?> €</p>
-                            <p><strong>Frais de livraison :</strong> <?php echo htmlspecialchars($order['prix_livraison'] ?? 'N/A'); ?> €</p>
-                            <p><strong>Prêt Matériel :</strong> <?php echo ($order['pret_materiel'] == 1) ? 'Oui' : 'Non'; ?></p>
-                            <p><strong>Caution :</strong> <?php echo htmlspecialchars($order['depot_garantie'] ?? 'N/A'); ?> €</p>
-                            <p><strong>Restitution Matériel :</strong> <?php echo ($order['restitution_materiel'] == 1) ? 'Oui' : 'Non'; ?></p>
+<!-- PLACEMENT DES MODALES -->
+<?php if (!empty($orders) && is_array($orders)): ?>
+    <?php foreach ($orders as $order): ?>
+        <?php
+        $workflow = [
+            'en_attente' => 1,
+            'acceptee' => 2,
+            'en_preparation' => 3,
+            'en_cours_livraison' => 4,
+            'livree' => 5,
+            'en_attente_retour_materiel' => 6,
+            'terminee' => 7,
+            'annulee' => 0
+        ];
+        $currentWeight = $workflow[$order['statut']] ?? 0;
+        $canCancel = ($order['statut'] !== 'annulee' && $currentWeight <= 4);
+        ?>
+
+        <!-- 1. Modale Détails -->
+        <div class="modal fade" id="modal-<?= $order['commande_id'] ?>" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Détails commande n°<?= htmlspecialchars($order['numero_commande'] ?? $order['commande_id']) ?></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Client :</strong> <?php echo htmlspecialchars(($order['client_prenom'] ?? '') . ' ' . ($order['client_nom'] ?? 'N/A')); ?></p>
+                        <p><strong>E-mail :</strong> <?php echo htmlspecialchars($order['client_email'] ?? 'N/A'); ?></p>
+                        <p><strong>Menu :</strong> <?php echo htmlspecialchars($order['menu_titre'] ?? 'N/A'); ?></p>
+                        <p><strong>Date de prestation :</strong> <?php echo htmlspecialchars(date('d/m/Y', strtotime($order['date_prestation'] ?? 'now')) . ' à ' . substr($order['heure_livraison'] ?? '00:00', 0, 5)); ?></p>
+                        <p><strong>Adresse :</strong> <?php echo htmlspecialchars(($order['adresse_prestation'] ?? 'N/A') . ', ' . ($order['ville_prestation'] ?? 'N/A')); ?></p>
+                        <p><strong>Quantité :</strong> <?php echo htmlspecialchars($order['nombre_personne'] ?? 'N/A'); ?> personnes</p>
+                        <p><strong>Montant Commande :</strong> <?php echo htmlspecialchars($order['prix_total'] ?? $order['prix_menu'] ?? 'N/A'); ?> €</p>
+                        <p><strong>Frais de livraison :</strong> <?php echo htmlspecialchars($order['prix_livraison'] ?? '0'); ?> €</p>
+                        <p><strong>Prêt Matériel :</strong> <?php echo ($order['pret_materiel'] == 1) ? 'Oui' : 'Non'; ?></p>
+                        <p><strong>Caution :</strong> <?php echo htmlspecialchars($order['depot_garantie'] ?? '0'); ?> €</p>
+                        <p><strong>Restitution Matériel :</strong> <?php echo ($order['restitution_materiel'] == 1) ? 'Oui' : 'Non'; ?></p>
+                        <?php if (!empty($order['date_limite_restitution'])): ?>
                             <p><strong>Date limite de restitution :</strong> <?= date('d/m/Y', strtotime($order['date_limite_restitution'])) ?></p>
+                        <?php endif; ?>
+                        
+                        <div class="mt-4 pt-3 border-top">
+                            <h6 class="text-muted mb-3"><i class="fa-solid fa-address-book"></i> Contacter le client</h6>
+                            <div class="d-flex gap-2">
+                                <?php if (!empty($order['client_email'])): ?>
+                                    <a href="mailto:<?= htmlspecialchars($order['client_email']) ?>" class="btn btn-sm btn-outline-primary">
+                                        <i class="fa-solid fa-envelope"></i> Envoyer un e-mail
+                                    </a>
+                                <?php endif; ?>
+                                
+                                <?php if (!empty($order['client_telephone'])): ?>
+                                    <a href="tel:<?= htmlspecialchars($order['client_telephone']) ?>" class="btn btn-sm btn-outline-success">
+                                        <i class="fa-solid fa-phone"></i> Appeler
+                                    </a>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- 2. Modale Annulation -->
-            <?php if ($order['statut'] !== 'annulee'): ?>
-                <div class="modal fade" id="cancelModal<?= $order['commande_id'] ?>" tabindex="-1">
-                    <div class="modal-dialog">
-                        <form action="index.php?page=cancel-order-common" method="POST">
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                            <input type="hidden" name="commande_id" value="<?= $order['commande_id'] ?>">
-                            
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Annuler la commande n°<?= $order['commande_id'] ?></h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <label class="form-label">Mode de contact utilisé :</label>
-                                    <select name="mode_contact" class="form-select" required>
-                                        <option value="tel">Appel GSM</option>
-                                        <option value="mail">Email</option>
-                                    </select>
-
-                                    <label class="form-label mt-2">Motif de l'annulation :</label>
-                                    <textarea name="motif" class="form-control" rows="3" required></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn btn-danger">Confirmer l'annulation</button>
-                                </div>
+        <!-- 2. Modale Annulation (Générée uniquement si annulable) -->
+        <?php if ($canCancel): ?>
+            <div class="modal fade" id="cancelModal<?= $order['commande_id'] ?>" tabindex="-1">
+                <div class="modal-dialog">
+                    <form action="index.php?page=cancel-order-common" method="POST">
+                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                        <input type="hidden" name="commande_id" value="<?= htmlspecialchars($order['commande_id']) ?>">
+                        
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Annuler la commande n°<?= htmlspecialchars($order['numero_commande'] ?? $order['commande_id']) ?></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            <?php endif; ?>
+                            <div class="modal-body">
+                                <label class="form-label">Mode de contact utilisé :</label>
+                                <select name="mode_contact" class="form-select" required>
+                                    <option value="tel">Appel GSM</option>
+                                    <option value="mail">Email</option>
+                                </select>
 
-       <!-- 3. Modale Prise de contact Matériel -->
-            <?php if ($order['pret_materiel'] == 1 && $order['statut'] === 'en_attente_retour_materiel'): ?>
-                <div class="modal fade" id="contactModal<?= $order['commande_id'] ?>" tabindex="-1">
-                    <div class="modal-dialog">
-                        <form action="index.php?page=contact-material-client" method="POST">
-                            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                            <input type="hidden" name="commande_id" value="<?= $order['commande_id'] ?>">
-                            <input type="hidden" name="mode_contact" value="mail">
-                            
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">E-mail de relance matériel - Commande n°<?= $order['commande_id'] ?></h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <p class="text-muted small">
-                                        Rappel : Si le matériel n'est pas restitué sous 10 jours ouvrés, des frais de 600€ s'appliquent (CGV).
-                                    </p>
-
-                                    <!-- Affichage de l'e-mail pré-rempli -->
-                                    <div class="mb-3">
-                                        <label class="form-label">Destinataire :</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                                            <input type="text" class="form-control" value="<?= htmlspecialchars($order['client_email'] ?? $order['email'] ?? 'Non renseigné') ?>" readonly>
-                                        </div>
-                                    </div>
-
-                                    <label class="form-label">Notes / Compte-rendu de l'e-mail :</label>
-                                    <textarea name="commentaire_contact" class="form-control" rows="3" placeholder="Détails de l'e-mail envoyé au client..." required></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-                                    <button type="submit" class="btn btn-primary">Envoyer l'e-mail</button>
-                                </div>
+                                <label class="form-label mt-2">Motif de l'annulation :</label>
+                                <textarea name="motif" class="form-control" rows="3" required></textarea>
                             </div>
-                        </form>
-                    </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                <button type="submit" class="btn btn-danger">Confirmer l'annulation</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            <?php endif; ?>
+            </div>
+        <?php endif; ?>
 
-        <?php endforeach; ?>
-    <?php endif; ?>
+    <?php endforeach; ?>
+<?php endif; ?>

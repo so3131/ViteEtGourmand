@@ -4,12 +4,12 @@ namespace App\Controllers\UserController;
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 class MentionLegalesController
 {
-
+//function pour afficher la page des mentions légales
 public static function mentionsLegales(\PDO $db)
 {
     $pdo = $db;
     $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    $title = "Mentions Légales - EcoRide";
+    $title = "Mentions Légales - Vite&Gourmand";
 
     $specifics_fonts = "https://fonts.googleapis.com/css?family=Lexend&display=swap";
 

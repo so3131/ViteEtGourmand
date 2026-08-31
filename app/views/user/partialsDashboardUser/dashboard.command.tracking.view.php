@@ -1,5 +1,6 @@
 <?php
 /** @var array $ordersData */
+/** @var \PDO $db */
 ?>
 
 <div class="tab-content">
@@ -9,7 +10,7 @@
                 <p class="text-muted">Aucune commande.</p>
             <?php else: ?>
                 <ul class="list-group">
-                    <?php foreach ($orders as $order) renderOrderRow($order); ?>
+                    <?php foreach ($orders as $order) { renderOrderRow($order, $db); } ?>
                 </ul>
             <?php endif; ?>
         </div>

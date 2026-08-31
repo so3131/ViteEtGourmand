@@ -18,7 +18,8 @@ use App\Managers\MongoStatsManager;
 
 class OrderMenuController
 {
-    public static function orderMenu(\PDO $db, ?int $menuID = 0)
+    //function pour afficher le processus de commande d'un menu avec plusieurs étapes et gérer les données de session
+  public static function orderMenu(\PDO $db, ?int $menuID = 0)
     {
         $menuID = (int)$menuID;
         if ($menuID === 0 && isset($_GET['menu_id'])) {
@@ -27,7 +28,6 @@ class OrderMenuController
 
         Auth::check([ROLE_USER]);
 
-
         // INITIALISATION DE TOUTES LES VARIABLES
         $menu = null;
         $menuInfo = null;
@@ -35,11 +35,10 @@ class OrderMenuController
         $order = [];
         $Discount = false;
 
+        // 1. Définition du step (mis à 0 par défaut si c'est la première étape)
+        $step = isset($_GET['step']) ? (int)$_GET['step'] : 0;
 
-        // 1. Définition constante du step
-        $step = isset($_GET['step']) ? (int)$_GET['step'] : 1;
-
-        // 2. PRÉPARATION GLOBALE DES DONNÉES (Pour éviter les erreurs de variable non définie)
+        // 2. PRÉPARATION GLOBALE DES DONNÉES
         $user = (object) [
             'user_id' => $_SESSION['user_id'] ?? null,
             'nom'     => $_SESSION['nom'] ?? 'Inconnu',
@@ -51,87 +50,101 @@ class OrderMenuController
         $menuData = $orderData['menu'] ?? [];
         $totalCommande = $orderData['total_final'] ?? 0;
 
-        // 1. TRAITEMENT DES DONNÉES (POST)
+        // --- CHARGEMENT DES DONNÉES UTILES POUR L'ÉTAPE 0 (GET et POST) ---
+        $menuInfo = MenuManager::getById($db, $menuID);
+        $tousLesLieux = LieuManager::getAll($db);
+        $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
+        $dateMinimale = ($delaiCommande > 0) ? (new \DateTime('today'))->modify('+' . $delaiCommande . ' days')->format('Y-m-d') : null;
+        $timetables = \App\Models\Timetable::ShowTimetable($db);
+        // -----------------------------------------------------------------
+
+        // 3. TRAITEMENT DES DONNÉES (POST)
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             switch ($step) {
+      case 0:
+        $_SESSION['current_order'] = [];
+        $menu = MenuManager::getById($db, $menuID);
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: index.php?page=login');
+            exit();
+        }
 
-                case 0:
-                    $menu = MenuManager::getById($db, $menuID);
+        $user = (object) [
+            'nom'       => $_SESSION['nom'],
+            'prenom'    => $_SESSION['prenom'],
+            'email'     => $_SESSION['email'],
+            'telephone' => $_SESSION['telephone']
+        ];
+        
+        $datePrestation = $_POST['date_prestation'] ?? '';
+        $ville = $_POST['ville'] ?? '';
+        $codePostal = $_POST['code_postal'] ?? '';
+        $adresseLivraison = $_POST['adresse_livraison'] ?? '';
+        
+        $latClient = (float)($_POST['lat'] ?? 0);
+        $lonClient = (float)($_POST['lon'] ?? 0);
+        
+        $menuInfo = MenuManager::getById($db, $menuID);
+        
+        if (!$menuInfo) {
+            error_message("Menu introuvable.");
+            header('Location: index.php?page=home');
+            exit();
+        }
 
-                    // 1. Gestion du POST de l'étape 0
-                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                        if (!isset($_SESSION['user_id'])) {
-                            header('Location: index.php?page=login');
-                            exit();
-                        }
+        try {
+            $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
+            $dateMinimale = new \DateTime('today');
+            $dateMinimale->modify('+' . $delaiCommande . ' days');
 
-                        $user = (object) [
-                            'nom'       => $_SESSION['nom'],
-                            'prenom'    => $_SESSION['prenom'],
-                            'email'     => $_SESSION['email'],
-                            'telephone' => $_SESSION['telephone']
-                        ];
-                        $datePrestation = $_POST['date_prestation'] ?? '';
-                        $lieuId = (int)($_POST['lieu_id'] ?? 0);
+            $dateSelectionnee = new \DateTime($datePrestation);
+            $dateSelectionnee->setTime(0, 0, 0);
 
-                        $lieu = LieuManager::getById($db, $lieuId);
-                        $menuInfo = MenuManager::getById($db, $menuID);
-                        if (!$menuInfo) {
-                            error_message("Menu introuvable.");
-                            header('Location: index.php?page=home');
-                            exit();
-                        }
-                        try {
-                            $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
-                            $dateMinimale = new \DateTime('today');
-                            $dateMinimale->modify('+' . $delaiCommande . ' days');
+            if ($dateSelectionnee < $dateMinimale) {
+                error_message("La date de prestation doit être au minimum à J+" . $delaiCommande . ".");
+                header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
+                exit();
+            }
+        } catch (\Exception $e) {
+            error_message("Format de date invalide.");
+            header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
+            exit();
+        }
 
-                            $dateSelectionnee = new \DateTime($datePrestation);
-                            $dateSelectionnee->setTime(0, 0, 0);
+        if (empty($datePrestation) || empty($ville)) {
+            error_message("Veuillez remplir la date et sélectionner une adresse de livraison valide.");
+            header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
+            exit();
+        }
 
+        // --- CALCUL DES FRAIS DE LIVRAISON ---
+        $fraisLivraison = 0.00;
+        if (mb_strtolower(trim($ville)) !== 'bordeaux' && $latClient && $lonClient) {
+            $distanceKm = Order::calculerDistanceRouteVersClient($latClient, $lonClient);
+            $fraisLivraison = Order::calculerFraisLivraisonParKm($ville, $distanceKm);
+        }
 
-                            if ($dateSelectionnee < $dateMinimale) {
-                                error_message("La date de prestation doit être au minimum à J+" . $delaiCommande . ".");
-                                header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
-                                exit();
-                            }
-                        } catch (\Exception $e) {
-                            error_message("Format de date invalide.");
-                            header('Location: index.php?page=order-menu&step=0');
-                            exit();
-                        }
+        // Stockage complet dans la session (avec lat et lon)
+        $_SESSION['current_order']['prestation'] = [
+            'nom' => $user->nom,
+            'prenom' => $user->prenom,
+            'email' => $user->email,
+            'gsm' => $user->telephone,
+            'date_prestation' => $datePrestation,
+            'heure_livraison' => $_POST['heure_livraison'] ?? '12:00',
+            'ville' => $ville,
+            'code_postal' => $codePostal,
+            'adresse_livraison' => $adresseLivraison,
+            'lat' => $latClient,  // <-- INDISPENSABLE
+            'lon' => $lonClient,  // <-- INDISPENSABLE
+            'frais_livraison' => round($fraisLivraison, 2),
+            'nom_menu' => $menu['titre'] ?? 'Menu inconnu'
+        ];
 
-                        $menu = MenuManager::getById($db, $menuID);
-
-                        // 3. Validation
-                        if (empty($datePrestation) || !$lieu) {
-                            error_message("Veuillez remplir la date et choisir un lieu de prestation valide.");
-                            header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
-                            exit();
-                        }
-
-                        $fraisLivraison = Order::calculerFraisLivraison($lieu['ville'], (float)$lieu['distance_bordeaux']);
-
-                        // 5. Stockage complet dans la session
-                        $_SESSION['current_order']['prestation'] = [
-                            'nom' => $user->nom,
-                            'prenom' => $user->prenom,
-                            'email' => $user->email,
-                            'gsm' => $user->telephone,
-                            'date_prestation' => $datePrestation,
-                            'heure_livraison' => $_POST['heure_livraison'] ?? '12:00',
-                            'lieu' => $lieu,
-                            'frais_livraison' => $fraisLivraison,
-                            'nom_menu' => $menu['titre'] ?? 'Menu inconnu',
-                            'adresse_precise' => $_POST['adresse_precise'] ?? ''
-                        ];
-                        session_write_close();
-                        header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=1');
-                        exit();
-                    }
-
-                    break;
+        session_write_close();
+        header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=1');
+        exit();
+        break;
 
                 case 1:
 
@@ -216,8 +229,32 @@ class OrderMenuController
                     break;
 
                 case 3:
+if (!isset($_SESSION['current_order']['menu'])) {
+            error_message("Votre session a expiré ou le menu n'a pas été sélectionné.");
+            header('Location: index.php?page=home');
+            exit();
+        }
 
+        // --- RECALCUL ET MISE À JOUR DES FRAIS À L'ÉTAPE 3 ---
+        $prestationData = $_SESSION['current_order']['prestation'] ?? [];
+        $ville = $prestationData['ville'] ?? '';
+        $latClient = $prestationData['lat'] ?? null;
+        $lonClient = $prestationData['lon'] ?? null;
 
+        if (mb_strtolower(trim($ville)) !== 'bordeaux' && $latClient !== null && $lonClient !== null) {
+            $distanceKm = Order::calculerDistanceRouteVersClient((float)$latClient, (float)$lonClient);
+            $fraisLivraisonRecalcules = Order::calculerFraisLivraisonParKm($ville, $distanceKm);
+            
+            // On force la mise à jour dans la session avec la valeur exacte
+            $_SESSION['current_order']['prestation']['frais_livraison'] = round($fraisLivraisonRecalcules, 2);
+        }
+
+        // Si l'utilisateur valide l'étape 3 en POST pour aller à l'étape suivante (ex: étape 4 ou paiement)
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            header('Location: index.php?page=order-menu&menu_id=' . $menuID . '&step=4');
+            exit();
+        }
+        break;
 
 
                 case 4:
@@ -257,7 +294,7 @@ class OrderMenuController
 
                             // === AJOUT MONGODB : Synchronisation des stats / historique ===
 
-                            // === AJOUT MONGODB : Synchronisation des stats / historique ===
+                           
                             try {
                                 // 1. Récupération des données depuis la session
                                 $prixMenus = ($menuData['prix_unitaire'] ?? 0) * ($menuData['quantite'] ?? 0);
@@ -307,7 +344,7 @@ class OrderMenuController
                                     'prix_total' => $totalCommande,
                                     'date_prestation' => $prestation['date_prestation'] ?? 'Non défini',
                                     'heure_livraison' => $prestation['heure_livraison'] ?? 'Non défini',
-                                    'lieu' => $prestation['lieu']['ville'] ?? 'Non défini',
+                                    'lieu' => $prestation['ville'] ?? 'Non défini',
                                 ];
 
                                 // Appelle la fonction avec le tableau
@@ -355,7 +392,7 @@ class OrderMenuController
             );
         }
 
-        // On calcule le total une seule fois, de façon fiable
+        // On calcule le total une seule fois
         $orderData = $_SESSION['current_order'] ?? [];
         $total_general = 0;
 
@@ -368,7 +405,7 @@ class OrderMenuController
             $_SESSION['current_order']['total_final'] = $total_general;
         }
 
-        // 2. PRÉPARATION DES VARIABLES POUR LA VUE
+// 2. PRÉPARATION DES VARIABLES POUR LA VUE
 
         if (!empty($orderData['menu']['quantite']) && $menu !== null) {
             $Discount = $menu->hasDiscount((int)$orderData['menu']['quantite']);
@@ -382,7 +419,11 @@ class OrderMenuController
             'db' => $db,
             'total_general' => $total_general,
             'order' => $orderData,
-            'hasDiscount' => $Discount
+            'hasDiscount' => $Discount,
+            'tousLesLieux' => $tousLesLieux,       
+            'dateMinimale' => $dateMinimale,      
+            'delaiCommande' => $delaiCommande,       
+            'timetables' => $timetables
         ];
 
         $step = $data['step'];
@@ -393,6 +434,10 @@ class OrderMenuController
         $total_general = $data['total_general'];
         $order = $data['order'];
         $Discount = $data['hasDiscount'];
+        $tousLesLieux = $data['tousLesLieux'];     
+        $dateMinimale = $data['dateMinimale'];    
+        $delaiCommande = $data['delaiCommande'];
+        $timetables = $data['timetables'];
 
         /** @var int $step */
         /** @var int $menuID */
@@ -402,6 +447,10 @@ class OrderMenuController
         /** @var float $total_general */
         /** @var array $order */
         /** @var bool $Discount */
+        /** @var array $tousLesLieux */         
+        /** @var string|null $dateMinimale */     
+        /** @var int $delaiCommande */ 
+        /** @var array $timetables */            
 
         // 3. AFFICHAGE
         $specific_scripts = ["assets/javascript/orderMenu.js"];
@@ -414,24 +463,29 @@ class OrderMenuController
         }
         require_once ROOT_PATH . '/app/views/layout/footer.php';
     }
-    public static function ajaxFraisLivraison($db)
-    {
-        $lieuId = $_GET['lieu_id'] ?? 0;
+    //function pour afficher les frais de livraison estimés en fonction du lieu sélectionné par l'utilisateur
+public static function ajaxFraisLivraison($db)
+{
+    $ville = $_GET['ville'] ?? '';
+    $latClient = $_GET['lat'] ?? null;
+    $lonClient = $_GET['lon'] ?? null;
 
-        if ($lieuId > 0) {
-            // Utilisation de la méthode que tu as créée dans OrderManager
-            $frais = OrderManager::EstimerFraisLivraison($db, (int)$lieuId);
+    $frais = 0.00;
 
-            header('Content-Type: application/json');
-            echo json_encode(['frais' => number_format($frais, 2)]);
-            exit();
-        }
+    if ($latClient && $lonClient) {
+        // On appelle la méthode propre de ton modèle qui utilise les constantes
+        $distanceKm = Order::calculerDistanceRouteVersClient((float)$latClient, (float)$lonClient);
 
-        // Cas d'erreur ou lieu absent
-        header('Content-Type: application/json');
-        echo json_encode(['frais' => '0.00']);
-        exit();
+        // On calcule les frais avec la règle métier du modèle
+        $frais = Order::calculerFraisLivraisonParKm($ville, $distanceKm);
     }
+
+    // Réponse JSON obligatoire et propre (sans aucun affichage parasite avant)
+    header('Content-Type: application/json');
+    echo json_encode(['frais' => $frais]);
+    exit;
+}
+    //function pour afficher la page de succès après la validation d'une commande
     public static function orderSuccess(\PDO $db)
     {
         // Affiche simplement une vue de succès
@@ -439,6 +493,7 @@ class OrderMenuController
         require_once ROOT_PATH . '/app/views/user/order/order-success.view.php';
         require_once ROOT_PATH . '/app/views/layout/footer.php';
     }
+    //function pour annuler une commande en cours et nettoyer la session
     public static function cancelOrder()
     {
         // 1. On nettoie la session

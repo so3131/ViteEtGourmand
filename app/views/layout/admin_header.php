@@ -111,8 +111,8 @@ if ($current_page === '' || $current_page === '/') {
 ?>
 
 <div class="breadcrumb">
-    <span style="color: var(--color-text-lighter)">Administration /</span> 
-    <strong><?= htmlspecialchars($pageName) ?></strong>
+    <span style="color: var(--color-text-lighter)">Administration / </span> 
+    <strong><?= htmlspecialchars($pageName) ?> </strong>
 </div>
                 <div class="admin-profile">
                     <span style="margin-right: var(--spacing-sm)">Bienvenue, <strong>Admin</strong></span>
