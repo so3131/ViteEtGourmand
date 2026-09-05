@@ -2,16 +2,19 @@
 
 Application web PHP MVC de présentation et de commande de menus pour événements.
 
-## Prérequis
+## 🛠️ Prérequis techniques
 
-- Windows avec [XAMPP](https://www.apachefriends.org/) installé.
-- Apache et MariaDB démarrés depuis le panneau de contrôle XAMPP.
-- PHP 8.2 ou supérieur.
-- Composer installé et disponible dans le terminal.
-- MongoDB installé localement ou une instance MongoDB accessible.
-- L'extension PHP `pdo_mysql` activée.
-- L'extension PHP `mongodb` activée pour les statistiques et les fonctionnalités MongoDB.
-https://account.heigit.org/manage/key?first_visit=true aussi
+Pour exécuter l'application en local :
+
+- **OS :** Windows avec [XAMPP](https://www.apachefriends.org/)
+- **Serveurs :** Apache & MariaDB démarrés via XAMPP
+- **PHP :** Version 8.2 ou supérieure
+- **Gestionnaire de dépendances :** Composer
+- **Base de données NoSQL :** Instance MongoDB locale ou distante (MongoDB Atlas)
+- **Extensions PHP requises :**
+  - `pdo_mysql` (accès BDD relationnelle)
+  - `mongodb` (gestion des statistiques)
+- **API Externe :** Clé d'API OpenRouteService via [heiGIT](https://account.heigit.org/manage/key?first_visit=true) pour le calcul d'itinéraire/kilométrage de livraison.
 
 ## Installation locale
 
@@ -322,14 +325,8 @@ Le parcours attendu est : `commande terminée -> avis utilisateur -> validation 
 - [ ] Scripts SQL propres pour créer et alimenter la base.
 
 ## Ordre conseillé pour terminer
+.
 
-1. Harmoniser la base SQL et le code.
-2. Corriger les routes et les redirections.
-3. Terminer les statuts et l'historique des commandes.
-4. Terminer les avis et leur modération.
-5. Compléter les espaces employé et administrateur.
 6. Ajouter CSRF et corriger la sécurité.
-7. Finaliser les statistiques filtrées.
-8. Corriger les assets et effectuer tous les tests.
 9. Ajouter RGPD et accessibilité.
 10. Produire les documents, déployer et faire la démonstration finale.

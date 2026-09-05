@@ -77,8 +77,8 @@ $route = match ($page) {
     'erase-order' => ['class' => '\App\Controllers\UserController\EraseOrderController', 'params' => ['db', 'commande_id'], 'action' => 'eraseOrder'],
     'edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'params' => ['db', 'commande_id'], 'action' => 'editOrderView'],
     'recalculer-prix' => [
-        'class' => '\App\Controllers\UserController\UpdateOrderController', 
-        'action' => 'recalculerPrix', 
+        'class' => '\App\Controllers\UserController\UpdateOrderController',
+        'action' => 'recalculerPrix',
         'params' => ['db', 'commande_id']
     ],
     'cancel-edit-order' => ['class' => '\App\Controllers\UserController\UpdateOrderController', 'action' => 'cancelEditOrder'],
@@ -95,15 +95,15 @@ $route = match ($page) {
 
     // Avis'
     'review' => [
-    'class' => '\App\Controllers\UserController\ReviewController',
-    'action' => 'submitReview',
-    'params' => ['db']
-],
-'store-review' => [
-    'class' => '\App\Controllers\UserController\ReviewController',
-    'action' => 'storeReview',
-    'params' => ['db']
-],
+        'class' => '\App\Controllers\UserController\ReviewController',
+        'action' => 'submitReview',
+        'params' => ['db']
+    ],
+    'store-review' => [
+        'class' => '\App\Controllers\UserController\ReviewController',
+        'action' => 'storeReview',
+        'params' => ['db']
+    ],
 
     // Admin
 
@@ -121,8 +121,8 @@ $route = match ($page) {
         'action' => 'toggleEmployeStatus',
         'params' => ['db', 'id']
     ],
-   'ban-user'           => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'banUser'],
-'unban-user'         => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'unBanUser'],
+    'ban-user'           => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'banUser'],
+    'unban-user'         => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'unBanUser'],
 
 
 
@@ -131,7 +131,7 @@ $route = match ($page) {
 
 
     // Admin et Employee
-   
+
 
     'order-management'     => ['class' => '\App\Controllers\StaffCommon\OrderManagementController', 'action' => 'OrderManagement'],
     'menu-management'      => ['class' => '\App\Controllers\StaffCommon\MenuManagementController', 'action' => 'MenuManagement'],
@@ -144,15 +144,15 @@ $route = match ($page) {
         'params' => ['db', 'commande_id']
     ],
     'update-order-status' => [
-    'class' => '\App\Controllers\StaffCommon\OrderManagementController',
-    'action' => 'updateStatus',
-    'params' => ['db']
-],
- 'contact-material-client' => [
-    'class' => '\App\Controllers\StaffCommon\OrderManagementController',
-    'action' => 'contactMaterialClient',
-    'params' => ['db']
-],
+        'class' => '\App\Controllers\StaffCommon\OrderManagementController',
+        'action' => 'updateStatus',
+        'params' => ['db']
+    ],
+    'contact-material-client' => [
+        'class' => '\App\Controllers\StaffCommon\OrderManagementController',
+        'action' => 'contactMaterialClient',
+        'params' => ['db']
+    ],
     'edit-menu' => [
         'class' => '\App\Controllers\StaffCommon\EditMenuController',
         'action' => 'editMenu',
@@ -168,11 +168,27 @@ $route = match ($page) {
         'action' => 'createPlatAjax',
         'params' => ['db']
     ],
+        'add-plat-process' => [
+        'class' => '\App\Controllers\StaffCommon\MenuManagementController',
+        'action' => 'addPlatProcess',
+        'params' => ['db']
+    ],
+    'delete-plat' => [
+        'class' => '\App\Controllers\StaffCommon\MenuManagementController',
+        'action' => 'deletePlat',
+        'params' => ['db', 'plat_id']
+    ],
+    'activate-plat' => [
+        'class' => '\App\Controllers\StaffCommon\MenuManagementController',
+        'action' => 'activatePlat',
+        'params' => ['db', 'plat_id']
+    ],
     'delete-menu' => [
         'class' => '\App\Controllers\StaffCommon\MenuManagementController',
         'action' => 'deleteMenu',
         'params' => ['db', 'menu_id']
     ],
+
     'activate-menu' => [
         'class' => '\App\Controllers\StaffCommon\MenuManagementController',
         'action' => 'activateMenu',

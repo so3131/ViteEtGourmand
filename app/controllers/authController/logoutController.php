@@ -1,35 +1,42 @@
 <?php
+
 namespace App\Controllers\AuthController;
+
 require_once dirname(__DIR__, 2) . '/config/constants.php';
+
+// Class LogoutController pour gérer la déconnexion des utilisateurs
 class LogoutController
 {
-public static function logOut(\PDO $db)
-{
-    $pdo = $db;
-    $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    //  on récupère la session AVANT de tester son statut
-    if (session_status() == PHP_SESSION_NONE) {
-        session_start();
-    }
-    // Si une session est active, on la détruit de fond en comble
-    if (session_status() == PHP_SESSION_ACTIVE) {
-        $_SESSION = array(); // On vide la session
-        // 2. On efface le cookie de session dans le navigateur pour éviter que le navigateur ne renvoie un ID de session obsolète
-        if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(
-                session_name(),
-                '',
-                time() - 42000, // Date d'expiration dans le passé pour le forcer à s'effacer
-                $params["path"],
-                $params["domain"],
-                $params["secure"],
-                $params["httponly"]
-            );
+    // function pour gérer la déconnexion des utilisateurs
+    public static function logOut(\PDO $db)
+    {
+        $pdo = $db;
+        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        //  Récupère la session avant de tester son statut
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
         }
-        session_destroy(); // On détruit la session 
+        // Si une session est active, elle est détruite
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            $_SESSION = array(); // On vide la session
+            // Efface le cookie de session dans le navigateur pour éviter que le navigateur ne renvoie un ID de session obsolète
+            if (ini_get("session.use_cookies")) {
+                $params = session_get_cookie_params();
+                setcookie(
+                    session_name(),
+                    '',
+                    // Date d'expiration passée pour forcer l'effacement du cookie
+                    time() - 42000,
+                    $params["path"],
+                    $params["domain"],
+                    $params["secure"],
+                    $params["httponly"]
+                );
+            }
+            // Détruit la session
+            session_destroy();
+        }
+        header('Location: index.php?page=home');
+        exit();
     }
-    header('Location: index.php?page=home');
-    exit();
-}
 }

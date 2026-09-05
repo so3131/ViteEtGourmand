@@ -1,8 +1,8 @@
 <?php
- 
+
 /* 
 *function pour générer un champ de formulaire standardisé */
-  
+
 function render_form_input(string $name, string $label, string $type = 'text', string $placeholder = '', string $value = '', string $autocomplete = 'off')
 {
 ?>
@@ -41,26 +41,26 @@ function render_password_input(string $name, string $label, string $value = '')
             </button>
         </div>
     </div>
-    <?php
+<?php
 }
 
 /*
  *function pour générer un champ de formulaire standardisé avec gestion d'erreur optionnelle*/
 function render_standard_field(string $name, string $label, string $type = 'text', string $placeholder = '', string $value = '', string $errorId = '', array $errors = [])
 {
-    
+
     $isInvalid = (isset($errors[$name])) ? 'is-invalid' : '';
     $errorMessage = $errors[$name] ?? '';
 ?>
     <div class="mb-3" id="div_<?= $name ?>">
         <label for="<?= $name ?>" class="form-label fw-bold"><?= $label ?></label>
         <input type="<?= $type ?>"
-            class="form-control py-2 <?= $isInvalid ?>" 
+            class="form-control py-2 <?= $isInvalid ?>"
             id="<?= $name ?>"
             name="<?= $name ?>"
             value="<?= htmlspecialchars($value) ?>"
             placeholder="<?= htmlspecialchars($placeholder) ?>">
-        
+
         <?php if (!empty($errorMessage)): ?>
             <div id="<?= $errorId ?>" class="text-danger small mt-1"><?= $errorMessage ?></div>
         <?php endif; ?>
@@ -82,7 +82,7 @@ function render_textarea_field(string $name, string $placeholder = '', int $rows
             rows="<?= $rows ?>"
             placeholder="<?= htmlspecialchars($placeholder) ?>"
             required><?= htmlspecialchars($value) ?></textarea>
-            
+
         <?php if (!empty($errorMessage)): ?>
             <div id="<?= $errorId ?>" class="text-danger small mt-1"><?= $errorMessage ?></div>
         <?php elseif ($errorId): ?>

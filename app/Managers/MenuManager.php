@@ -86,25 +86,25 @@ class MenuManager
                         ];
                     }
 
-                   if (!empty($row['plat_id'])) {
-    $categorie = trim($row['categorie']);
+                    if (!empty($row['plat_id'])) {
+                        $categorie = trim($row['categorie']);
 
-    $categories = [
-        'entrée' => 'Entrée',
-        'entree' => 'Entrée',
-        'plat' => 'Plat',
-        'dessert' => 'Dessert'
-    ];
+                        $categories = [
+                            'entrée' => 'Entrée',
+                            'entree' => 'Entrée',
+                            'plat' => 'Plat',
+                            'dessert' => 'Dessert'
+                        ];
 
-    $categorieNormalisee = $categories[mb_strtolower($categorie)] ?? null;
+                        $categorieNormalisee = $categories[mb_strtolower($categorie)] ?? null;
 
-    if ($categorieNormalisee !== null) {
-        $menusGroupes[$menuId]['plats_structures'][$categorieNormalisee] = [
-            'plat_id' => $row['plat_id'],
-            'titre_plat' => $row['titre_plat'],
-            'photo' => $row['photo']
-        ];
-    }
+                        if ($categorieNormalisee !== null) {
+                            $menusGroupes[$menuId]['plats_structures'][$categorieNormalisee] = [
+                                'plat_id' => $row['plat_id'],
+                                'titre_plat' => $row['titre_plat'],
+                                'photo' => $row['photo']
+                            ];
+                        }
 
 
 
@@ -153,8 +153,6 @@ class MenuManager
             if (empty($rawResults)) {
                 return null;
             }
-
-            // On structure les données pour retrouver le même format avec 'plats_structures'
             $menuData = null;
 
             foreach ($rawResults as $row) {
@@ -168,8 +166,8 @@ class MenuManager
                         'quantite_restante' => $row['quantite_restante'] ?? 0,
                         'delai_commande' => $row['delai_commande'] ?? '24h',
                         'conditions_stockage' => $row['conditions_stockage'] ?? 'Aucune précaution particulière',
-                        'theme_id' => $row['theme_id'] ?? null,   // <-- Ajouté ici
-                        'regime_id' => $row['regime_id'] ?? null, // <-- Ajouté ici
+                        'theme_id' => $row['theme_id'] ?? null,
+                        'regime_id' => $row['regime_id'] ?? null,
                         'vg_theme' => ['libelle' => $row['theme_libelle'] ?? 'Non défini'],
                         'regime' => $row['regime_libelle'] ?? 'Non défini',
                         'plats_structures' => [
@@ -182,7 +180,7 @@ class MenuManager
 
                 // Placement du plat dans sa catégorie correspondante
                 if (!empty($row['plat_id'])) {
-                    $categorie = $row['categorie']; // 'Entrée', 'Plat', 'Dessert'
+                    $categorie = $row['categorie'];
                     if (array_key_exists($categorie, $menuData['plats_structures'])) {
                         if ($menuData['plats_structures'][$categorie] === null) {
                             $menuData['plats_structures'][$categorie] = [
@@ -218,7 +216,7 @@ class MenuManager
             return false;
         }
     }
-// Fonction pour récupérer TOUS les allergènes disponibles
+    // Fonction pour récupérer TOUS les allergènes disponibles
     public static function getAllAllergenes(\PDO $db)
     {
         try {

@@ -1,7 +1,8 @@
 <?php
-// filepath: c:\xampp\htdocs\Projet_Vite_Gourmand_Finale\app\Config\pages.php
+// Fichier de configuration des pages accessibles selon les rôles
 
 return [
+    // Pages accessibles à tous les utilisateurs, y compris les visiteurs non connectés
     'publiques' => [
         'home',
         'login',
@@ -17,7 +18,7 @@ return [
         'forgot-password',
         'reset-password'
     ],
-
+    // Toutes les pages existantes dans l'application, indépendamment des rôles
     'existante' => [
         'home',
         'login',
@@ -49,7 +50,7 @@ return [
         'store-review',
 
         'dashboard-employee',
-       
+
         'dashboard-admin',
         'stats-admin',
         'rh-admin',
@@ -59,10 +60,10 @@ return [
         'ban-user-admin',
         'ban-action-admin',
         'unban-action-admin',
-         'ban-user',
+        'ban-user',
         'unban-user',
-        
-        
+
+
 
         'menu-management',
         'order-management',
@@ -76,12 +77,17 @@ return [
         'add-menu-process',
         'delete-menu',
         'activate-menu',
+        'delete-plat',
+        'activate-plat',
+        'add-plat-process',
         'erase-order',
         'review-management',
         'update-review-status',
         'contact-material-client'
     ],
+    // Pages accessibles selon les rôles
 
+    // Role propre à l'Admin
     'admin' => [
         'dashboard-admin',
         'stats-admin',
@@ -92,19 +98,18 @@ return [
         'ban-user-admin',
         'ban-action-admin',
         'unban-action-admin',
-         'ban-user',
+        'ban-user',
         'unban-user',
-       ],
-
+    ],
+    // Role propre a l'Employee
     'employee' => [
         'dashboard-employee',
-        
-    ],
 
+    ],
+    // Role propre auStaff = Employee + Admin
     'staff' => [
-       
-        'tickets',
-        'delete-tickets',
+
+        
         'menu-management',
         'order-management',
         'cancel-order-common',
@@ -116,6 +121,9 @@ return [
         'add-menu-process',
         'create-plat-ajax',
         'delete-menu',
+        'delete-plat',
+        'activate-plat',
+        'add-plat-process',
         'activate-menu',
         'review-management',
         'update-review-status',
@@ -123,7 +131,7 @@ return [
         'error-ban',
         'contact-material-client'
     ],
-
+    // Role propre à l'User
     'user' => [
         'dashboard-user',
         'update-profil',

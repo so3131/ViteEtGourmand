@@ -79,11 +79,26 @@ if (isset($_SESSION['success_message'])): ?>
                                         <div class="d-flex gap-1 justify-content-end">
                                             <button class="btn btn-xs btn-outline-secondary" title="Réinitialiser MDP"><i class="fa-solid fa-key"></i></button>
                                             <?php if (isset($emp['est_actif']) && $emp['est_actif'] == 1): ?>
-                                                <a href="index.php?page=rh-admin-toggle&id=<?= $emp['utilisateur_id'] ?>" class="btn btn-xs btn-outline-danger" title="Désactiver" onclick="return confirm('Désactiver cet employé ?');"><i class="fa-solid fa-user-lock"></i></a>
+                                                <form action="index.php?page=rh-admin-toggle" method="POST" class="d-inline" onsubmit="return confirm('Désactiver cet employé ?');">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+    <input type="hidden" name="id" value="<?= $emp['utilisateur_id'] ?>">
+    <button type="submit" class="btn btn-xs btn-outline-danger" title="Désactiver"><i class="fa-solid fa-user-lock"></i></button>
+</form>
+
                                             <?php else: ?>
-                                                <a href="index.php?page=rh-admin-toggle&id=<?= $emp['utilisateur_id'] ?>" class="btn btn-xs btn-outline-success" title="Réactiver" onclick="return confirm('Réactiver cet employé ?');"><i class="fa-solid fa-user-check"></i></a>
+                                                <form action="index.php?page=rh-admin-toggle" method="POST" class="d-inline" onsubmit="return confirm('Réactiver cet employé ?');">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+    <input type="hidden" name="id" value="<?= $emp['utilisateur_id'] ?>">
+    <button type="submit" class="btn btn-xs btn-outline-success" title="Réactiver"><i class="fa-solid fa-user-check"></i></button>
+</form>
+
                                             <?php endif; ?>
-                                            <a href="index.php?page=rh-admin-delete&id=<?= $emp['utilisateur_id'] ?>" class="btn btn-xs btn-outline-danger" title="Supprimer" onclick="return confirm('Supprimer cet employé ?');"><i class="fa-solid fa-user-slash"></i></a>
+                                            <form action="index.php?page=rh-admin-delete" method="POST" class="d-inline" onsubmit="return confirm('Supprimer cet employé ?');">
+    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+    <input type="hidden" name="id" value="<?= $emp['utilisateur_id'] ?>">
+    <button type="submit" class="btn btn-xs btn-outline-danger" title="Supprimer"><i class="fa-solid fa-user-slash"></i></button>
+</form>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -156,11 +171,13 @@ if (isset($_SESSION['success_message'])): ?>
                                         <?php if ($user['role_id'] != 1): ?>
                                             <?php if ($user['est_actif'] == 1): ?>
                                                 <form action="index.php?page=ban-action-admin" method="POST" class="d-inline">
+                                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                                                     <input type="hidden" name="id" value="<?= $user['utilisateur_id'] ?>">
                                                     <button type="submit" class="btn btn-danger btn-xs">Désactiver</button>
                                                 </form>
                                             <?php else: ?>
-                                                <form action="index.php?page=unban-action-admin" method="POST" class="d-inline">
+                                                <form action="index.php?page=unban-action-admin" method="POST" class="d-inline">                                  <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+
                                                     <input type="hidden" name="id" value="<?= $user['utilisateur_id'] ?>">
                                                     <button type="submit" class="btn btn-success btn-xs">Réactiver</button>
                                                 </form>

@@ -10,6 +10,7 @@
     --color-olive-light: #6b8e23;    /* Vert Olive clair */
     --color-dark: #212529;           /* Anthracite / Fond sombre */
     --color-bg-light: #f8f9fa;       /* Blanc cassé pour le fond */
+    --color-bg-dark: #343a40;        /* Gris foncé pour le texte sur fond clair */
 
     /* ===== TYPOGRAPHIE ===== */
     --font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

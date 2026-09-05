@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Managers;
-
+// class StatAdminManager pour gérer les statistiques globales depuis la base de données SQL
 class StatAdminManager
 {
     //function pour récupérer les statistiques globales depuis la base de données SQL
@@ -17,7 +17,7 @@ class StatAdminManager
                     (SELECT COUNT(*) FROM vg_theme) AS total_themes,
                     (SELECT COUNT(*) FROM vg_regime) AS total_regimes,
                     (SELECT COUNT(*) FROM vg_utilisateur) AS total_users";
-                    
+
         $stmt = $db->query($sql);
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }

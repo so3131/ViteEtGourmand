@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
         from: (value) => Math.round(value),
       },
     });
+
+// Ajouter des attributs ARIA pour l'accessibilité
+  const handles = slider.querySelectorAll('.noUi-handle');
+if (handles[0]) handles[0].setAttribute('aria-label', 'Prix minimum');
+if (handles[1]) handles[1].setAttribute('aria-label', 'Prix maximum');
 // 2. Fonction pour mettre à jour la plage du slider
     function updateSliderRange(max) {
       slider.noUiSlider.updateOptions({
@@ -44,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // gestion de filtres
-// j'ecoute le submit des filtres et je bloque le rechargement de la page
+// ecoute le submit des filtres et bloque le rechargement de la page
 // On attend que tout le HTML soit chargé dans le DOM
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("filterForm");

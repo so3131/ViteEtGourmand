@@ -4,11 +4,12 @@ namespace App\Controllers\AuthController;
 
 class Auth
 {
-/**
-* Vérifie que l'utilisateur a le rôle requis pour accéder à une page
-* @param array $requiredRoles
-* @return void
-*/
+    /**
+     * @param array $requiredRoles
+     * @return void
+     */
+
+    //function pour vérifier si l'utilisateur a le rôle requis pour accéder à une page
     public static function check(array $requiredRoles)
     {
         if (session_status() === PHP_SESSION_NONE) {
@@ -21,10 +22,10 @@ class Auth
         }
     }
 
-/**
-* Remplit la session utilisateur après login/signin
-* @param array $user Données utilisateur de la BD
-*/
+    /**
+     * @param array $user Données utilisateur de la BD
+     */
+    //function pour définir les variables de session de l'utilisateur après la connexion
     public static function setUserSession(array $user): void
     {
         $_SESSION['user_id'] = $user['utilisateur_id'];
@@ -38,21 +39,18 @@ class Auth
         $_SESSION['pays'] = $user['pays'];
     }
 
-/**
- * 
- * Vérifie si l'utilisateur est connecté et si la session est valide, sinon redirige vers la page de login
- * Utilisée pour protéger les pages privées accessibles uniquement aux utilisateurs connectés
- * Redirige vers login si pas connecté
- * @return void
- */
-public static function checkLogin(): void
-{
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
+    /**
+     * @return void
+     */
+    // function pour vérifier si l'utilisateur est connecté et rediriger vers la page de login si ce n'est pas le cas
+    public static function checkLogin(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: index.php?page=login');
+            exit();
+        }
     }
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: index.php?page=login');
-        exit();
-    }
-}
 }

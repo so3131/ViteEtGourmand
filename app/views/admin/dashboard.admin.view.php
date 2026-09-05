@@ -123,6 +123,12 @@
                         <option value="Dimanche">Dimanche</option>
                     </select>
                 </div>
+                      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" name="est_ferme" id="est_ferme" value="1">
+        <label class="form-check-label text-danger fw-bold" for="est_ferme">
+            Fermé ce jour
+        </label>
+    </div>
                 <div class="mb-3">
                     <label for="heure_ouverture" class="form-label">Heure d'ouverture</label>
                     <input type="time" name="heure_ouverture" id="heure_ouverture" class="form-control">

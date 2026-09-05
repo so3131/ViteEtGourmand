@@ -55,7 +55,6 @@ class Menu
     //function pour vérifier si la quantité commandée est valide par rapport au nombre de personnes minimum requis pour le menu
     public function estQuantiteValide(int $nombrePersonne): bool
     {
-        // La règle métier est ici, dans le modèle
         return $nombrePersonne >= $this->nombre_personne_minimum;
     }
     //function pour vérifier le nombre de personnes minimum requis pour le menu
@@ -79,7 +78,7 @@ class Menu
     //function pour calculer le prix total en incluant les frais de livraison et le dépôt de garantie
     public function calculerTotal(int $quantite, float $fraisLivraison = 0, float $depotGarantie = 0): float
     {
-        // On appelle votre logique de prix de base (avec les -10%)
+        // On appelle la logique de prix de base (avec les -10%)
         $prixMenu = $this->calculerPrix($quantite);
 
         // On ajoute le reste

@@ -14,7 +14,7 @@
             </div>
 
             <div class="col-md-3">
-                <h5>Horaires</h5>
+                <h3>Horaires</h3>
                 <ul class="list-unstyled small">
                     <?php
                     if (isset($db)) {
@@ -24,9 +24,9 @@
                             <li><?= htmlspecialchars($timetable->jour) ?> : 
     <?php 
     if (empty($timetable->heure_fermeture)): ?>
-        <span class="text-danger">Fermé</span>
+        <span class="text-danger-accessible">Fermé</span>
     <?php else: ?>
-        <?= htmlspecialchars($timetable->heure_ouverture) ?> - <?= htmlspecialchars($timetable->heure_fermeture) ?>
+        <?= htmlspecialchars($timetable->heure_ouverture ?? '') ?> - <?= htmlspecialchars($timetable->heure_fermeture ?? '') ?>
     <?php endif; ?>
 </li>
                         <?php endforeach;
@@ -36,20 +36,20 @@
             </div>
 
             <div class="col-md-3">
-                <h5>Contacts</h5>
+                <h3>Contacts</h3>
                 <dl class="contact-list small">
                     <dt>Mail :</dt>
                     <dd><a href="mailto:vite&gourmand@gmail.com" class="text-black d-inline-block py-1">Vite&Gourmand@gmail.com</a></dd>
                     <dt>Tél :</dt>
-                    <dd>
-                        <a href="tel:0531053105" class="text-black d-inline-block py-1">05 05 05 05 05</a><br>
-                        <a href="tel:0665066506" class="text-black d-inline-block py-1">06 06 06 06 06</a>
-                    </dd>
+                    <dd class="d-flex flex-column gap-2">
+    <a href="tel:0531053105" class="text-black d-inline-block py-2 text-decoration-none">05 05 05 05 05</a>
+    <a href="tel:0665066506" class="text-black d-inline-block py-2 text-decoration-none">06 06 06 06 06</a>
+</dd>
                 </dl>
             </div>
 
             <div class="col-md-3">
-                <h5>Informations</h5>
+                <h3>Informations</h3>
                 <ul class="nav-list list-unstyled small">
                     <li><a href="?page=contact" class="text-black d-block py-1">Nous contacter</a></li>
                     <li><a href="?page=mention" class="text-black d-block py-1">Mentions Légales</a></li>

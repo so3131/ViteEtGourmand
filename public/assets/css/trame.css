@@ -169,14 +169,16 @@ footer.container-fluid {
     padding-top: 2rem;
     padding-bottom: 1rem;
 }
-
-footer h5 {
+.text-danger-accessible {
+    color: #b02a37 !important;
+}
+footer h3 {
     font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin-bottom: 1rem;
-    color: var(--color-olive); /* Rappel vert olive pour les titres du footer */
+    color: var(--color-olive); 
 }
 
 footer ul li, 

@@ -105,12 +105,14 @@
                                         <p class="fw-bold fs-5 text-dark"><?= htmlspecialchars($review['nom_auteur'] ?? 'Client Anonyme') ?></p>
                                         <div class="text-warning mb-2">
                                             <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                <?= $i <= ($review['rating'] ?? 5) ? '★' : '☆' ?>
+                                                <?= $i <= ($review['note'] ?? 5) ? '★' : '☆' ?>
                                             <?php endfor; ?>
                                         </div>
-                                        <p class="card-text text-dark"><?= nl2br(htmlspecialchars($review['comment'] ?? '')) ?></p>
+                                        <p class="card-text text-dark"><?= nl2br(htmlspecialchars($review['description'] ?? '')) ?></p>
                                     </div>
-                                    <small class="text-dark mt-3">Publié le <?= date('d/m/Y', $review['created_at']->toDateTime()->getTimestamp()) ?></small>
+                                    
+<small class="text-dark mt-3">Publié le <?= date('d/m/Y', strtotime($review['created_at'])) ?></small>
+
                                 </div>
                             </div>
                         </div>

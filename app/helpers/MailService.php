@@ -10,7 +10,7 @@ use Brevo\TransactionalEmails\Types\SendTransacEmailRequestToItem;
 class MailService
 {
     /**
-     * Factoriser l'envoi Brevo
+     * Factoriser l'envoi via Brevo
      */
     public static function sendEmail(string $toEmail, string $toName, string $subject, string $textContent, ?string $htmlContent = null): bool
     {
@@ -56,7 +56,7 @@ class MailService
             return false;
         }
     }
-//function pour envoyer un email de bienvenue à un nouvel utilisateur
+    //function pour envoyer un email de bienvenue à un nouvel utilisateur
     public static function sendWelcomeEmail(string $toEmail): bool
     {
         $subject = "Bienvenue chez Vite Gourmand !";
@@ -71,7 +71,7 @@ class MailService
         $textContent = "Bonjour,\n\nUn compte employé vient d'être créé pour vous sur Vite & Gourmand.\nVotre identifiant est : " . $toEmail . "\n\nVeuillez vous rapprocher de votre administrateur pour obtenir votre mot de passe.\n\nCordialement,\nL'équipe Vite & Gourmand.";
         return self::sendEmail($toEmail, 'Employé', $subject, $textContent);
     }
-//function pour envoyer un email de contact à l'administrateur du site
+    //function pour envoyer un email de contact à l'administrateur du site
     public static function sendContactEmail(array $data): bool
     {
         $nomComplet = htmlspecialchars($data['prenom'] . ' ' . $data['nom']);
@@ -94,7 +94,7 @@ class MailService
 
         return self::sendEmail('sofiene31@hotmail.com', 'Sofiene', $sujet, '', $htmlContent);
     }
-//function pour envoyer un email de réinitialisation de mot de passe à un utilisateur
+    //function pour envoyer un email de réinitialisation de mot de passe à un utilisateur
     public static function sendResetEmail(string $toEmail, string $resetLink): bool
     {
         $subject = "Réinitialisation de votre mot de passe";
@@ -102,7 +102,7 @@ class MailService
 
         return self::sendEmail($toEmail, 'Client', $subject, $textContent);
     }
-//function pour envoyer un email de confirmation de réinitialisation de mot de passe à un utilisateur
+    //function pour envoyer un email de confirmation de réinitialisation de mot de passe à un utilisateur
     public static function sendResetConfirmationEmail(string $toEmail, string $prenom = 'client'): bool
     {
         $subject = "Sécurité : Votre mot de passe a été modifié - Vite Gourmand";
@@ -110,7 +110,7 @@ class MailService
 
         return self::sendEmail($toEmail, $prenom, $subject, $textContent);
     }
-//function pour envoyer une confirmation de commande à un client
+    //function pour envoyer une confirmation de commande à un client
     public static function sendOrderConfirmationEmail(string $toEmail, array $orderDetails, string $prenom = 'client'): bool
     {
         $prenom = $orderDetails['prenom'] ?? ($prenom !== 'client' ? $prenom : 'client');
@@ -129,7 +129,7 @@ class MailService
 
         return self::sendEmail($toEmail, $prenom, $subject, $textContent);
     }
-//function pour envoyer un email de mise à jour de commande à un client
+    //function pour envoyer un email de mise à jour de commande à un client
     public static function sendOrderUpdateEmail(string $toEmail, array $orderDetails): bool
     {
         $prenom = $orderDetails['prenom'] ?? 'client';
@@ -148,8 +148,8 @@ class MailService
 
         return self::sendEmail($toEmail, $prenom, $subject, $textContent);
     }
-//function pour envoyer un email de mise à jour de statut de commande à un client
-public static function sendOrderStatusUpdateEmail(string $toEmail, array $orderDetails, string $statut, string $prenom = 'client'): bool
+    //function pour envoyer un email de mise à jour de statut de commande à un client
+    public static function sendOrderStatusUpdateEmail(string $toEmail, array $orderDetails, string $statut, string $prenom = 'client'): bool
     {
         $prenom = $orderDetails['prenom'] ?? ($prenom !== 'client' ? $prenom : 'client');
         $subject = "Mise à jour de votre commande n°" . ($orderDetails['commande_id'] ?? 'N/A') . " - Vite Gourmand";
@@ -162,7 +162,7 @@ public static function sendOrderStatusUpdateEmail(string $toEmail, array $orderD
         return self::sendEmail($toEmail, $prenom, $subject, $textContent);
     }
 
-//function pour envoyer un email d'annulation de commande à un client
+    //function pour envoyer un email d'annulation de commande à un client
     public static function sendOrderCancellationEmail(string $toEmail, array $orderDetails, string $commentaire = ''): bool
     {
         $menuName = $orderDetails['menu']['titre'] ?? 'votre menu';
@@ -170,7 +170,7 @@ public static function sendOrderStatusUpdateEmail(string $toEmail, array $orderD
         $prenom = $orderDetails['prenom'] ?? $orderDetails['client_nom'] ?? 'Client';
 
         $subject = "Annulation de votre commande n°" . $orderId;
-        
+
         $textContent = "Bonjour " . $prenom . ",\n\n";
         $textContent .= "Nous vous confirmons l'annulation de votre commande n°" . $orderId . " concernant le menu : " . $menuName . ".\n\n";
 
@@ -182,35 +182,35 @@ public static function sendOrderStatusUpdateEmail(string $toEmail, array $orderD
 
         return self::sendEmail($toEmail, $prenom, $subject, $textContent);
     }
-//function pour envoyer un email de rappel de restitution de matériel à un client
-    public static function sendMaterialReturnReminderEmail(string $toEmail, array $orderDetails, string $commentaire): bool 
+    //function pour envoyer un email de rappel de restitution de matériel à un client
+    public static function sendMaterialReturnReminderEmail(string $toEmail, array $orderDetails, string $commentaire): bool
     {
         $orderId = $orderDetails['commande_id'] ?? 'N/A';
         $prenom = $orderDetails['prenom'] ?? $orderDetails['client_nom'] ?? 'Client';
 
         $subject = "Rappel important : Restitution du matériel - Commande n°" . $orderId;
-        
+
         $textContent = "Bonjour " . $prenom . ",\n\n" .
-                       "Nous vous rappelons que vous avez du matériel en prêt dans le cadre de votre commande n°" . $orderId . ".\n\n" .
-                       "Rappel : Si le matériel n'est pas restitué sous 10 jours ouvrés, des frais de 600€ s'appliquent conformément à nos CGV.\n\n" .
-                       "Pour organiser la restitution, merci de bien vouloir répondre à cet e-mail ou de prendre directement contact avec notre équipe.\n\n";
-        
+            "Nous vous rappelons que vous avez du matériel en prêt dans le cadre de votre commande n°" . $orderId . ".\n\n" .
+            "Rappel : Si le matériel n'est pas restitué sous 10 jours ouvrés, des frais de 600€ s'appliquent conformément à nos CGV.\n\n" .
+            "Pour organiser la restitution, merci de bien vouloir répondre à cet e-mail ou de prendre directement contact avec notre équipe.\n\n";
+
         if (!empty($commentaire)) {
             $textContent .= "Message de notre équipe :\n" . $commentaire . "\n\n";
         }
-        
+
         $textContent .= "Cordialement,\nL'équipe Vite Gourmand.";
 
         return self::sendEmail($toEmail, $prenom, $subject, $textContent);
     }
-//function pour envoyer un email de demande d'avis à un client après la livraison de sa commande
+    //function pour envoyer un email de demande d'avis à un client après la livraison de sa commande
     public static function sendReviewEmail(string $toEmail, array $orderDetails, string $prenom = 'client'): bool
     {
         $orderId = $orderDetails['commande_id'] ?? 'N/A';
         $prenom = $orderDetails['prenom'] ?? $prenom;
 
         $subject = "Votre commande n°" . $orderId . " est terminée - Donnez votre avis ! - Vite Gourmand";
-        
+
         $textContent = "Bonjour " . $prenom . ",\n\n";
         $textContent .= "Nous vous informons que votre commande n°" . $orderId . " est désormais terminée.\n\n";
         $textContent .= "Vous pouvez dès à présent vous connecter à votre compte sur Vite Gourmand pour consulter l'historique de votre commande et nous laisser votre avis (noté de 1 à 5 avec un commentaire).\n\n";

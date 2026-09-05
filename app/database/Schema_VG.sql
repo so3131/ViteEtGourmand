@@ -53,17 +53,25 @@ CREATE TABLE
 
 -- --------------------------------------------------------
 --
--- Structure de la table `vg_avis`
---
-CREATE TABLE
-  `vg_avis` (
-    `avis_id` int (11) NOT NULL,
-    `note` varchar(50) NOT NULL,
-    `description` varchar(50) NOT NULL,
-    `statut` varchar(50) NOT NULL,
-    `utilisateur_id` int (11) NOT NULL,
-    `menu_id` int (11) NOT NULL
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+CREATE TABLE `vg_avis` (
+  `avis_id` int(11) NOT NULL AUTO_INCREMENT,
+  `note` int(11) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `statut` varchar(20) NOT NULL DEFAULT 'pending',
+  `utilisateur_id` int(11) NOT NULL,
+  `commande_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `validated_by` int(11) DEFAULT NULL,
+  `validated_by_name` varchar(100) DEFAULT NULL,
+  `validated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`avis_id`),
+  UNIQUE KEY `un_seule_avis_par_commande` (`commande_id`),
+  KEY `fk_avis_utilisateur` (`utilisateur_id`),
+  KEY `fk_avis_commande` (`commande_id`),
+  CONSTRAINT `fk_avis_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `vg_utilisateur` (`utilisateur_id`) ON DELETE CASCADE,
+  CONSTRAINT `fk_avis_commande` FOREIGN KEY (`commande_id`) REFERENCES `vg_commande` (`commande_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- --------------------------------------------------------
 --
@@ -205,7 +213,8 @@ CREATE TABLE
     `titre_plat` varchar(50) NOT NULL,
     `description_plat` varchar(255) DEFAULT NULL,
     `photo` varchar(255) DEFAULT NULL,
-    `categorie` varchar(50) DEFAULT NULL
+    `categorie` varchar(50) DEFAULT NULL,
+    'is_active' tinyint (1) NOT NULL DEFAULT 1
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------

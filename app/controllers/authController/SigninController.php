@@ -1,27 +1,33 @@
 <?php
+
 namespace App\Controllers\AuthController;
+
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 require_once __DIR__ . '/Auth.php';
+
 use App\Helpers\MailService;
-use App\Controllers\AuthController\Auth; 
+use App\Controllers\AuthController\Auth;
+
+// Class SigninController pour gérer l'inscription des utilisateurs
 class SigninController
 {
-    // fonction qu'on appelle pour afficher la page depuis l'index.php puis s'inscrire
+    //function pour afficher la page d'inscription et pour s'inscrire
     public static function SignIn(\PDO $db)
-   
+
     {
         $errors = [];
 
         if (isset($_GET['redirect'])) {
-        $_SESSION['redirect_after_login'] = $_GET['redirect'];
-    }
+            $_SESSION['redirect_after_login'] = $_GET['redirect'];
+        }
         $pdo = $db;
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         $error = null;
 
-        
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-             if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
+              // Vérification CSRF
+           if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
                 $errors['general'] = "Session expirée ou requête invalide. Veuillez recharger la page.";
             }
             $email = trim($_POST['email']);
@@ -36,7 +42,7 @@ class SigninController
             $ville = strip_tags(trim($_POST['ville'] ?? ''));
             $pays = strip_tags(trim($_POST['pays'] ?? ''));
 
-            // 1, 2, 3 : Tes vérifications de mot de passe sont bonnes.
+            // Vérifier que les mots de passe sont bons.
             if ($password !== $password_confirm) {
                 $errors['password_confirm'] = "Les mots de passe ne correspondent pas.";
             } elseif (strlen($password) < 10) {
@@ -48,8 +54,8 @@ class SigninController
                 }
             }
 
-            // 4. SI TOUT EST BON : Insérer en DB
-            
+            // Insérer en DB
+
             if (empty($errors)) {
 
 
@@ -91,21 +97,21 @@ class SigninController
                             $_SESSION['show_welcome'] = true;
                             \App\Helpers\MailService::sendWelcomeEmail($email);
                         }
-if (ob_get_length()) ob_clean();
+                        if (ob_get_length()) ob_clean();
 
-if (isset($_SESSION['redirect_after_login'])) {
-    $url = $_SESSION['redirect_after_login'];
-    // Sécurité : Optionnel mais conseillé
-    if (strpos($url, 'index.php?page=order-menu') === 0) {
-        unset($_SESSION['redirect_after_login']);
-        header('Location: ' . $url);
-        exit();
-    }
-}
+                        if (isset($_SESSION['redirect_after_login'])) {
+                            $url = $_SESSION['redirect_after_login'];
+                            // Sécurité : Vérifier que l'URL est valide
+                            if (strpos($url, 'index.php?page=order-menu') === 0) {
+                                unset($_SESSION['redirect_after_login']);
+                                header('Location: ' . $url);
+                                exit();
+                            }
+                        }
 
-// Redirection classique si pas de redirection spécifique
-header('Location: index.php?page=dashboard-user');
-exit();
+                        // Redirection classique si pas de redirection spécifique
+                        header('Location: index.php?page=dashboard-user');
+                        exit();
                     } catch (\PDOException $e) {
                         $errors['general'] = ($e->getCode() == 23000) ? "Ces identifiants sont déjà utilisés." : "Une erreur est survenue.";
                     }

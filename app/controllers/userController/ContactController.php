@@ -1,12 +1,13 @@
 <?php
+
 namespace App\Controllers\UserController;
 
 use App\Helpers\MailService;
 
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 require_once ROOT_PATH . '/app/helpers/FormHelper.php';
-
-class ContactController 
+// class ContactController pour gérer l'affichage de la page de contact et l'envoi du formulaire
+class ContactController
 {
     //function pour afficher la page de contact et gérer l'envoi du formulaire
     public static function contactUs(\PDO $db)
@@ -15,18 +16,18 @@ class ContactController
         $success = false;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // 1. Récupération et nettoyage
+            // Récupération et nettoyage
             $nom = strip_tags(trim($_POST['nom'] ?? ''));
             $prenom = strip_tags(trim($_POST['prenom'] ?? ''));
             $email = filter_var(trim($_POST['email'] ?? ''), FILTER_VALIDATE_EMAIL);
             $sujet = strip_tags(trim($_POST['sujet'] ?? ''));
             $message = strip_tags(trim($_POST['message'] ?? ''));
 
-            // 2. Validation
+            // Validation
             if (empty($nom) || empty($prenom) || !$email || empty($sujet) || empty($message)) {
                 $errors[] = "Veuillez remplir correctement tous les champs obligatoires.";
             } else {
-                // 3. Construction des données pour l'envoi via Brevo (MailService)
+                // Construction des données pour l'envoi via Brevo (MailService)
                 $contactDetails = [
                     'nom' => $nom,
                     'prenom' => $prenom,
@@ -35,13 +36,13 @@ class ContactController
                     'message' => $message
                 ];
 
-                // 4. Envoi du mail via ton service Brevo
-                
+                // Envoi du mail via ton service Brevo
+
                 $mailSent = MailService::sendContactEmail($contactDetails);
 
                 if ($mailSent) {
                     $success = true;
-                    // Optionnel : vider le $_POST pour réinitialiser le formulaire
+                    // Vider le $_POST pour réinitialiser le formulaire
                     $_POST = [];
                 } else {
                     $errors[] = "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.";
@@ -49,12 +50,11 @@ class ContactController
             }
         }
 
-        // Affichage de la page
         $title = "Nous contacter - Vite & Gourmand";
         $specifics_fonts = "https://fonts.googleapis.com/css?family=Lexend:400,500,600&display=swap";
 
         $specific_styles = ["assets/css/styleContact.css", "assets/css/MQContact.css"];
-        $specific_scripts = ["assets/javascript/formulaire.js", "assets/javascript/evenements.js"];
+        $specific_scripts = [""];
 
         require_once ROOT_PATH . '/app/views/layout/header.php';
         require_once ROOT_PATH . '/app/views/user/contact.view.php';

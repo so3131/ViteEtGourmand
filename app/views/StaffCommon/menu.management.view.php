@@ -9,7 +9,7 @@
         </div>
 
         <div class="table-responsive">
-             <table class="table table-hover align-middle text-nowrap table-sm" id="menusTable">
+             <table class="table table-hover align-middle table-sm" id="menusTable">
                 <thead class="table-light">
                     <tr>
                         <th>Menu</th>
@@ -101,7 +101,85 @@
         </div>
     </div>
 </div>
+           <!-- Tableau des Plats  -->
+      <div class="card shadow-sm p-4 mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="m-0">Gestion des Plats</h3>
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPlatModalDirect">
+                <i class="fa-solid fa-plus"></i> Ajouter un plat
+            </button>
+        </div>
 
+        <div class="table-responsive">
+            <table class="table table-hover align-middle table-sm" id="platsTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nom du plat</th>
+                        <th>Catégorie</th>
+                        <th>Description</th>
+                        <th>Statut / Menus liés</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($all_plats as $plat): ?>
+                        <?php 
+                        $isPlatActive = ($plat['is_active'] ?? 1) == 1;
+                        $hasMenus = ($plat['nb_menus'] ?? 0) > 0;
+                        ?>
+                        <tr>
+                            <td><strong><?= htmlspecialchars($plat['titre_plat']) ?></strong></td>
+                            <td><?= htmlspecialchars($plat['categorie']) ?></td>
+                            <td><small class="text-muted"><?= htmlspecialchars($plat['description_plat'] ?? '') ?></small></td>
+                            <td>
+                                <!-- Indicateur Menus liés -->
+                                <?php if ($hasMenus): ?>
+                                    <span class="badge bg-warning text-dark" title="Ce plat est utilisé dans des menus">
+                                        <i class="fa-solid fa-link"></i> <?= $plat['nb_menus'] ?> menu(s) lié(s)
+                                    </span>
+                                <?php else: ?>
+                                    <span class="badge bg-secondary">Libre</span>
+                                <?php endif; ?>
+
+                                <!-- Indicateur Inactif -->
+                                <?php if (!$isPlatActive): ?>
+                                    <span class="badge bg-dark">Inactif</span>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <?php if (!$isPlatActive): ?>
+                                    
+                                    <form action="index.php?page=activate-plat&plat_id=<?= $plat['plat_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('Voulez-vous réactiver ce plat ?');">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <button type="submit" class="btn btn-sm btn-outline-success" title="Activer">
+                                            <i class="fa-solid fa-check"></i> Activer
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                   
+                                    <?php 
+                                    $actionText = $hasMenus ? 'Désactiver' : 'Supprimer';
+                                    $confirmMsg = $hasMenus 
+                                        ? "Ce plat est utilisé dans des menus. Il sera désactivé (soft delete) au lieu d'être supprimé. Continuer ?" 
+                                        : "Voulez-vous vraiment supprimer définitivement ce plat ?";
+                                    $btnClass = $hasMenus ? 'btn-outline-secondary' : 'btn-outline-danger';
+                                    $iconClass = $hasMenus ? 'fa-ban' : 'fa-trash';
+                                    ?>
+                                    <form action="index.php?page=delete-plat&plat_id=<?= $plat['plat_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('<?= $confirmMsg ?>');">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <button type="submit" class="btn btn-sm <?= $btnClass ?>" title="<?= $actionText ?>">
+                                            <i class="fa-solid <?= $iconClass ?>"></i> <?= $actionText ?>
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
 <div class="modal fade" id="addMenuModal" tabindex="-1" aria-labelledby="addMenuLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -171,13 +249,12 @@
                                         <h6 class="text-primary fw-bold m-0">
                                             <i class="fa-solid fa-utensils me-2"></i><?= htmlspecialchars($categorie === 'Entree' ? 'Entrée' : $categorie) ?>
                                         </h6>
-                                        <!-- Bouton pour ouvrir le formulaire complet d'ajout de plat -->
                                         <button type="button" class="btn btn-sm btn-outline-success" data-bs-toggle="collapse" data-bs-target="#addPlatForm<?= $categorie ?>">
                                             <i class="fa-solid fa-plus"></i> Ajouter un plat
                                         </button>
                                     </div>
 
-                                    <!-- Formulaire complet pour ajouter un plat à cette catégorie -->
+                                    <!-- Formulaire pour ajouter un plat à cette catégorie -->
                                     <div class="collapse mb-3 p-3 bg-white border rounded shadow-sm" id="addPlatForm<?= $categorie ?>">
                                         <h6 class="text-success mb-2">Nouveau plat - <?= htmlspecialchars($categorie === 'Entree' ? 'Entrée' : $categorie) ?></h6>
 
@@ -240,6 +317,68 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="submit" class="btn btn-success">Enregistrer le menu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modale d'ajout d'un plat -->
+<div class="modal fade" id="addPlatModalDirect" tabindex="-1" aria-labelledby="addPlatModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addPlatModalLabel">Ajouter un nouveau plat</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <form action="index.php?page=add-plat-process" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+                
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nom du plat *</label>
+                        <input type="text" name="titre_plat" class="form-control" required placeholder="Ex: Pavé de saumon">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Catégorie *</label>
+                        <select name="categorie" class="form-select" required>
+                            <option value="Entree">Entrée</option>
+                            <option value="Plat" selected>Plat</option>
+                            <option value="Dessert">Dessert</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Description</label>
+                        <textarea name="description_plat" class="form-control" rows="2" placeholder="Description du plat..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Photo du plat</label>
+                        <input type="file" name="photo" class="form-control" accept="image/*">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Allergènes</label>
+                        <div class="row g-1" style="max-height: 120px; overflow-y: auto;">
+                            <?php foreach (($all_allergenes ?? []) as $allergene): ?>
+                                <div class="col-6">
+                                    <div class="form-check small">
+                                        <input class="form-check-input" type="checkbox" name="allergenes[]" value="<?= $allergene['allergene_id'] ?>" id="alg_<?= $allergene['allergene_id'] ?>">
+                                        <label class="form-check-label" for="alg_<?= $allergene['allergene_id'] ?>">
+                                            <?= htmlspecialchars($allergene['nom_allergene'] ?? $allergene['libelle'] ?? '') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-success">Enregistrer le plat</button>
                 </div>
             </form>
         </div>

@@ -1,8 +1,8 @@
-<div class="user row align-items-center mb-5 p-3 bg-white rounded shadow-sm" style="--bs-bg-opacity: 0.8;">
+<div class="user row full-width align-items-center mb-5 p-3 rounded shadow-sm" style="--bs-bg-opacity: 0.8;">
   
   <div class="imgPseudo col-12 col-md-auto text-center">
-    <img src="/public/assets/images/pictureprofil2.png" alt=" photo de profil" width="120" height="120"
-      class="rounded-circle img-fluid border border-3 border-white shadow-sm">
+    <img src="assets/img/others/younes-detail.jpeg" alt=" photo de profil" width="120" height="120"
+      class="img-profil rounded-circle img-fluid border border-3 border-white shadow-sm">
   </div>
 
   <div class="Pseudo col-12 col-md mt-3 mt-md-0">
@@ -16,7 +16,7 @@
           </a>
           
         </div>
-        <p class="text-muted small mb-0"><?= htmlspecialchars($_SESSION['email'] ?? 'user@test.com') ?></p>
+        <p class=" small mb-0"><?= htmlspecialchars($_SESSION['email'] ?? 'user@test.com') ?></p>
       </div>
 
       <div class="d-flex flex-column align-items-center align-items-md-end gap-2">

@@ -9,7 +9,7 @@ require_once ROOT_PATH . '/app/helpers/FormHelper.php';
 
 class ForgotPasswordController
 {
-
+    // function pour afficher la page de mot de passe oublié et gérer l'envoi du formulaire
     public static function forgotPassword(\PDO $db)
     {
         $errors = [];
@@ -18,16 +18,16 @@ class ForgotPasswordController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $email = trim($_POST['email'] ?? '');
 
-            // 1. Validation de l'email
+            // Validation de l'email
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = "Veuillez entrer une adresse email valide.";
             } else {
-                // 2. Recherche utilisateur (on récupère aussi le prénom pour le mail)
+                //Recherche utilisateur (on récupère aussi le prénom pour le mail)
                 $stmt = $db->prepare("SELECT email, prenom FROM vg_utilisateur WHERE email = :email");
                 $stmt->execute(['email' => $email]);
                 $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                // Si l'utilisateur existe bien en base
+                // Verifier Si l'utilisateur existe bien en base
                 if ($user !== false) {
                     // Génération du token
                     $token = bin2hex(random_bytes(32));
@@ -44,8 +44,8 @@ class ForgotPasswordController
                     MailService::sendResetEmail($email, $resetLink, $user['prenom']);
                 }
 
-                // 3. Message de succès identique dans tous les cas (Sécurité par l'obscurité)
-                $success = "Si un compte est associé à cette adresse, vous avez reçu un lien de réinitialisation.";
+                //Message de succès identique dans tous les cas par securité pour ne pas révéler si l'email est enregistré ou non
+                $success = "Si un compte est associé à cette adresse, vous avez reçu un lien de réinitialisation par mail.";
             }
         }
 

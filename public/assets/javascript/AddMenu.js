@@ -17,14 +17,14 @@ function addNewPlat(categorie) {
         formData.append('photo', photoInput.files[0]);
     }
 
-    // Récupérer tous les allergènes cochés dans ce mini-formulaire spécifique
+    
     const formContainer = document.getElementById('addPlatForm' + categorie);
     const checkedAllergenes = formContainer.querySelectorAll('input[name="allergenes[]"]:checked');
     checkedAllergenes.forEach(cb => {
         formData.append('allergenes[]', cb.value);
     });
 
-    // Un seul appel fetch propre
+    
     fetch('index.php?page=create-plat-ajax', {
         method: 'POST',
         body: formData
@@ -52,13 +52,13 @@ function addNewPlat(categorie) {
             `;
             container.appendChild(colDiv);
 
-            // Vider les champs du mini-formulaire (titre, description, photo et décocher les allergènes)
+            
             document.getElementById('titrePlat' + categorie).value = '';
             document.getElementById('descPlat' + categorie).value = '';
             photoInput.value = '';
             formContainer.querySelectorAll('input[name="allergenes[]"]').forEach(cb => cb.checked = false);
 
-            // Refermer le collapse du mini-formulaire
+           
             const collapseElement = document.getElementById('addPlatForm' + categorie);
             const bsCollapse = bootstrap.Collapse.getInstance(collapseElement) || new bootstrap.Collapse(collapseElement);
             bsCollapse.hide();
@@ -73,7 +73,7 @@ function addNewPlat(categorie) {
     });
 }
 
-// Fonction utilitaire pour éviter les failles XSS lors de l'affichage du titre
+// éviter les failles XSS lors de l'affichage du titre
 function escapeHtml(text) {
     const map = {
         '&': '&amp;',

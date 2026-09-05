@@ -5,18 +5,13 @@ namespace App\Controllers\UserController;
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 
 use App\Controllers\AuthController\Auth;
-
-
-
-
-
-
-
+// Class EraseOrderController pour gérer l'annulation des commandes par les utilisateurs
 class EraseOrderController
-{//function pour annuler une commande depuis le tableau de bord de l'utilisateur
+{
+    //function pour annuler une commande depuis le tableau de bord de l'utilisateur
     public static function eraseOrder(\PDO $db, ?int $commande_id)
     {
-        //verif de secu
+
         Auth::check([ROLE_USER]);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Content-Type: application/json; charset=utf-8');
@@ -29,7 +24,7 @@ class EraseOrderController
             $pdo = $db;
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             try {
-                               // 1. Récupérer les infos nécessaires (avec menu_id et nombre_personne)
+                // Récupérer les infos nécessaires
                 $sqlCheck = "SELECT c.utilisateur_id, c.statut, c.menu_id, c.nombre_personne, m.titre as menu_titre, 
                     c.prix_total, 
                     c.date_prestation, c.heure_livraison, 
@@ -50,32 +45,32 @@ class EraseOrderController
                     throw new \Exception("Seules les commandes en attente peuvent être annulées.");
                 }
 
-                // 2. Annuler la commande
+                // Annuler la commande
                 $sqlUpdate = "UPDATE vg_commande SET statut = 'annulee' WHERE commande_id = :orderID";
                 $stmtUpdate = $pdo->prepare($sqlUpdate);
                 $stmtUpdate->execute(['orderID' => $commande_id]);
 
-                // 3. ✅ Restituer le stock du menu
+                // Restituer le stock du menu correspondant au menu annulé
                 $sqlRestituer = "UPDATE vg_menu SET quantite_restante = quantite_restante + :quantite WHERE menu_id = :menu_id";
                 $stmtRestituer = $pdo->prepare($sqlRestituer);
                 $stmtRestituer->execute([
                     'quantite' => (int)$result['nombre_personne'],
                     'menu_id'  => (int)$result['menu_id']
                 ]);
-try {
-    $orderDetails = [
-        'commande_id'     => $commande_id,
-        'menu'            => ['titre' => $result['menu_titre'] ?? 'Non défini'],
-        'total_final'     => $result['prix_total'] ?? 0,
-        'date_prestation' => $result['date_prestation'],
-        'heure_livraison' => $result['heure_livraison'],
-        'lieu'            => $result['adresse'] . ', ' . $result['code_postal'] . ' ' . $result['ville']
-    ];
+                try {
+                    $orderDetails = [
+                        'commande_id'     => $commande_id,
+                        'menu'            => ['titre' => $result['menu_titre'] ?? 'Non défini'],
+                        'total_final'     => $result['prix_total'] ?? 0,
+                        'date_prestation' => $result['date_prestation'],
+                        'heure_livraison' => $result['heure_livraison'],
+                        'lieu'            => $result['adresse'] . ', ' . $result['code_postal'] . ' ' . $result['ville']
+                    ];
 
-            \App\Helpers\MailService::sendOrderCancellationEmail($_SESSION['email'], $orderDetails);
-        } catch (\Exception $e) {
-            error_log("Erreur envoi mail : " . $e->getMessage());
-        }
+                    \App\Helpers\MailService::sendOrderCancellationEmail($_SESSION['email'], $orderDetails);
+                } catch (\Exception $e) {
+                    error_log("Erreur envoi mail : " . $e->getMessage());
+                }
                 echo json_encode(['success' => true, 'message' => '✅ Commande annulée']);
                 exit();
             } catch (\Exception $e) {

@@ -1,20 +1,26 @@
 <?php
+
 namespace App\Controllers\UserController;
+
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 
 use App\Managers\MenuManager;
-
+// class MenuController pour gérer l'affichage et la recherche des menus
 class MenuController
 {
-    //function pour afficher la page de recherche de menu et gérer les filtres dynamiques
+    //function pour afficher la page de recherche de menu
     public static function searchMenu(\PDO $db)
     {
         $nomMenu = isset($_GET['nomMenu']) ? trim($_GET['nomMenu']) : '';
 
         try {
             if (!empty($nomMenu)) {
-                $menus = MenuManager::get($db, null, ['titre' => $nomMenu],
-        true);
+                $menus = MenuManager::get(
+                    $db,
+                    null,
+                    ['titre' => $nomMenu],
+                    true
+                );
             } else {
                 $menus = MenuManager::get($db, null, [], true);
             }
@@ -23,13 +29,11 @@ class MenuController
             $menus = [];
         }
 
-        // Variables pour la vue
         $title = "Rechercher un menu - Vite Gourmand";
         $specific_fonts = ["https://fonts.googleapis.com/css?family=Lexend&display=swap"];
         $specific_styles = ["assets/css/styleSearch.css", "assets/css/trame.css"];
         $specific_scripts = ["assets/javascript/recherche.js"];
 
-        // Chargement des composants
         require_once ROOT_PATH . '/app/views/layout/header.php';
         require_once ROOT_PATH . '/app/views/user/search.Menu.view.php';
         require_once ROOT_PATH . '/app/views/layout/footer.php';
@@ -69,16 +73,15 @@ class MenuController
     public static function showMenuDetails(\PDO $db)
     {
         $canOrder = (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_USER);
-        // 1. Récupération de l'ID depuis l'URL
+        //Récupérer l'ID depuis l'URL
         $menuID = isset($_GET['menu_id']) ? (int)$_GET['menu_id'] : 0;
 
-        // 2. Récupération des données via tes Managers
+        //Récupérer les données
         $result = MenuManager::get($db, $menuID);
         $menu = !empty($result) ? $result[0] : false;
 
-
+        // Si le menu n'existe pas, rediriger vers la page de recherche
         if (!$menu) {
-            // Le menu n'existe pas en base : on redirige vers search
             header('Location: index.php?page=search');
             exit();
         }

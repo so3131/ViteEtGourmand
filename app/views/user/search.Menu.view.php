@@ -3,6 +3,7 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
 ?>
 
 <main class="container-fluid py-4">
+    
     <header class="mb-4">
         <h1>Nos Menus</h1>
         <p class="text-muted">Découvrez nos créations culinaires et filtrez selon vos besoins.</p>
@@ -12,10 +13,10 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
 
         <aside class="col-md-3">
             <div class="card p-3 shadow-sm sticky-top" style="top: 20px;">
-                <h5 class="mb-3">Filtres</h5>
+                <h2 class="mb-3">Filtres</h2>
                 <form id="filterForm">
                     <div class="filter-group border-bottom pb-3 mb-3">
-                        <h6 class="fw-bold">Budget</h6>
+                        <h3 class="h6 fw-bold">Budget</h3>
                         <label class="small text-muted">Fourchette de prix par personne</label>
                         <div id="price-slider" class="my-3"></div>
 
@@ -37,28 +38,30 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
                     </div>
 
                     <div class="mb-3">
-                        <h6 class="fw-bold">Nombre de personnes</h6>
+                        <h3 class="h6 fw-bold">Nombre de personnes</h3>
                         <label class="form-label">Choisissez un minimum d'invités</label>
                         <input type="number" class="form-control" name="nombre_personne_minimum" min="15" max="150" placeholder="Min 15 Personnes">
                     </div>
 
-                                        <div class="accordion accordion-flush" id="filterAccordion">
+                    <div class="accordion accordion-flush" id="filterAccordion">
                         <div class="accordion-item">
-                            <h2 class="accordion-header"><button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#theme">Thèmes</button></h2>
+                            <h3 class="accordion-header">
+                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#theme">Thèmes</button>
+                            </h3>
                             <div id="theme" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
-
                                 <div class="accordion-body">
                                     <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="4" id="t4"><label class="form-check-label" for="t4">Noël</label></div>
                                     <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="5" id="t5"><label class="form-check-label" for="t5">Pâques</label></div>
                                     <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="1" id="t1"><label class="form-check-label" for="t1">Gastronomique</label></div>
                                     <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="2" id="t2"><label class="form-check-label" for="t2">Traditionnel</label></div>
                                 </div>
-
                             </div>
                         </div>
 
                         <div class="accordion-item">
-                            <h2 class="accordion-header"><button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#regime">Régimes</button></h2>
+                            <h3 class="accordion-header">
+                                <button type="button" class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#regime">Régimes</button>
+                            </h3>
                             <div id="regime" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
                                 <div class="accordion-body">
                                     <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="1" id="r1"><label class="form-check-label" for="r1">Végétarien</label></div>
@@ -69,16 +72,11 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-outline-primary w-100">Appliquer les filtres</button>
+                    <button type="submit" class="btn btn-outline-primary w-100 mt-3">Appliquer les filtres</button>
                     <button type="button" class="btn btn-outline-secondary btn-sm w-100 mt-3" id="reset-filters">Réinitialiser les filtres</button>
                 </form>
             </div>
-
         </aside>
-
-
-
-
 
         <section class="col-md-9">
             <div class="row row-cols-1 row-cols-lg-3 g-4" id="menu-container">
@@ -89,15 +87,8 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
                             <div class="card h-100 shadow-sm">
                                 <?php
                                 $plats = $menu['plats_structures'] ?? [];
-
-                                $platPrincipal = $plats['Plat']
-                                    ?? $plats['Entrée']
-                                    ?? $plats['Dessert']
-                                    ?? null;
-
-                                $photoUrl = !empty($platPrincipal['photo'])
-                                    ? $platPrincipal['photo']
-                                    : 'assets/img/plats/default.webp';
+                                $platPrincipal = $plats['Plat'] ?? $plats['Entrée'] ?? $plats['Dessert'] ?? null;
+                                $photoUrl = !empty($platPrincipal['photo']) ? $platPrincipal['photo'] : 'assets/img/plats/default.webp';
                                 ?>
 
                                 <img src="<?= htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') ?>"
@@ -106,14 +97,14 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
                                     style="height: 300px; object-fit: cover;">
 
                                 <div class="card-body">
-                                    <h5 class="card-title"><?= htmlspecialchars($menu['titre']) ?></h5>
+                                    <h3 class="card-title h5"><?= htmlspecialchars($menu['titre']) ?></h3>
                                     <?php
                                     $theme = $menu['vg_theme']['libelle'] ?? 'Thème non défini';
                                     $regime = $menu['regime'] ?? 'Régime classique';
                                     ?>
-                                    <h6 class="card-subtitle mb-2 text-muted">
+                                    <h4 class="card-subtitle mb-2 text-muted h6">
                                         <?= htmlspecialchars($theme) ?> - <?= htmlspecialchars($regime) ?>
-                                    </h6>
+                                    </h4>
                                     <p class="card-text text-muted small"><?= htmlspecialchars($menu['description_menu']) ?></p>
                                     <ul class="list-unstyled small">
                                         <li><strong>Minimum :</strong> <?= htmlspecialchars($menu['nombre_personne_minimum']) ?> personnes</li>

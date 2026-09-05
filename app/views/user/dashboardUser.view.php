@@ -4,9 +4,12 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 <?php endif; ?>
+
+<?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/dashboard.Profil.view.php'; ?>
+
 <main class="container-fluid py-4 px-lg-5">
  
-<?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/dashboard.Profil.view.php'; ?>
+
 
   <div class="row g-4 align-items-start">
     <aside class="col-12 col-lg-3">

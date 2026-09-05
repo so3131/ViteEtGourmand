@@ -1,0 +1,25 @@
+/* importation des variabes CSS */
+@import url('variables.css');
+
+.user{
+    background-color:var(--color-bg-dark);
+    color: var(--color-bg-light);
+    margin-top: var(--spacing-xs);
+}
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    background-color: var(--color-olive-light) !important;
+    color: var(--color-bg-dark) !important;
+}
+.nav-link {
+    color: var(--color-bg-dark) !important;
+}
+
+.img-profil {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--color-bg-light);
+    box-shadow: var(--shadow-sm);
+   
+}

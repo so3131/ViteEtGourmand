@@ -4,10 +4,10 @@ namespace App\Controllers\StaffCommon;
 
 use App\Controllers\AuthController\Auth;
 use App\Managers\MenuManager;
-
+// Class EditMenuController pour gérer l'édition des menus (accessible aux admins et employés)
 class EditMenuController
 {
-     //function pour afficher la page d'édition d'un menu
+    //function pour afficher la page d'édition d'un menu
     public static function editMenu(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -20,7 +20,7 @@ class EditMenuController
             exit();
         }
 
-        // 1. Récupérer les données du menu via le Manager existant
+        // Récupérer les données du menu
         $menu = MenuManager::getById($db, (int)$menu_id);
 
         if (!$menu) {
@@ -29,24 +29,24 @@ class EditMenuController
             exit();
         }
 
-        // 2. Récupérer TOUS les plats disponibles pour les cases à cocher de la vue
+        // Récupérer tous les plats disponibles pour les checkboxes
         $stmtPlats = $db->query("SELECT * FROM vg_plat ORDER BY titre_plat ASC");
         $all_plats = $stmtPlats->fetchAll(\PDO::FETCH_ASSOC);
 
-        // 2ire. Récupérer les thèmes et régimes pour les listes déroulantes de la vue
+        // Récupérer les thèmes et régimes pour les selects
         $all_themes = $db->query("SELECT * FROM vg_theme ORDER BY libelle ASC")->fetchAll(\PDO::FETCH_ASSOC);
         $all_regimes = $db->query("SELECT * FROM vg_regime ORDER BY libelle ASC")->fetchAll(\PDO::FETCH_ASSOC);
 
-        // 3. Récupérer les plats associés à ce menu précis pour pré-cocher les cases
+        // Récupérer les plats associés au menu a éditer pour pré-cocher les checkboxes
         $platsAssocies = MenuManager::getPlatsByMenuId($db, (int)$menu_id);
 
-        // On extrait uniquement un tableau simple contenant les IDs (ex: [1, 4, 12])
+        // Extraire uniquement un tableau simple contenant les IDs des plats associés pour faciliter la vérification dans la vue
         $selected_plats_ids = [];
         if (is_array($platsAssocies)) {
             $selected_plats_ids = array_column($platsAssocies, 'plat_id');
         }
 
-        // Styles et scripts spécifiques
+
         $specific_styles = [
             'assets/css/AdminEmployee/MenuManagement.css',
             'assets/css/AdminEmployee/AdminEmployee.css'
@@ -55,7 +55,7 @@ class EditMenuController
             'assets/javascript/EditMenu.js'
         ];
 
-        // Chargement de la vue
+
         $userRole = $_SESSION['role_id'] ?? null;
         if ($userRole === ROLE_ADMIN) {
             require_once ROOT_PATH . '/app/views/layout/admin_header.php';
@@ -69,7 +69,7 @@ class EditMenuController
             require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
         }
     }
-     //function pour mettre à jour un menu
+    //function pour mettre à jour un menu
     public static function updateMenu(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);

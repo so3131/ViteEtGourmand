@@ -1,10 +1,10 @@
 <?php
-
+// Classe pour gérer la connexion à la base de données
 class Database
-{
+{ // Méthode pour établir une connexion à la base de données
     public function connect()
     {
-        // Récupération depuis le .env (ou valeurs par défaut)
+        // Récupération depuis le .env
         $host = $_ENV['DB_HOST'] ?? 'localhost';
         $dbname = $_ENV['DB_NAME'] ?? 'test_transit_ecf';
         $username = $_ENV['DB_USER'] ?? 'vg_creator';

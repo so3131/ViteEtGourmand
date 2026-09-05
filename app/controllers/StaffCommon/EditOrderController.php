@@ -7,7 +7,7 @@ use App\Managers\MenuManager;
 use App\Models\Order; 
 use App\Models\Menu;
 use App\Helpers\MailService;
-
+// Class EditOrderController pour gérer l'édition des commandes (accessible aux admins et employés)
 class EditOrderController
 {
     // Fonction pour afficher le formulaire de modification de la commande
@@ -41,7 +41,6 @@ class EditOrderController
         $menus = MenuManager::get($db);
         
         $specific_styles = [
-            'assets/css/Admin/OrderManagement.css',
             'assets/css/Admin/AdminEmployee.css'
         ];
         $specific_scripts = [
@@ -66,13 +65,12 @@ $lieux = $stmtLieux->fetchAll(\PDO::FETCH_ASSOC);
         }
     }
 
-    // Fonction pour traiter la mise à jour de la commande avec l'API OpenRoute
-    // Fonction pour traiter la mise à jour de la commande avec l'API OpenRoute
+      // Fonction pour traiter la mise à jour de la commande (via l'API OpenRoute)
 public static function processUpdate(\PDO $db)
 {
     Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
 
-    // Récupération des données JSON envoyées par fetch
+    // Récupérer les données JSON envoyées par fetch
     $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
     if (str_contains($contentType, 'application/json')) {
         $_POST = json_decode(file_get_contents('php://input'), true) ?? [];
@@ -229,12 +227,12 @@ public static function processUpdate(\PDO $db)
                 MailService::sendEmail($client['email'], $client['prenom'], $sujet, $message);
             }
 
-            // Réponse JSON de succès pour le JavaScript
+          
             echo json_encode(['success' => true]);
             exit();
 
         } catch (\Exception $e) {
-            // Réponse JSON d'erreur pour le JavaScript
+           
             echo json_encode(['success' => false, 'message' => $e->getMessage()]);
             exit();
         }
@@ -262,7 +260,7 @@ public static function processUpdate(\PDO $db)
             exit();
         }
 
-        // Calcul dynamique par la route basé sur les coordonnées GPS reçues du front
+        // Calcul dynamique par la route basé sur les coordonnées GPS reçues
         $frais = 0.00;
         if ($lat && $lon) {
             $distance = Order::calculerDistanceRouteVersClient($lat, $lon);

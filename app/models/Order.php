@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Models;
+
 use App\Config\Constants;
+// La classe Order représente une commande avec ses propriétés
 class Order
 {
 
@@ -15,7 +18,7 @@ class Order
         public int $nombre_personne = 0,
         public float $prix_livraison = 0.0,
         public float $prix_total = 0.0,
-        
+
         public string $statut = 'en_attente',
         public string $pret_materiel = 'non',
         public float $depot_garantie = 0.0,
@@ -30,7 +33,7 @@ class Order
         public float $km = 0.0,
     ) {}
 
-public static function calculerFraisLivraisonParKm(string $ville, float $distanceKm): float
+    public static function calculerFraisLivraisonParKm(string $ville, float $distanceKm): float
     {
         // Si la ville est Bordeaux, la livraison est gratuite
         if (mb_strtolower(trim($ville)) === 'bordeaux') {
@@ -45,16 +48,16 @@ public static function calculerFraisLivraisonParKm(string $ville, float $distanc
 
         return round($fraisTotal, 2);
     }
-public static function calculerDistanceRouteVersClient(float $clientLat, float $clientLon): float
+    public static function calculerDistanceRouteVersClient(float $clientLat, float $clientLon): float
     {
         return self::calculerDistanceRoute(COMPANY_LAT, COMPANY_LON, $clientLat, $clientLon);
     }
 
     public static function calculerDistanceRoute(float $lat1, float $lon1, float $lat2, float $lon2): float
     {
-        
-        $apiKey = getenv('OPENROUTESERVICE_API_KEY') ?: ''; 
-        
+
+        $apiKey = getenv('OPENROUTESERVICE_API_KEY') ?: '';
+
         $url = "https://api.openrouteservice.org/v2/directions/driving-car?api_key={$apiKey}&start={$lon1},{$lat1}&end={$lon2},{$lat2}";
 
         $ch = curl_init();
@@ -69,7 +72,7 @@ public static function calculerDistanceRouteVersClient(float $clientLat, float $
 
         if ($response) {
             $data = json_decode($response, true);
-            
+
             if (isset($data['features'][0]['properties']['segments'][0]['distance'])) {
                 $distanceMetres = $data['features'][0]['properties']['segments'][0]['distance'];
                 return round($distanceMetres / 1000, 2);
@@ -88,8 +91,8 @@ public static function calculerDistanceRouteVersClient(float $clientLat, float $
         $dLon = deg2rad($lon2 - $lon1);
 
         $a = sin($dLat / 2) * sin($dLat / 2) +
-             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-             sin($dLon / 2) * sin($dLon / 2);
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon / 2) * sin($dLon / 2);
 
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 

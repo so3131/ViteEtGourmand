@@ -16,34 +16,39 @@
     height: auto;
     object-fit: cover;
 }
-/* 1. Bouton "Voir le détail" de vos cartes de menu */
+/* 1. Bouton "Voir le détail" (Fond Doré -> Texte Anthracite pour le contraste) */
 .card .btn-primary {
-    background-color: var(--color-gold, #ffc107)  !important;
-    border-color: var(--color-teal-primary, #83b5af) !important;
-    color: #ffffff !important;
-    border-radius: var(--border-radius-md, 8px);
-    transition: var(--transition-base, all 0.3s ease);
+    background-color: var(--color-gold) !important;
+    border-color: var(--color-gold-hover) !important;
+    color: var(--color-dark) !important;
+    border-radius: var(--border-radius-md);
+    transition: var(--transition-base);
 }
 
 .card .btn-primary:hover {
-    background-color: var(--color-teal-hover, #6f619b) !important;
-    border-color: var(--color-teal-hover, #6f619b) !important;
+    background-color: var(--color-gold-hover) !important;
+    border-color: var(--color-gold-hover) !important;
+    color: var(--color-dark) !important;
     transform: translateY(-2px);
-    box-shadow: var(--shadow-button, 0 4px 15px rgba(131, 181, 175, 0.3));
+    box-shadow: var(--shadow-button);
 }
 
-/* 2. Bouton principal "Appliquer les filtres" dans le formulaire de gauche */
+/* 2. Bouton "Appliquer les filtres" (Fond Vert Olive -> Texte Blanc) */
 #filterForm > button[type="submit"] {
-    background-color: var(--color-teal-primary, #83b5af) !important;
-    border-color: var(--color-teal-primary, #83b5af) !important;
+    background-color: var(--color-olive) !important;
+    border-color: var(--color-olive) !important;
     color: #ffffff !important;
     font-weight: 500;
-    transition: var(--transition-base, all 0.3s ease);
+    transition: var(--transition-base);
 }
 
 #filterForm > button[type="submit"]:hover {
-    background-color: var(--color-gold, #ffc107)  !important;
-    border-color: var(--color-teal-hover, #6f619b) !important;
+    background-color: var(--color-olive-light) !important;
+    border-color: var(--color-olive-light) !important;
+    color: #ffffff !important;
+}
+.noUi-connect {
+    background-color: var(--color-olive, #556B2F) !important;
 }
 /* ==========================================================================
    CORRECTION GLOBALE DES SELECTS SUR MOBILE

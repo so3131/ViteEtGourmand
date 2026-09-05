@@ -7,10 +7,11 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
 use App\Controllers\AuthController\Auth;
 use App\Managers\UserAdminManager;
 use App\Helpers\MailService;
+use app\Helpers\SecurityManager;
 
 class RhAdminController
 {
-     //function pour afficher la page de gestion des employés et des utilisateurs
+    //function pour afficher la page de gestion des employés et des utilisateurs
     public static function adminRH(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
@@ -19,11 +20,11 @@ class RhAdminController
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         try {
-            // 1. Récupération des employés (rôle 2)
+            // Récupération des employés (rôle 2)
             $stmtEmp = $pdo->query("SELECT * FROM vg_utilisateur WHERE role_id = 2");
             $employes = $stmtEmp->fetchAll(\PDO::FETCH_ASSOC);
 
-            // 2. Récupération des utilisateurs pour la modération (avec filtres de recherche éventuels)
+            // Récupération des utilisateurs pour la modération (avec filtres de recherche)
             $searchTerm = isset($_GET['search-user']) ? trim($_GET['search-user']) : '';
             $roleFilter = isset($_GET['filter-role']) ? trim($_GET['filter-role']) : '';
 
@@ -35,10 +36,9 @@ class RhAdminController
                 $listeUtilisateurs = UserAdminManager::findAll($pdo);
             }
 
-            // 3. Récupération des rôles pour le menu déroulant (CORRIGÉ : vg_role au lieu de role)
+            // Récupération des rôles pour le menu déroulant
             $stmtRoles = $pdo->query("SELECT * FROM vg_role ORDER BY libelle ASC");
             $listeRoles = $stmtRoles->fetchAll(\PDO::FETCH_ASSOC);
-
         } catch (\PDOException $e) {
             die($e->getMessage());
         }
@@ -46,12 +46,11 @@ class RhAdminController
         $title = "Gestion des employés et des utilisateurs - Vite & Gourmand";
         $specific_styles = [
             'assets/css/bootstrap/bootstrap.min.css',
-            'assets/css/Admin/OrderManagement.css',
             'assets/css/Admin/AdminEmployee.css',
             'https://cdn.datatables.net/1.13.6/dataTables.bootstrap5.min.css'
         ];
         $specific_scripts = [
-            "assets/javascript/Rh.js"
+            "assets/javascript/tables.js"
         ];
 
         require_once ROOT_PATH . '/app/views/layout/admin_header.php';
@@ -59,53 +58,44 @@ class RhAdminController
         require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
     }
 
-     //function pour créer un employé
-        public static function createEmploye(\PDO $db)
+    //function pour créer un employé
+    public static function createEmploye(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
+        SecurityManager::validatePost('?page=rh-admin');
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $email = trim($_POST['email'] ?? '');
+        $password = $_POST['password'] ?? '';
 
-            // 🛡️ Vérification CSRF
-            if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== ($_SESSION['csrf_token'] ?? '')) {
-                $_SESSION['error'] = "Session expirée ou requête invalide. Veuillez recharger la page.";
-                header('Location: ?page=rh-admin');
-                exit;
-            }
-            
-            $email = trim($_POST['email'] ?? '');
-            $password = $_POST['password'] ?? '';
+        if (!empty($email) && !empty($password)) {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $roleId = 2; // ID du rôle employé
 
-            if (!empty($email) && !empty($password)) {
-                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                $roleId = 2; // ID du rôle employé
+            try {
+                $stmt = $db->prepare("INSERT INTO vg_utilisateur (email, password, role_id) VALUES (?, ?, ?)");
+                $success = $stmt->execute([$email, $hashedPassword, $roleId]);
 
-                try {
-                    $stmt = $db->prepare("INSERT INTO vg_utilisateur (email, password, role_id) VALUES (?, ?, ?)");
-                    $success = $stmt->execute([$email, $hashedPassword, $roleId]);
-
-                    if ($success) {
-                        MailService::sendAccountCreationEmail($email);
-                        $_SESSION['success'] = "L'employé a été créé avec succès et averti par mail.";
-                    }
-                } catch (\PDOException $e) {
-                    $_SESSION['error'] = "Cet email est déjà utilisé par un autre compte.";
+                if ($success) {
+                    MailService::sendAccountCreationEmail($email);
+                    $_SESSION['success'] = "L'employé a été créé avec succès et averti par mail.";
                 }
-            } else {
-                $_SESSION['error'] = "Veuillez remplir tous les champs.";
+            } catch (\PDOException $e) {
+                $_SESSION['error'] = "Cet email est déjà utilisé par un autre compte.";
             }
+        } else {
+            $_SESSION['error'] = "Veuillez remplir tous les champs.";
         }
+
 
         header('Location: ?page=rh-admin');
         exit;
     }
-
-     //function pour supprimer un employé
+    //function pour supprimer un employé
     public static function deleteEmploye(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
-        $id = (int)($_GET['id'] ?? 0);
-
+        $id = (int)($_POST['id'] ?? 0);
+        $id = SecurityManager::validatePost('?page=rh-admin');
         if (!empty($id)) {
             try {
                 $stmt = $db->prepare("DELETE FROM vg_utilisateur WHERE utilisateur_id = :id");
@@ -122,10 +112,11 @@ class RhAdminController
     }
 
     //function pour activer/désactiver un employé
-    public static function toggleEmployeStatus(\PDO $db)
+    public static function toggleEmployeStatus(\PDO $db, ?int $id)
     {
         Auth::check([ROLE_ADMIN]);
-        $id = (int)($_GET['id'] ?? 0);
+        $id = (int)($_POST['id'] ?? $id ?? 0);
+        $id = SecurityManager::validatePost('?page=rh-admin');
 
         if (!empty($id)) {
             try {
@@ -146,17 +137,15 @@ class RhAdminController
     public static function banUser(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
-            $id = (int)($_POST['id'] ?? 0);
-
-            try {
-                require_once ROOT_PATH . '/app/managers/UserAdminManager.php';
-                UserAdminManager::ban($db, $id);
-                $_SESSION['success_message'] = 'Utilisateur désactivé avec succès !';
-            } catch (\PDOException $e) {
-                die($e->getMessage());
-            }
+        $id = SecurityManager::validatePost('?page=rh-admin');
+        try {
+            require_once ROOT_PATH . '/app/managers/UserAdminManager.php';
+            UserAdminManager::ban($db, $id);
+            $_SESSION['success_message'] = 'Utilisateur désactivé avec succès !';
+        } catch (\PDOException $e) {
+            die($e->getMessage());
         }
+
         header('Location: index.php?page=rh-admin');
         exit();
     }
@@ -165,17 +154,16 @@ class RhAdminController
     public static function unbanUser(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id'])) {
-            $id = (int)($_POST['id'] ?? 0);
+        $id = SecurityManager::validatePost('?page=rh-admin');
 
-            try {
-                require_once ROOT_PATH . '/app/managers/UserAdminManager.php';
-                UserAdminManager::unBan($db, $id);
-                $_SESSION['success_message'] = 'Utilisateur réactivé avec succès !';
-            } catch (\PDOException $e) {
-                die($e->getMessage());
-            }
+        try {
+            require_once ROOT_PATH . '/app/managers/UserAdminManager.php';
+            UserAdminManager::unBan($db, $id);
+            $_SESSION['success_message'] = 'Utilisateur réactivé avec succès !';
+        } catch (\PDOException $e) {
+            die($e->getMessage());
         }
+
         header('Location: index.php?page=rh-admin');
         exit();
     }

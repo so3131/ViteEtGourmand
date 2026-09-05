@@ -19,7 +19,7 @@ section.full-width-section {
     left: 50%;
     right: 50%;
     transform: translateX(-50%);
-    background-color: #343a40; 
+    background-color: var(--color-bg-dark); 
     color: #ffffff;
     margin-top: var(--spacing-xs);
     padding-top: 4rem;
