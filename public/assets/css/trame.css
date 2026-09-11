@@ -1,230 +1,369 @@
 /* importation des variabes CSS */
-@import url('variables.css');
+@import url("variables.css");
 
 /*  ==========================================================================
    1. CONFIGURATION GLOBALE & RESET
    ========================================================================== */
 
-  html {
-    font-size: 13px; /* Réduit uniformément tout ton site (polices, marges, padding basés sur le rem) */
+html {
+  font-size: 13px;
+  /* Réduit uniformément tout le site (polices, marges, padding basés sur le rem) */
 }
-html,
-body {
-    max-width: 100%;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: var(--color-bg-light, #f8f9fa);
-    color: var(--color-dark, #212529);
-    font-family: var(--font-family, sans-serif);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-/* main {
-    flex: 1;
-    overflow-x: hidden;
-    padding: 2rem;
-} */
+body,
+html {
+  overflow-x: hidden; /* Empêche tout défilement horizontal intempestif */
+  max-width: 100%;
+}
+body {
+  font-family: var(--font-family-public-body, "Inter"), sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg-light, #f8f9fa);
+  color: var(--color-dark, #212529);
+}
+
+h1,
+h2,
+h3,
+.card-title {
+  font-family:
+    var(--font-family-public-heading, "Plus Jakarta Sans"), sans-serif;
+}
+
+body.gestion-theme {
+  --font-family-public-body:
+    system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-family-public-heading:
+    system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
 
 img {
-    max-width: 100%;
-    height: auto;
+  max-width: 100%;
+  height: auto;
 }
 
 .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
+.btn-primary,
+.btn-success,
+.btn-valider,
+.btn-enregistrer {
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-olive) !important;
+  color: var(--color-bg-dark) !important;
+  font-weight: var(--font-weight-medium);
+}
 /* ==========================================================================
    2. FORMULAIRES & MESSAGES D'ERREUR
    ========================================================================== */
 .erreurMessage {
-    color: #dc3545;
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
+  color: var(--color-danger);
+  font-size: var(--spacing-sm);
+  margin-top: var(--spacing-xs);
 }
 
 .form-label {
-    margin-bottom: 0.5rem;
-    color: var(--color-dark, #333);
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-dark);
 }
 
 .form-control,
 .form-select {
-    border: 1px solid #dee2e6;
-    border-radius: var(--border-radius-sm, 6px);
-    padding: 0.75rem;
-    transition: border-color 0.2s;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+  transition: border-color var(--transition-fast);
 }
 
 .form-control:focus {
-    border-color: var(--color-gold, #DAA520);
-    box-shadow: 0 0 0 0.2rem rgba(218, 165, 32, 0.25);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
 select {
-    max-width: 100%;
-    box-sizing: border-box;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-
 /* ==========================================================================
-   3. NAVIGATION (NAVBAR FROSTED & DORÉE)
+   3. NAVIGATION
    ========================================================================== */
 .dropdown-toggle {
-    position: relative !important;
-    z-index: 9999 !important;
-    pointer-events: auto !important;
-    cursor: pointer !important;
+  position: relative !important;
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
 }
 
 .navbar-frosted {
-    background-color: rgba(218, 165, 32, 0.9); 
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition-base);
+  background-color: var(--color-accent);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-base);
 }
 
 .navbar-nav .nav-link {
-    color: var(--color-dark, #212529) !important;
-    font-weight: 500;
-    position: relative;
-    transition: color 0.3s ease;
+  color: var(--color-dark) !important;
+  font-weight: var(--font-weight-medium);
+  position: relative;
+  transition: color var(--transition-base);
 }
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-    color: var(--color-olive, #556B2F) !important;
+  color: var(--color-olive) !important;
 }
 
 .navbar-nav .nav-link::after {
-    content: "";
-    position: absolute;
-    height: 2px;
-    bottom: 0;
-    left: 50%;
-    background-color: var(--color-olive, #556B2F);
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-    width: 0;
+  content: "";
+  position: absolute;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  background-color: var(--color-olive);
+  transition: var(--transition-base);
+  transform: translateX(-50%);
+  width: 0;
 }
 
 .navbar-nav .nav-link:hover::after,
 .navbar-nav .nav-link.active::after {
-    width: 80%;
+  width: 80%;
 }
 
 .navbar-nav .custom-login-btn {
-    border: 1px solid var(--color-olive, #556B2F) !important;
-    border-radius: var(--border-radius-md, 8px) !important;
-    color: var(--color-dark, #212529) !important;
-    transition: all 0.3s ease !important;
+  background-color: var(--color-accent);
+  color: var(--color-dark);
+  border: none;
+  border-radius: var(--border-radius-sm);
+  padding: var(--padding-btn);
+  font-weight: var(--font-weight-semibold);
+  transition: var(--transition-base) !important;
 }
 
 .navbar-nav .custom-login-btn:hover {
-    background-color: var(--color-olive, #556B2F) !important;
-    color: #ffffff !important;
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-sm);
+  background-color: var(--color-olive) !important;
+  color: var(--color-white) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .navbar-nav .custom-login-btn::after {
-    display: none !important;
+  display: none !important;
+}
+.navbar-brand {
+  margin-left: var(--spacing-md);
 }
 .dropdown-menu {
-    animation: fadeIn 0.2s ease-in-out;
+  animation: fadeIn var(--transition-fast) ease-in-out;
 }
 
 .dropdown-item {
-    transition: background-color 0.15s ease-in-out, transform 0.15s ease-in-out;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .dropdown-item:hover {
-    background-color: rgba(var(--bs-primary-rgb), 0.1);
-    transform: translateX(3px);
+  background-color: rgba(var(--bs-primary-rgb), 0.1);
+  transform: translateX(3px);
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ==========================================================================
    5. FOOTER
    ========================================================================== */
 footer.container-fluid {
-    background-color: #ffffff;
-    border-top: 3px solid var(--color-gold);
-    box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.02);
-    padding-top: 2rem;
-    padding-bottom: 1rem;
+  background-color: var(--color-white);
+  border-top: 3px solid var(--color-accent);
+  box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.02);
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-md);
 }
 .text-danger-accessible {
-    color: #b02a37 !important;
+  color: var(--color-danger) !important;
 }
 footer h3 {
-    font-size: 1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 1rem;
-    color: var(--color-olive); 
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-olive);
 }
 
-footer ul li, 
+footer ul li,
 footer dl dd {
-    margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-xs);
 }
 
 footer a {
-    text-decoration: none;
-    color: var(--color-dark);
-    transition: color 0.2s ease-in-out, padding-left 0.2s ease-in-out;
+  text-decoration: none;
+  color: var(--color-dark);
+  transition:
+    color var(--transition-fast),
+    padding-left var(--transition-fast);
 }
 
 footer a:hover {
-    color: var(--color-gold) !important;
-    padding-left: 3px;
+  color: var(--color-accent) !important;
+  padding-left: 3px;
 }
 
 footer .text-danger {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 /* Sécurité absolue anti-débordement sur mobile */
-*, *::before, *::after {
-    box-sizing: border-box;
-}
 
-body, html {
-    overflow-x: hidden; /* Empêche tout défilement horizontal intempestif */
+.form-control,
+.form-select {
+  width: 100% !important;
+  max-width: 100% !important;
 }
-
-.form-control, .form-select {
-    width: 100% !important;
-    max-width: 100% !important;
-}
-
 
 @media (max-width: 768px) {
-    /* Empêche le conteneur sticky de bloquer le rendu de la liste mobile */
-    aside .card {
-        position: relative !important;
-        top: 0 !important;
-    }
-    
-    /* Force le select à utiliser une taille neutre acceptée par le système */
-    #price-max-select {
-        font-size: 16px !important;
-    }
+  /* Empêche le conteneur sticky de bloquer le rendu de la liste mobile */
+  aside .card {
+    position: relative !important;
+    top: 0 !important;
+  }
+
+  /* Force le select à utiliser une taille neutre acceptée par le système */
+  #price-max-select {
+    font-size: 16px !important;
+  }
+}
+
+/* ==========================================================================
+   6. TOASTS
+   ========================================================================== */
+#toast-container {
+  position: fixed;
+  top: var(--spacing-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: min(420px, calc(100vw - var(--spacing-xl)));
+}
+
+.app-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid transparent;
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-md);
+  background: var(--color-white);
+  color: var(--color-dark);
+  animation: toast-in var(--transition-fast) ease-out;
+}
+
+.app-toast.success {
+  border-color: var(--color-success);
+}
+
+.app-toast.error {
+  border-color: var(--color-danger);
+}
+
+.app-toast.info {
+  border-color: var(--color-info);
+}
+
+.app-toast button {
+  margin-left: auto;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ==========================================================================
+   7. MODAL DE CONFIRMATION
+   ========================================================================== */
+.confirm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.confirm-modal[hidden] {
+  display: none;
+}
+
+.confirm-box {
+  width: min(420px, calc(100vw - var(--spacing-xl)));
+  padding: var(--spacing-lg);
+  background: var(--color-white);
+  border-radius: var(--border-radius-sm);
+  box-shadow: var(--shadow-lg);
+}
+
+.confirm-box h2 {
+  margin-top: 0;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+
+.confirm-actions button {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 0;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+}
+
+#confirm-cancel {
+  background: var(--color-border);
+}
+
+#confirm-ok {
+  background: var(--color-danger);
+  color: var(--color-white);
+  font-weight: var(--font-weight-medium);
 }

@@ -1,0 +1,13 @@
+.input-group {
+    display: flex;
+    flex-wrap: nowrap; /* Empêche le bouton de passer à la ligne */
+}
+
+.input-group > .form-control {
+    flex: 1 1 auto;
+    width: 1%;
+}
+
+.input-group > .toggle-password-btn {
+    flex: 0 0 auto;
+}

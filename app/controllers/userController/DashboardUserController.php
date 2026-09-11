@@ -26,7 +26,7 @@ class DashboardUserController
         ];
         extract($viewData);
 
-        $specific_styles = ["assets/css/styleGestion.css", "assets/css/MQGestion.css"];
+        $specific_styles = ["assets/css/styleGestion.css"];
         $specific_scripts = ["assets/javascript/DashboardUser.js"];
 
         require_once ROOT_PATH . '/app/views/layout/header.php';

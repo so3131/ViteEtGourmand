@@ -99,7 +99,15 @@ class OrderManager
             (int)$order->lieu_prestation_id
         ]);
     }
+ // Léger : menu_id, utilisateur_id, lieu_prestation_id (recalcul AJAX côté client)
+    public static function getOrderLight(\PDO $db, int $commandeId): ?array
+    {
+     $stmt = $db->prepare("SELECT menu_id, utilisateur_id, lieu_prestation_id, nombre_personne FROM vg_commande WHERE commande_id = ?");
 
+        $stmt->execute([$commandeId]);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $row ?: null;
+    }
     //function pour récupérer toutes les commandes d'un utilisateur
     public static function getOrdersByUser(\PDO $db, int $userId)
     {
@@ -218,5 +226,192 @@ class OrderManager
         }
 
         return $workflow[$newStatus] >= $workflow[$oldStatus];
+    }
+    // Récupère une commande avec tous ses détails (lieu, utilisateur, menu)
+public static function getOrderWithDetails(\PDO $db, int $commandeId): ?array
+{
+    $sql = "SELECT c.*, l.adresse, l.ville, l.code_postal, l.latitude, l.longitude,
+                   u.prenom AS prenom, u.nom AS nom, u.email AS email,
+                   m.titre AS menu_titre
+            FROM vg_commande c
+            JOIN vg_lieu_prestation l ON c.lieu_prestation_id = l.id
+            JOIN vg_utilisateur u ON c.utilisateur_id = u.utilisateur_id
+            JOIN vg_menu m ON c.menu_id = m.menu_id
+            WHERE c.commande_id = :orderID";
+    $stmt = $db->prepare($sql);
+    $stmt->execute(['orderID' => $commandeId]);
+    $order = $stmt->fetch(\PDO::FETCH_ASSOC);
+    return $order ?: null;
+}
+ // Variante client : ne renvoie la commande QUE si elle appartient à l'utilisateur
+    public static function getOrderWithDetailsForUser(\PDO $db, int $commandeId, int $userId): ?array
+    {
+        $sql = "SELECT c.*, l.adresse, l.ville, l.code_postal, l.latitude, l.longitude,
+                       u.prenom AS prenom, u.nom AS nom, u.email AS email,
+                       m.titre AS menu_titre
+                FROM vg_commande c
+                JOIN vg_lieu_prestation l ON c.lieu_prestation_id = l.id
+                JOIN vg_utilisateur u ON c.utilisateur_id = u.utilisateur_id
+                JOIN vg_menu m ON c.menu_id = m.menu_id
+                WHERE c.commande_id = :orderID
+                  AND c.utilisateur_id = :user_id";
+        $stmt = $db->prepare($sql);
+        $stmt->execute(['orderID' => $commandeId, 'user_id' => $userId]);
+        $order = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $order ?: null;
+    }
+
+// Récupère les 10 dernières commandes pour le dashboard
+public static function getRecentOrders(\PDO $db, int $limit = 10): array
+{
+    $stmt = $db->query("SELECT c.*, u.nom, u.prenom 
+                        FROM vg_commande c 
+                        JOIN vg_utilisateur u ON c.utilisateur_id = u.utilisateur_id 
+                        ORDER BY c.commande_id DESC LIMIT $limit");
+    return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+}
+
+// Met à jour le statut d'une commande et historise
+public static function updateStatus(\PDO $db, int $commandeId, string $newStatus): bool
+{
+    $sql = "UPDATE vg_commande SET statut = ? WHERE commande_id = ?";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([$newStatus, $commandeId]);
+
+    $stmtHistorique = $db->prepare(
+        "INSERT INTO vg_commande_statut_historique (commande_id, statut) VALUES (?, ?)"
+    );
+    $stmtHistorique->execute([$commandeId, $newStatus]);
+    return true;
+}
+
+// Annule une commande (avec restitution du stock)
+public static function cancelOrder(\PDO $db, int $commandeId, string $motif, string $modeContact): ?array
+{
+    $db->beginTransaction();
+    try {
+        // Récupérer la commande
+        $orderData = self::getOrderWithDetails($db, $commandeId);
+        // ... mais il faut le query avec u.email etc pour l'email
+        // Solution : réutiliser getAllOrders ou faire une version "for cancel"
+        
+        // Annuler
+        $sqlUpdate = "UPDATE vg_commande SET statut = 'annulee', motif_annulation = :motif, 
+                      mode_contact = :mode_contact WHERE commande_id = :id AND statut <> 'annulee'";
+        $stmtUpdate = $db->prepare($sqlUpdate);
+        $stmtUpdate->execute(['motif' => $motif, 'mode_contact' => $modeContact, 'id' => $commandeId]);
+        
+        // Restituer le stock
+        $sqlRestituer = "UPDATE vg_menu SET quantite_restante = quantite_restante + :quantite WHERE menu_id = :menu_id";
+        $stmtRestituer = $db->prepare($sqlRestituer);
+        $stmtRestituer->execute(['quantite' => $orderData['nombre_personne'], 'menu_id' => $orderData['menu_id']]);
+        
+        $db->commit();
+        return $orderData;
+    } catch (\Exception $e) {
+        $db->rollBack();
+        throw $e;
+    }
+}
+
+   // Met à jour les champs modifiables d'une commande  
+   public static function updateOrder(\PDO $db, int $commandeId, array $data, ?int $userId = null): bool
+    {
+        $sql = "UPDATE vg_commande
+                SET date_prestation    = :date,
+                    heure_livraison    = :heure,
+                    lieu_prestation_id = :lieu_id,
+                    prix_total         = :prix,
+                    pret_materiel      = :materiel,
+                    depot_garantie     = :depot,
+                    nombre_personne    = :nombre_personne
+                WHERE commande_id = :id";
+        $params = [
+            'date'            => $data['date_prestation'],
+            'heure'           => $data['heure_livraison'],
+            'lieu_id'         => (int)$data['lieu_prestation_id'],
+            'prix'            => (float)$data['prix_total'],
+            'materiel'        => (int)$data['pret_materiel'],
+            'depot'           => (float)$data['depot_garantie'],
+            'nombre_personne' => (int)$data['nombre_personne'],
+            'id'              => $commandeId,
+        ];
+
+        if ($userId !== null) {
+            $sql .= " AND utilisateur_id = :user_id";
+            $params['user_id'] = $userId;
+        }
+
+        $stmt = $db->prepare($sql);
+        return $stmt->execute($params);
+    }
+
+    // Récupère uniquement le menu_id d'une commande (léger, pour le recalcul AJAX)
+    public static function getMenuIdByCommandeId(\PDO $db, int $commandeId): ?int
+    {
+        $stmt = $db->prepare("SELECT menu_id FROM vg_commande WHERE commande_id = ?");
+        $stmt->execute([$commandeId]);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $row ? (int)$row['menu_id'] : null;
+    }
+        // Annulation côté CLIENT : 
+    public static function cancelOrderForUser(\PDO $db, int $commandeId, int $userId): bool
+    {
+        $db->beginTransaction();
+        try {
+            // Annulation uniquement si la commande est encore en attente ET appartient au client
+            $stmtUpdate = $db->prepare("
+                UPDATE vg_commande
+                SET statut = 'annulee'
+                WHERE commande_id = :orderID
+                  AND utilisateur_id = :userID
+                  AND statut = 'en_attente'
+            ");
+            $stmtUpdate->execute([
+                'orderID' => $commandeId,
+                'userID'  => $userId
+            ]);
+
+            if ($stmtUpdate->rowCount() !== 1) {
+                throw new \Exception("La commande a déjà été annulée ou n'est plus modifiable.");
+            }
+
+            // Restitution du stock dans la transaction
+            $orderData = self::getOrderLight($db, $commandeId);
+
+            $stmtRestituer = $db->prepare("
+                UPDATE vg_menu
+                SET quantite_restante = quantite_restante + :quantite
+                WHERE menu_id = :menu_id
+            ");
+            $stmtRestituer->execute([
+                'quantite' => (int)$orderData['nombre_personne'],
+                'menu_id'  => (int)$orderData['menu_id']
+            ]);
+
+            $db->commit();
+            return true;
+        } catch (\Exception $e) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+            throw $e;
+        }
+    }
+     // Compteurs du tableau de bord 
+    public static function getDashboardStats(\PDO $db): array
+    {
+        $row = $db->query("
+            SELECT COUNT(*) AS total,
+                   SUM(statut = 'en_attente') AS en_attente,
+                   SUM(statut = 'terminee') AS terminee
+            FROM vg_commande
+        ")->fetch(\PDO::FETCH_ASSOC);
+
+        return [
+            'total'      => (int)($row['total'] ?? 0),
+            'en_attente' => (int)($row['en_attente'] ?? 0),
+            'terminee'   => (int)($row['terminee'] ?? 0),
+        ];
     }
 }

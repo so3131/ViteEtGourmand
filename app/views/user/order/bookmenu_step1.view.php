@@ -19,7 +19,9 @@
 
     <div id="step-1" class="card p-4 shadow-sm">
         <form action="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=1" method="POST">
-           
+           <input type="hidden"
+       name="csrf_token"
+       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
             <div class="mb-3">
                 <label for="quantite_restante" class="form-label">

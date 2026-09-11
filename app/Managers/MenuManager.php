@@ -19,7 +19,8 @@ class MenuManager
         LEFT JOIN vg_regime ON vg_menu.regime_id = vg_regime.regime_id
         LEFT JOIN vg_menu_plat ON vg_menu.menu_id = vg_menu_plat.menu_id
         LEFT JOIN vg_plat ON vg_menu_plat.plat_id = vg_plat.plat_id
-        WHERE 1=1 ";
+        WHERE 1=1 
+        AND vg_menu.is_active = 1";
             $params = [];
 
             if ($id !== null) {
@@ -246,5 +247,185 @@ class MenuManager
             error_log("Erreur lors de la récupération des allergènes : " . $e->getMessage());
             return false;
         }
+    }
+    //function pour compter les menus en rupture de stock
+    public static function countRuptureStock(\PDO $db): int
+    {
+        try {
+            $sql = "SELECT COUNT(*) FROM vg_menu WHERE quantite_restante <= 0 AND is_active = 1";
+            $stmt = $db->query($sql);
+            return (int)$stmt->fetchColumn();
+        } catch (\PDOException $e) {
+            error_log("ERREUR MenuManager::countRuptureStock() : " . $e->getMessage());
+            return 0;
+        }
+    }
+    public static function getAllThemes(\PDO $db): array
+    {
+
+        $stmt = $db->query("SELECT * FROM vg_theme ORDER BY libelle ASC");
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    // Récupérer les thèmes et régimes pour les selects
+    public static function getAllRegimes(\PDO $db): array
+    {
+        $stmt = $db->query("SELECT * FROM vg_regime ORDER BY libelle ASC");
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+    // Crée un menu avec ses plats associés (gère la transaction)
+    public static function create(\PDO $db, array $menuData, array $plats = []): int
+    {
+        $db->beginTransaction();
+        try {
+            $sqlMenu = "INSERT INTO vg_menu (titre, nombre_personne_minimum, prix_par_personne, 
+                    description_menu, quantite_restante, delai_commande, conditions_stockage, 
+                    theme_id, regime_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $db->prepare($sqlMenu);
+            $stmt->execute([
+                $menuData['titre'],
+                $menuData['min_personne'],
+                $menuData['prix'],
+                $menuData['description'],
+                $menuData['quantite'],
+                $menuData['delai'],
+                $menuData['conditions'] ?? null,
+                $menuData['theme_id'] ?? null,
+                $menuData['regime_id'] ?? null,
+            ]);
+            $menuId = (int)$db->lastInsertId();
+
+            if (!empty($plats)) {
+                $sqlLiaison = "INSERT INTO vg_menu_plat (menu_id, plat_id) VALUES (?, ?)";
+                $stmtLiaison = $db->prepare($sqlLiaison);
+                foreach ($plats as $platId) {
+                    $stmtLiaison->execute([$menuId, (int)$platId]);
+                }
+            }
+
+            $db->commit();
+            return $menuId;
+        } catch (\Exception $e) {
+            $db->rollBack();
+            throw $e;
+        }
+    }
+
+    // Met à jour un menu et synchronise ses plats
+    public static function update(\PDO $db, int $menuId, array $menuData, array $plats = []): bool
+    {
+        $db->beginTransaction();
+        try {
+            $sql = "UPDATE vg_menu SET titre = :titre, prix_par_personne = :prix, 
+                quantite_restante = :quantite, nombre_personne_minimum = :nb_min,
+                description_menu = :description, theme_id = :theme_id, 
+                regime_id = :regime_id, delai_commande = :delai, 
+                conditions_stockage = :stockage WHERE menu_id = :id";
+            $stmt = $db->prepare($sql);
+            $stmt->execute([
+                'titre'       => $menuData['titre'],
+                'prix'        => $menuData['prix'],
+                'quantite'    => $menuData['quantite'],
+                'nb_min'      => $menuData['nombre_personne_minimum'],
+                'description' => $menuData['description'],
+                'theme_id'    => $menuData['theme_id'] ?? null,
+                'regime_id'   => $menuData['regime_id'] ?? null,
+                'delai'       => $menuData['delai_commande'],
+                'stockage'    => $menuData['conditions_stockage'] ?? null,
+                'id'          => $menuId,
+            ]);
+
+            // Synchroniser les plats (supprimer anciens, insérer nouveaux)
+            $stmtDelete = $db->prepare("DELETE FROM vg_menu_plat WHERE menu_id = :id");
+            $stmtDelete->execute(['id' => $menuId]);
+
+            if (!empty($plats)) {
+                $stmtInsert = $db->prepare("INSERT INTO vg_menu_plat (menu_id, plat_id) VALUES (:menu_id, :plat_id)");
+                foreach ($plats as $platId) {
+                    $stmtInsert->execute(['menu_id' => $menuId, 'plat_id' => (int)$platId]);
+                }
+            }
+
+            $db->commit();
+            return true;
+        } catch (\Exception $e) {
+            $db->rollBack();
+            throw $e;
+        }
+    }
+    public static function ajusterStock(\PDO $db, int $menuId, int $delta): void
+    {
+        if ($delta === 0) {
+            return;
+        }
+
+        if ($delta > 0) {
+            $stmt = $db->prepare("
+                UPDATE vg_menu
+                SET quantite_restante = quantite_restante - :quantite
+                WHERE menu_id = :menu_id
+                  AND quantite_restante >= :quantite
+            ");
+            $stmt->execute(['quantite' => $delta, 'menu_id' => $menuId]);
+
+            if ($stmt->rowCount() !== 1) {
+                throw new \Exception("Stock insuffisant pour ce menu.");
+            }
+        } else {
+            $stmt = $db->prepare("
+                UPDATE vg_menu
+                SET quantite_restante = quantite_restante + :quantite
+                WHERE menu_id = :menu_id
+            ");
+            $stmt->execute(['quantite' => abs($delta), 'menu_id' => $menuId]);
+        }
+    }
+    public static function getMenusManagement(\PDO $db): array
+    {
+        $sql = "SELECT m.*, 
+            GROUP_CONCAT(p.titre_plat SEPARATOR ', ') as liste_plats,
+            (SELECT COUNT(*) FROM vg_commande c WHERE c.menu_id = m.menu_id) as nb_commandes
+            FROM vg_menu m
+            LEFT JOIN vg_menu_plat mp ON m.menu_id = mp.menu_id
+            LEFT JOIN vg_plat p ON mp.plat_id = p.plat_id
+            GROUP BY m.menu_id
+            ORDER BY m.menu_id DESC";
+
+        return $db->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    // Nombre de commandes EN COURS liées à un menu (bloque la suppression)
+    public static function countActiveOrders(\PDO $db, int $menuId): int
+    {
+        $stmt = $db->prepare("SELECT COUNT(*) FROM vg_commande WHERE menu_id = ? AND statut NOT IN ('annulee', 'terminee')");
+        $stmt->execute([$menuId]);
+        return (int)$stmt->fetchColumn();
+    }
+
+    // Soft delete (désactivation)
+    public static function deactivate(\PDO $db, int $menuId): bool
+    {
+        $stmt = $db->prepare("UPDATE vg_menu SET is_active = 0 WHERE menu_id = ?");
+        return $stmt->execute([$menuId]);
+    }
+
+    // Réactivation d'un menu désactivé
+    public static function activate(\PDO $db, int $menuId): bool
+    {
+        $stmt = $db->prepare("UPDATE vg_menu SET is_active = 1 WHERE menu_id = ?");
+        return $stmt->execute([$menuId]);
+    }
+
+    // Suppression des liaisons menu-plat
+    public static function deleteLinks(\PDO $db, int $menuId): void
+    {
+        $stmt = $db->prepare("DELETE FROM vg_menu_plat WHERE menu_id = ?");
+        $stmt->execute([$menuId]);
+    }
+
+    // Suppression définitive du menu (APRÈS deleteLinks)
+    public static function deleteHard(\PDO $db, int $menuId): bool
+    {
+        $stmt = $db->prepare("DELETE FROM vg_menu WHERE menu_id = ?");
+        return $stmt->execute([$menuId]);
     }
 }

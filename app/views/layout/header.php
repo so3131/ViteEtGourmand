@@ -76,12 +76,11 @@ if ($current_page === '' || $current_page === '/') {
     </li>
     <?php if (isset($_SESSION['user_id'])): ?>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle d-flex align-items-center justify-content-center justify-content-lg-start gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle-no-arrow d-flex align-items-center justify-content-center justify-content-lg-start gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Mon compte
             </a>
             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 text-center text-lg-start" style="min-width: 220px;">
                 <li class="text-center py-3 border-bottom mb-2">
-                    <img src="assets/images/pictureprofil2.png" class="rounded-circle shadow-sm mb-2" style="width: 60px; height: 60px; object-fit: cover;">
                     <div class="small fw-bold text-dark">Espace Personnel</div>
                 </li>
                 <?php if (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_ADMIN): ?>
@@ -104,4 +103,7 @@ if ($current_page === '' || $current_page === '/') {
             </div>
         </div>
     </nav>
+  
+<?php require_once ROOT_PATH . '/app/views/layout/partials/flash-messages.php'; ?>
+</div>
 </header>

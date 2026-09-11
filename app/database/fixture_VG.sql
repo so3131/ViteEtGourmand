@@ -22,233 +22,6 @@ VALUES
     (14, 'Mollusques');
 
 --
--- Déchargement des données de la table `vg_allergene_plat`
---
-INSERT INTO
-    `vg_allergene_plat` (`plat_id`, `allergene_id`)
-VALUES
-    (2, 7),
-    (3, 4),
-    (5, 1),
-    (6, 7),
-    (7, 2),
-    (7, 14),
-    (8, 1),
-    (8, 7),
-    (9, 7),
-    (10, 4),
-    (10, 7),
-    (11, 3),
-    (11, 7),
-    (12, 3),
-    (12, 7),
-    (13, 1),
-    (13, 3),
-    (13, 7),
-    (13, 8),
-    (14, 1),
-    (14, 7),
-    (19, 1),
-    (19, 3),
-    (19, 7),
-    (20, 4),
-    (21, 3),
-    (21, 7),
-    (23, 10),
-    (24, 1),
-    (24, 3),
-    (24, 7),
-    (25, 7);
-
---
--- Déchargement des données de la table `vg_commande_statut_historique`
---
-INSERT INTO
-    `vg_commande_statut_historique` (
-        `historique_id`,
-        `commande_id`,
-        `statut`,
-        `date_changement`
-    )
-VALUES
-    (
-        1,
-        25,
-        'en_cours_livraison',
-        '2026-08-31 17:49:46'
-    ),
-    (2, 25, 'livree', '2026-08-31 17:50:18'),
-    (3, 30, 'acceptee', '2026-08-31 18:02:10');
-
---
--- Déchargement des données de la table `vg_horaire`
---
-INSERT INTO
-    `vg_horaire` (
-        `horaire_id`,
-        `jour`,
-        `heure_ouverture`,
-        `heure_fermeture`
-    )
-VALUES
-    (1, 'Lundi', '09:00', '19:00'),
-    (2, 'Mardi', '08H00', '19H00'),
-    (3, 'Mercredi', '08H00', '19H00'),
-    (4, 'Jeudi', '08H00', '19H00'),
-    (5, 'Vendredi', '08H00', '19H00'),
-    (6, 'Samedi', '08H00', '19H00'),
-    (7, 'Dimanche', '', '');
-
---
--- Déchargement des données de la table `vg_lieu_prestation`
---
-INSERT INTO
-    `vg_lieu_prestation` (
-        `id`,
-        `adresse`,
-        `ville`,
-        `code_postal`,
-        `latitude`,
-        `longitude`,
-        `distance_bordeaux`
-    )
-VALUES
-    (
-        1,
-        'Centre-ville',
-        'Bordeaux',
-        '',
-        NULL,
-        NULL,
-        0.00
-    ),
-    --
-    -- Déchargement des données de la table `vg_menu`
-    --
-INSERT INTO
-    `vg_menu` (
-        `menu_id`,
-        `titre`,
-        `nombre_personne_minimum`,
-        `prix_par_personne`,
-        `description_menu`,
-        `quantite_restante`,
-        `theme_id`,
-        `regime_id`,
-        `delai_commande`,
-        `conditions_stockage`,
-        `is_active`
-    )
-VALUES
-    (
-        1,
-        'Menu Découverte',
-        3,
-        36,
-        'Un assortiment raffiné',
-        70,
-        1,
-        3,
-        3,
-        NULL,
-        1
-    ),
-    (
-        2,
-        'Menu Végé-Gourmand',
-        100,
-        28,
-        'Toute la fraîcheur des légumes',
-        100,
-        2,
-        1,
-        0,
-        NULL,
-        1
-    ),
-    (
-        4,
-        'Menu Fraîcheur',
-        7,
-        25,
-        'Léger et estival',
-        9,
-        2,
-        1,
-        0,
-        NULL,
-        1
-    ),
-    (
-        5,
-        'Menu Prestige',
-        44,
-        55,
-        'Une expérience gastronomique inoubliable',
-        56,
-        1,
-        3,
-        0,
-        NULL,
-        1
-    );
-
---
--- Déchargement des données de la table `vg_menu_plat`
---
-INSERT INTO
-    `vg_menu_plat` (`menu_id`, `plat_id`)
-VALUES
-    (1, 3),
-    (1, 7),
-    (1, 11),
-    (2, 1),
-    (2, 8),
-    (2, 14),
-    (4, 19),
-    (4, 21),
-    (4, 22),
-    (5, 3),
-    (5, 6),
-    (5, 20),
-    (5, 24),
-    (5, 25);
-
---
--- Déchargement des données de la table `vg_password_resets`
---
-INSERT INTO
-    `vg_password_resets` (
-        `id`,
-        `email`,
-        `token`,
-        `created_at`,
-        `expires_at`
-    )
-VALUES
-    (
-        1,
-        'test12000@test.com',
-        '45ca03939a73324f62a381f709c54fab2f0554d882d812d0402a756da01cf14e',
-        '2026-08-24 11:16:14',
-        '2026-08-24 13:46:14'
-    ),
-    (
-        2,
-        'test12000@test.com',
-        '8997f38c4290118bf4200fedfff40ddbd5b3cc7e9159e74eb19a76ff06c4f2f9',
-        '2026-08-24 11:16:51',
-        '2026-08-24 13:46:51'
-    ),
-    (
-        5,
-        'sofiene31@hotmail.com',
-        '3cdebf4d7d6ae753689514eec6784ad90ed3de6cbe72cc3c2c03217a27e8fd82',
-        '2026-08-25 15:26:19',
-        '2026-08-25 17:56:19'
-    );
-
---
 -- Déchargement des données de la table `vg_plat`
 --
 INSERT INTO
@@ -416,6 +189,22 @@ VALUES
     );
 
 --
+-- Déchargement des données de la table `vg_theme`
+--
+INSERT INTO
+    `vg_theme` (`theme_id`, `libelle`)
+VALUES
+    (1, 'Gastronomique'),
+    (2, 'Traditionnel'),
+    (3, 'Saint Valentin'),
+    (4, 'Noël'),
+    (5, 'Pâques'),
+    (6, 'Anniversaire'),
+    (7, 'Halloween'),
+    (8, 'Nouvel An'),
+    (9, 'Mariage');
+
+--
 -- Déchargement des données de la table `vg_regime`
 --
 INSERT INTO
@@ -438,20 +227,186 @@ VALUES
     (3, 'Utilisateur');
 
 --
--- Déchargement des données de la table `vg_theme`
+-- Déchargement des données de la table `vg_horaire`
 --
 INSERT INTO
-    `vg_theme` (`theme_id`, `libelle`)
+    `vg_horaire` (
+        `horaire_id`,
+        `jour`,
+        `heure_ouverture`,
+        `heure_fermeture`
+    )
 VALUES
-    (1, 'Gastronomique'),
-    (2, 'Traditionnel'),
-    (3, 'Saint Valentin'),
-    (4, 'Noël'),
-    (5, 'Pâques'),
-    (6, 'Anniversaire'),
-    (7, 'Halloween'),
-    (8, 'Nouvel An'),
-    (9, 'Mariage');
+    (1, 'Lundi', '09:00', '19:00'),
+    (2, 'Mardi', '08H00', '19H00'),
+    (3, 'Mercredi', '08H00', '19H00'),
+    (4, 'Jeudi', '08H00', '19H00'),
+    (5, 'Vendredi', '08H00', '19H00'),
+    (6, 'Samedi', '08H00', '19H00'),
+    (7, 'Dimanche', '', '');
+
+--
+-- Déchargement des données de la table `vg_ville`
+--
+INSERT INTO
+    `vg_ville` (`id`, `nom_ville`, `distance_bordeaux`)
+VALUES
+    (1, 'Bordeaux', 0.00);
+
+--
+-- Déchargement des données de la table `vg_lieu_prestation`
+--
+INSERT INTO
+    `vg_lieu_prestation` (
+        `id`,
+        `adresse`,
+        `ville`,
+        `code_postal`,
+        `latitude`,
+        `longitude`,
+        `distance_bordeaux`
+    )
+VALUES
+    (
+        1,
+        'Centre-ville',
+        'Bordeaux',
+        '',
+        NULL,
+        NULL,
+        0.00
+    );
+
+--
+-- Déchargement des données de la table `vg_allergene_plat`
+--
+INSERT INTO
+    `vg_allergene_plat` (`plat_id`, `allergene_id`)
+VALUES
+    (2, 7),
+    (3, 4),
+    (5, 1),
+    (6, 7),
+    (7, 2),
+    (7, 14),
+    (8, 1),
+    (8, 7),
+    (9, 7),
+    (10, 4),
+    (10, 7),
+    (11, 3),
+    (11, 7),
+    (12, 3),
+    (12, 7),
+    (13, 1),
+    (13, 3),
+    (13, 7),
+    (13, 8),
+    (14, 1),
+    (14, 7),
+    (19, 1),
+    (19, 3),
+    (19, 7),
+    (20, 4),
+    (21, 3),
+    (21, 7),
+    (23, 10),
+    (24, 1),
+    (24, 3),
+    (24, 7),
+    (25, 7);
+
+--
+-- Déchargement des données de la table `vg_menu`
+--
+INSERT INTO
+    `vg_menu` (
+        `menu_id`,
+        `titre`,
+        `nombre_personne_minimum`,
+        `prix_par_personne`,
+        `description_menu`,
+        `quantite_restante`,
+        `theme_id`,
+        `regime_id`,
+        `delai_commande`,
+        `conditions_stockage`,
+        `is_active`
+    )
+VALUES
+    (
+        1,
+        'Menu Découverte',
+        3,
+        36,
+        'Un assortiment raffiné',
+        70,
+        1,
+        3,
+        3,
+        NULL,
+        1
+    ),
+    (
+        2,
+        'Menu Végé-Gourmand',
+        100,
+        28,
+        'Toute la fraîcheur des légumes',
+        100,
+        2,
+        1,
+        0,
+        NULL,
+        1
+    ),
+    (
+        4,
+        'Menu Fraîcheur',
+        7,
+        25,
+        'Léger et estival',
+        9,
+        2,
+        1,
+        0,
+        NULL,
+        1
+    ),
+    (
+        5,
+        'Menu Prestige',
+        44,
+        55,
+        'Une expérience gastronomique inoubliable',
+        56,
+        1,
+        3,
+        0,
+        NULL,
+        1
+    );
+
+--
+-- Déchargement des données de la table `vg_menu_plat`
+--
+INSERT INTO
+    `vg_menu_plat` (`menu_id`, `plat_id`)
+VALUES
+    (1, 3),
+    (1, 7),
+    (1, 11),
+    (2, 1),
+    (2, 8),
+    (2, 14),
+    (4, 19),
+    (4, 21),
+    (4, 22),
+    (5, 3),
+    (5, 6),
+    (5, 20),
+    (5, 24),
+    (5, 25);
 
 --
 -- Déchargement des données de la table `vg_utilisateur`
@@ -473,7 +428,7 @@ INSERT INTO
     )
 VALUES
     (
-        13,
+        1,
         'admin@vite-gourmand.fr',
         '$2y$10$uUy.l5kaOZhTu5GH91yCeusMC4GNGbmnJQjIwoXa3JaDAL1FSXEre',
         'Admin',
@@ -485,40 +440,4 @@ VALUES
         1,
         1,
         '2026-08-23 10:30:45'
-    ),
-    (
-        15,
-        'employe2@vitegourmand.fr',
-        '$2y$10$Wot3zfeO0Z5Zo1Pa3JRMPunUa6yU9uJTKwzpDhtj.MS09.H1Ne57W',
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
-        2,
-        1,
-        '2026-08-23 10:47:51'
-    ),
-    (
-        19,
-        'sofiene31@hotmail.com',
-        '$2y$10$PNelfKYavYaHWUxXwM46aemj2Bw0S.vwhxtQncY9q3QP2Xs4lqLyq',
-        'SOFIENE',
-        'GUERNANE',
-        '4545454512',
-        'Toulouse',
-        'France',
-        '8 Allee Michel Ange',
-        3,
-        1,
-        '2026-08-25 14:30:04'
     );
-
---
--- Déchargement des données de la table `vg_ville`
---
-INSERT INTO
-    `vg_ville` (`id`, `nom_ville`, `distance_bordeaux`)
-VALUES
-    (1, 'Bordeaux', 0.00);

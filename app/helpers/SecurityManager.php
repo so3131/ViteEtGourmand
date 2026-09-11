@@ -53,7 +53,7 @@ class SecurityManager
         return $page;
     }
     /**
-     * 
+     * function pour valider les requêtes POST avec un jeton CSRF
      * @param string $redirectOnError L'URL de redirection en cas d'échec
      */
     public static function validatePost(string $redirectOnError = '?page=home'): int
@@ -74,4 +74,32 @@ class SecurityManager
         // 3. Retourne l'ID sécurisé s'il est présent
         return isset($_POST['id']) ? (int)$_POST['id'] : 0;
     }
+  //function pour valider les requêtes JSON avec un jeton CSRF
+    /**
+     * Valide une requête JSON en vérifiant le jeton CSRF.
+     *
+     * @param array $data Les données JSON à valider.
+     * @return void
+     */
+public static function validateJson(array $data): void
+{
+    $csrfToken = $data['csrf_token'] ?? '';
+    $sessionToken = $_SESSION['csrf_token'] ?? '';
+
+    if (
+        empty($sessionToken) ||
+        empty($csrfToken) ||
+        !hash_equals($sessionToken, $csrfToken)
+    ) {
+        http_response_code(403);
+        header('Content-Type: application/json; charset=utf-8');
+
+        echo json_encode([
+            'success' => false,
+            'message' => 'Requête invalide ou session expirée.'
+        ]);
+
+        exit();
+    }
+}
 }

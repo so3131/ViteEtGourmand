@@ -1,18 +1,20 @@
 <!-- 1. BANDEAU DE PRÉSENTATION -->
 <section class="full-width-section text-white">
     <div class="container">
-        <h2 class="text-center mb-5">Vite & Gourmand : 25 ans de passion au service de vos événements</h2>
+        <h2 class="text-center mb-5 titre-1">Vite & Gourmand : 25 ans de passion au service de vos événements</h2>
         
         <div class="row align-items-center">
-            <div class="col-md-6">
-                <p class="lead">
-                    Tout a commencé à Bordeaux, il y a un quart de siècle, autour d'une idée simple : partager une cuisine authentique et créative.
-                </p>
-                <p>
+            <div class="col-md-6 lead">
+                <p class="slogan-1">
+                    Tout a commencé à Bordeaux, il y a un quart de siècle, autour d'une idée simple, rapide et gourmande :</p>
+                <p class="slogan-2">Partager une cuisine authentique et créative.
+            </p>
+                
+                <p class="slogan-3">
                     Julie et José, fondateurs de <strong>Vite & Gourmand</strong>, ont bâti leur réputation sur des menus en constante évolution, capables de sublimer vos moments les plus précieux.
                 </p>
                 <p>
-                    Aujourd'hui, nous franchissons une nouvelle étape : notre application web vous permet de découvrir nos créations culinaires et de nous solliciter plus facilement.
+                    Avec notre application web, vous pouvez découvrir nos créations culinaires et nous solliciter plus facilement.
                 </p>
             </div>
             
@@ -28,8 +30,8 @@
 <!-- 2. CONTENEUR PRINCIPAL -->
 <main>
     <!-- Section Équipe -->
-    <section class="mb-5 pt-4">
-        <h2 class="text-center mb-4 text-dark">Notre Équipe</h2>
+    <section class="mb-5 pt-4 equipe-section">
+        <h2 class="text-center mb-4 text-dark">~ Notre Équipe ~ </h2>
         
         <div class="row g-4 justify-content-center">
             <!-- Membre 1 -->
@@ -95,32 +97,40 @@
         <div class="container">
             <h2 class="text-center mb-4">Ce que nos clients disent de nous :</h2>
             
-            <div class="row g-4 justify-content-center">
-                <?php if (!empty($approvedReviews)): ?>
-                    <?php foreach ($approvedReviews as $review): ?>
-                        <div class="col-md-4 col-sm-6">
-                            <div class="card h-100 shadow-sm bg-white text-dark border-0">
-                                <div class="card-body d-flex flex-column justify-content-between">
-                                    <div>
-                                        <p class="fw-bold fs-5 text-dark"><?= htmlspecialchars($review['nom_auteur'] ?? 'Client Anonyme') ?></p>
-                                        <div class="text-warning mb-2">
-                                            <?php for ($i = 1; $i <= 5; $i++): ?>
-                                                <?= $i <= ($review['note'] ?? 5) ? '★' : '☆' ?>
-                                            <?php endfor; ?>
-                                        </div>
-                                        <p class="card-text text-dark"><?= nl2br(htmlspecialchars($review['description'] ?? '')) ?></p>
-                                    </div>
-                                    
-<small class="text-dark mt-3">Publié le <?= date('d/m/Y', strtotime($review['created_at'])) ?></small>
+  <div class="row g-4 justify-content-center">
+    <?php if (!empty($approvedReviews)): ?>
+        <?php foreach ($approvedReviews as $review): ?>
+            <div class="col-md-4 col-sm-6">
+                <div class="card h-100 shadow-sm bg-white text-dark border-0">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div>
+                            <p class="fw-bold fs-5 text-dark mb-1"><?= htmlspecialchars($review['nom_auteur'] ?? 'Client Anonyme') ?></p>
+                            
+                            <!-- Affichage du nom du menu associé -->
 
-                                </div>
+                          <?php if (!empty($review['titre'])): ?>
+                                <small class="text-muted d-block mb-2">
+                                    <i class="fa-solid fa-utensils"></i>Menu commandé : <?= htmlspecialchars($review['titre']) ?>
+                                </small>
+                            <?php endif; ?>
+
+                            <div class="text-warning mb-2">
+                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                    <?= $i <= ($review['note'] ?? 5) ? '★' : '☆' ?>
+                                <?php endfor; ?>
                             </div>
+                            <p class="card-text text-dark"><?= nl2br(htmlspecialchars($review['description'] ?? '')) ?></p>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p class="text-center text-light">Aucun avis pour le moment. Soyez le premier à donner le vôtre !</p>
-                <?php endif; ?>
+                        
+                        <small class="text-dark mt-3">Publié le <?= date('d/m/Y', strtotime($review['created_at'])) ?></small>
+                    </div>
+                </div>
             </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p class="text-center text-light">Aucun avis pour le moment. Soyez le premier à donner le vôtre !</p>
+    <?php endif; ?>
+</div>
         </div>
     </section>
 </main>

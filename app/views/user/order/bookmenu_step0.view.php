@@ -28,7 +28,9 @@
 
     <div class="card p-4 shadow-sm">
         <form action="index.php?page=order-menu&menu_id=<?= (int)$menuID ?>&step=0" method="POST" id="form-livraison">
-
+<input type="hidden"
+       name="csrf_token"
+       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
             <div class="row">
                 <!-- Informations client -->
                 <div class="col-md-6 mb-3">

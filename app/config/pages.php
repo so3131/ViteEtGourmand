@@ -16,7 +16,8 @@ return [
         '404',
         'error-ban',
         'forgot-password',
-        'reset-password'
+        'reset-password',
+        
     ],
     // Toutes les pages existantes dans l'application, indépendamment des rôles
     'existante' => [
@@ -48,6 +49,8 @@ return [
         'dashboard-user',
         'review',
         'store-review',
+        'deactivate-account',
+        
 
         'dashboard-employee',
 
@@ -58,10 +61,10 @@ return [
         'rh-admin-delete',
         'rh-admin-toggle',
         'ban-user-admin',
-        'ban-action-admin',
-        'unban-action-admin',
+        
         'ban-user',
         'unban-user',
+        
 
 
 
@@ -96,8 +99,6 @@ return [
         'rh-admin-delete',
         'rh-admin-toggle',
         'ban-user-admin',
-        'ban-action-admin',
-        'unban-action-admin',
         'ban-user',
         'unban-user',
     ],
@@ -145,6 +146,7 @@ return [
         'update-order',
         'review',
         'store-review',
-        'recalculer-prix'
+        'recalculer-prix',
+        'deactivate-account'
     ],
 ];

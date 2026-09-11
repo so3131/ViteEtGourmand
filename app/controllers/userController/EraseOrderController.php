@@ -2,9 +2,12 @@
 
 namespace App\Controllers\UserController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
 
+
+require_once dirname(__DIR__, 2) . '/config/constants.php';
+use App\Helpers\SecurityManager;
 use App\Controllers\AuthController\Auth;
+use App\Managers\OrderManager;
 // Class EraseOrderController pour gérer l'annulation des commandes par les utilisateurs
 class EraseOrderController
 {
@@ -15,29 +18,19 @@ class EraseOrderController
         Auth::check([ROLE_USER]);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header('Content-Type: application/json; charset=utf-8');
+            SecurityManager::validatePost('?page=dashboard-user');
 
             if (!$commande_id) {
                 echo json_encode(['success' => false, 'message' => 'Identifiant de commande manquant.']);
                 exit();
             }
 
-            $pdo = $db;
-            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            
             try {
                 // Récupérer les infos nécessaires
-                $sqlCheck = "SELECT c.utilisateur_id, c.statut, c.menu_id, c.nombre_personne, m.titre as menu_titre, 
-                    c.prix_total, 
-                    c.date_prestation, c.heure_livraison, 
-                    l.adresse, l.ville, l.code_postal
-             FROM vg_commande c
-             JOIN vg_menu m ON c.menu_id = m.menu_id
-             JOIN vg_lieu_prestation l ON c.lieu_prestation_id = l.id
-             WHERE c.commande_id = :orderID";
-                $stmtCheck = $pdo->prepare($sqlCheck);
-                $stmtCheck->execute(['orderID' => $commande_id]);
-                $result = $stmtCheck->fetch(\PDO::FETCH_ASSOC);
+                $result = OrderManager::getOrderWithDetailsForUser($db, (int)$commande_id, (int)$_SESSION['user_id']);
 
-                if (!$result || (int)$result['utilisateur_id'] !== (int)$_SESSION['user_id']) {
+                if (!$result) {
                     throw new \Exception("Commande non trouvée ou accès refusé.");
                 }
 
@@ -45,18 +38,11 @@ class EraseOrderController
                     throw new \Exception("Seules les commandes en attente peuvent être annulées.");
                 }
 
-                // Annuler la commande
-                $sqlUpdate = "UPDATE vg_commande SET statut = 'annulee' WHERE commande_id = :orderID";
-                $stmtUpdate = $pdo->prepare($sqlUpdate);
-                $stmtUpdate->execute(['orderID' => $commande_id]);
+               
 
-                // Restituer le stock du menu correspondant au menu annulé
-                $sqlRestituer = "UPDATE vg_menu SET quantite_restante = quantite_restante + :quantite WHERE menu_id = :menu_id";
-                $stmtRestituer = $pdo->prepare($sqlRestituer);
-                $stmtRestituer->execute([
-                    'quantite' => (int)$result['nombre_personne'],
-                    'menu_id'  => (int)$result['menu_id']
-                ]);
+OrderManager::cancelOrderForUser($db, (int)$commande_id, (int)$_SESSION['user_id']);
+
+
                 try {
                     $orderDetails = [
                         'commande_id'     => $commande_id,

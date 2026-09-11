@@ -26,6 +26,9 @@
                     <?php endif; ?>
 
                     <form method="POST" action="index.php?page=forgot-password">
+                        <input type="hidden"
+       name="csrf_token"
+       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                         <div class="mb-3">
                             <label for="email" class="form-label fw-semibold">Adresse email</label>
                             <input type="email" name="email" id="email" class="form-control <?= isset($errors['email']) ? 'is-invalid' : '' ?>" placeholder="nom@exemple.com" required>

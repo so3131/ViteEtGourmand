@@ -11,9 +11,7 @@ class SuccessController
     public static function successMessage(\PDO $db)
     {
         $title = "Message envoyé - Vite & Gourmand";
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
+       
         require_once ROOT_PATH . '/app/views/layout/header.php';
         require_once ROOT_PATH . '/app/views/contact.success.view.php';
         require_once ROOT_PATH . '/app/views/layout/footer.php';

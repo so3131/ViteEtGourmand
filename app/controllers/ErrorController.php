@@ -10,8 +10,7 @@ class ErrorController
     public static function notFound(\PDO $db)
     {
         $title = "Page introuvable - Vite & Gourmand";
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+   
 
         require_once ROOT_PATH . '/app/views/layout/header.php';
         require_once ROOT_PATH . '/app/views/404.view.php';

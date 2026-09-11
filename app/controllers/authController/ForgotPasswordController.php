@@ -3,9 +3,13 @@
 namespace App\Controllers\AuthController;
 
 use App\Helpers\MailService;
+use App\Helpers\SecurityManager;
 
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 require_once ROOT_PATH . '/app/helpers/FormHelper.php';
+
+use App\Controllers\AuthController\Auth;
+use App\Managers\UserManager;
 
 class ForgotPasswordController
 {
@@ -16,6 +20,7 @@ class ForgotPasswordController
         $success = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            SecurityManager::validatePost('?page=forgot-password');
             $email = trim($_POST['email'] ?? '');
 
             // Validation de l'email
@@ -23,28 +28,26 @@ class ForgotPasswordController
                 $errors['email'] = "Veuillez entrer une adresse email valide.";
             } else {
                 //Recherche utilisateur (on récupère aussi le prénom pour le mail)
-                $stmt = $db->prepare("SELECT email, prenom FROM vg_utilisateur WHERE email = :email");
-                $stmt->execute(['email' => $email]);
-                $user = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-                // Verifier Si l'utilisateur existe bien en base
-                if ($user !== false) {
-                    // Génération du token
-                    $token = bin2hex(random_bytes(32));
-                    $expires_at = date('Y-m-d H:i:s', strtotime('+30 minutes'));
+                // findByEmail retourne null si le compte n'existe pas.
+                $user = UserManager::findByEmail($db, $email);
 
-                    $stmt = $db->prepare("INSERT INTO vg_password_resets (email, token, expires_at) 
-                                     VALUES (:email, :token, :expires_at)
-                                     ON DUPLICATE KEY UPDATE token = :token, expires_at = :expires_at");
-                    $stmt->execute(['email' => $email, 'token' => $token, 'expires_at' => $expires_at]);
+                if ($user) {
+                    // Génération + stockage du token (hashé) via le Manager
+                    $token = UserManager::createPasswordResetToken($db, $email);
 
-                    $resetLink = "http://localhost/Projet_Vite_Gourmand_Finale/public/index.php?page=reset-password&token=" . $token;
+                    $appUrl = rtrim(getenv('APP_URL'), '/');
+                    $resetLink = $appUrl
+                        . '/index.php?page=reset-password&token='
+                        . urlencode($token);
 
                     // Appel du service mail en passant l'e-mail et le prénom
-                    MailService::sendResetEmail($email, $resetLink, $user['prenom']);
+                    $prenom = $user['prenom'] ?? 'Utilisateur';
+                    MailService::sendResetEmail($email, $resetLink, $prenom);
                 }
 
-                //Message de succès identique dans tous les cas par securité pour ne pas révéler si l'email est enregistré ou non
+                // Message de succès identique dans tous les cas par sécurité
+                // pour ne pas révéler si l'email est enregistré ou non
                 $success = "Si un compte est associé à cette adresse, vous avez reçu un lien de réinitialisation par mail.";
             }
         }

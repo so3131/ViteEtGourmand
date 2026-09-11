@@ -5,6 +5,7 @@ namespace App\Controllers\StaffCommon;
 use App\Controllers\AuthController\Auth;
 use App\Managers\MenuManager;
 use App\Helpers\SecurityManager;
+use App\Managers\PlatManager;
 // Class MenuManagementController pour gérer la gestion des menus (accessible aux admins et employés)
 class MenuManagementController
 {
@@ -20,80 +21,33 @@ class MenuManagementController
         SecurityManager::validatePost('?page=menu-management');
         if (isset($_POST['submit'])) {
             try {
-                //Démarrer la transaction
-                $db->beginTransaction();
+                // Champs optionnels (null si non renseignés)
+                $menuData = $_POST;
+                $menuData['theme_id'] = !empty($_POST['theme_id']) ? (int)$_POST['theme_id'] : null;
+                $menuData['regime_id'] = !empty($_POST['regime_id']) ? (int)$_POST['regime_id'] : null;
+                $menuData['conditions'] = $_POST['conditions'] ?? null;
 
-                // Récupérer et sécuriser les champs optionnels
-                $theme_id = !empty($_POST['theme_id']) ? $_POST['theme_id'] : null;
-                $regime_id = !empty($_POST['regime_id']) ? $_POST['regime_id'] : null;
+                $plats = (!empty($_POST['plats']) && is_array($_POST['plats'])) ? $_POST['plats'] : [];
 
-                // Préparation de l'insertion
-                $sqlMenu = "INSERT INTO vg_menu (
-                    titre, 
-                    nombre_personne_minimum, 
-                    prix_par_personne, 
-                    description_menu, 
-                    quantite_restante, 
-                    delai_commande, 
-                    conditions_stockage,
-                    theme_id,
-                    regime_id
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                $stmt = $db->prepare($sqlMenu);
-                $stmt->execute([
-                    $_POST['titre'],
-                    $_POST['min_personne'],
-                    $_POST['prix'],
-                    $_POST['description'],
-                    $_POST['quantite'],
-                    $_POST['delai'],
-                    $_POST['conditions'] ?? null,
-                    $theme_id,
-                    $regime_id
-                ]);
-
-                //Récupérer l'ID du menu fraîchement créé
-                $menu_id = $db->lastInsertId();
-
-                // Inserer les liens dans 'vg_menu_plat'
-                if (!empty($_POST['plats']) && is_array($_POST['plats'])) {
-                    $sqlLiaison = "INSERT INTO vg_menu_plat (menu_id, plat_id) VALUES (?, ?)";
-                    $stmtLiaison = $db->prepare($sqlLiaison);
-
-                    foreach ($_POST['plats'] as $plat_id) {
-                        $stmtLiaison->execute([(int)$menu_id, (int)$plat_id]);
-                    }
-                }
-
-                // Valider de la transaction
-                $db->commit();
+                MenuManager::create($db, $menuData, $plats);
 
                 header("Location: index.php?page=menu-management&success=1");
                 exit();
             } catch (\Exception $e) {
-                // Annulation en cas d'erreur
-                if ($db->inTransaction()) {
-                    $db->rollBack();
-                }
                 $_SESSION['error'] = "Erreur lors de l'ajout du menu : " . $e->getMessage();
                 header("Location: index.php?page=menu-management&error=1");
                 exit();
             }
         }
     }
+
     //function pour récupérer tous les plats avec leur nombre de menus associés
     public static function getAllPlats(\PDO $db)
     {
-        $sql = "SELECT p.plat_id, p.titre_plat, p.description_plat, p.categorie, p.photo, p.is_active,
-                       COUNT(mp.menu_id) as nb_menus
-                FROM vg_plat p
-                LEFT JOIN vg_menu_plat mp ON p.plat_id = mp.plat_id
-                GROUP BY p.plat_id
-                ORDER BY p.categorie ASC, p.titre_plat ASC";
-        return $db->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
+        $all_plats = PlatManager::getAllWithMenuCount($db);
+        return $all_plats;
     }
-    // Fonction pour supprimer un plat (Soft delete si lié à un menu)
+    // Fonction pour supprimer un plat (Soft delete possiblesi lié à un menu)
     public static function deletePlat(\PDO $db, $plat_id = null)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -109,31 +63,18 @@ class MenuManagementController
         }
 
         try {
-
-            $stmtCheck = $db->prepare("SELECT COUNT(*) FROM vg_menu_plat WHERE plat_id = ?");
-            $stmtCheck->execute([$plat_id]);
-            $hasMenus = $stmtCheck->fetchColumn() > 0;
-
+            $hasMenus = PlatManager::countLinkedMenus($db, $plat_id) > 0;
             if ($hasMenus) {
-
-                $stmtUpdate = $db->prepare("UPDATE vg_plat SET is_active = 0 WHERE plat_id = ?");
-                $stmtUpdate->execute([$plat_id]);
+                PlatManager::deactivate($db, $plat_id);
                 $_SESSION['success'] = "Ce plat est lié à un menu : il a été désactivé (archivé).";
             } else {
-
-                $stmtPhoto = $db->prepare("SELECT photo FROM vg_plat WHERE plat_id = ?");
-                $stmtPhoto->execute([$plat_id]);
-                $photo = $stmtPhoto->fetchColumn();
-
-
-                $stmtDel = $db->prepare("DELETE FROM vg_plat WHERE plat_id = ?");
-                $stmtDel->execute([$plat_id]);
-
-
+                $plat = PlatManager::getById($db, $plat_id);
+                $photo = $plat['photo'] ?? '';
+                PlatManager::delete($db, $plat_id);
+                // suppression du fichier photo
                 if (!empty($photo) && file_exists(ROOT_PATH . '/public/' . $photo)) {
                     @unlink(ROOT_PATH . '/public/' . $photo);
                 }
-
                 $_SESSION['success'] = "Le plat a été définitivement supprimé.";
             }
         } catch (\PDOException $e) {
@@ -144,6 +85,8 @@ class MenuManagementController
         exit();
     }
     // Function pour ajouter un plat
+
+
     public static function addPlatProcess(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -167,12 +110,30 @@ class MenuManagementController
             $fileTmp = $_FILES['photo']['tmp_name'];
             $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-            if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
-                $newFileName = md5(time() . $fileName) . '.' . $ext;
+            $finfo = new \finfo(FILEINFO_MIME_TYPE);
+            $mime = $finfo->file($fileTmp);
+
+            $allowedMimeTypes = [
+                'image/jpeg' => 'jpg',
+                'image/png'  => 'png',
+                'image/webp' => 'webp'
+            ];
+
+            $maxFileSize = 5 * 1024 * 1024;
+
+            if (
+                isset($allowedMimeTypes[$mime]) &&
+                $_FILES['photo']['size'] <= $maxFileSize
+            ) {
+                $safeExtension = $allowedMimeTypes[$mime];
+                $newFileName = bin2hex(random_bytes(16)) . '.' . $safeExtension;
+
                 $uploadDir = ROOT_PATH . '/public/assets/uploads/plats/';
+
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
                 }
+
                 if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
                     $photoPath = 'assets/uploads/plats/' . $newFileName;
                 }
@@ -180,26 +141,9 @@ class MenuManagementController
         }
 
         try {
-            $db->beginTransaction();
-
-
-            $stmt = $db->prepare("INSERT INTO vg_plat (titre_plat, description_plat, categorie, photo, is_active) VALUES (?, ?, ?, ?, 1)");
-            $stmt->execute([$titre, $description, $categorie, $photoPath]);
-            $platId = $db->lastInsertId();
-
-            if (!empty($allergenes) && is_array($allergenes)) {
-                $stmtAllergenes = $db->prepare("INSERT INTO vg_allergene_plat (plat_id, allergene_id) VALUES (?, ?)");
-                foreach ($allergenes as $allergeneId) {
-                    $stmtAllergenes->execute([$platId, (int)$allergeneId]);
-                }
-            }
-
-            $db->commit();
-            $_SESSION['success'] = "Le plat a été ajouté avec succès !";
+            $platId = PlatManager::create($db, $titre, $description, $categorie, $photoPath, $allergenes);
         } catch (\Exception $e) {
-            if ($db->inTransaction()) {
-                $db->rollBack();
-            }
+
             $_SESSION['error'] = "Erreur lors de l'ajout du plat : " . $e->getMessage();
         }
 
@@ -218,66 +162,57 @@ class MenuManagementController
         }
 
         try {
-            $stmt = $db->prepare("UPDATE vg_plat SET is_active = 1 WHERE plat_id = ?");
-            $stmt->execute([$plat_id]);
+            PlatManager::activate($db, (int)$plat_id);
             header('Location: index.php?page=menu-management&success=activated');
         } catch (\Exception $e) {
             header('Location: index.php?page=menu-management&error=activation_failed');
         }
         exit();
     }
-    //function pour récupérer tous les menus
-    public static function getMenus(\PDO $db)
-    {
-        $sql = "SELECT m.*, 
-            GROUP_CONCAT(p.titre_plat SEPARATOR ', ') as liste_plats,
-            (SELECT COUNT(*) FROM vg_commande c WHERE c.menu_id = m.menu_id) as nb_commandes
-            FROM vg_menu m
-            LEFT JOIN vg_menu_plat mp ON m.menu_id = mp.menu_id
-            LEFT JOIN vg_plat p ON mp.plat_id = p.plat_id
-            GROUP BY m.menu_id
-            ORDER BY m.menu_id DESC";
 
-        return $db->query($sql)->fetchAll(\PDO::FETCH_ASSOC);
-    }
-    // function pour effacer un menu (soft delete si lié à des commandes, sinon suppression physique)
-    public static function deleteMenu(\PDO $db, $menu_id)
+    // function pour effacer un menu (soft delete si commande en cours, sinon choix soft delete ou suppression physique)
+    public static function deleteMenu(\PDO $db, $menu_id = null)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
+        SecurityManager::validatePost('?page=menu-management');
+
+        $menu_id = $menu_id ?? $_POST['menu_id'] ?? $_GET['menu_id'] ?? $_POST['id'] ?? null;
+        $actionType = $_POST['action_type'] ?? 'delete'; // 'delete' ou 'disable'
 
         if (empty($menu_id)) {
             die("Erreur : Aucun ID de menu reçu !");
         }
 
-        SecurityManager::validatePost('?page=menu-management');
-
-
         try {
-            //Vérifier si le menu est lié à au moins une commande
-            $stmtCheck = $db->prepare("SELECT COUNT(*) FROM vg_commande WHERE menu_id = ?");
-            $stmtCheck->execute([$menu_id]);
-            $hasOrders = $stmtCheck->fetchColumn() > 0;
+            // Vérifier si le menu est lié à au moins une commande EN COURS
+
+        $hasActiveOrders = MenuManager::countActiveOrders($db, (int)$menu_id) > 0;
+
 
             $db->beginTransaction();
 
-            if ($hasOrders) {
-                // Si commandes : soft delete
-
-                $stmtUpdate = $db->prepare("UPDATE vg_menu SET is_active = 0 WHERE menu_id = ?");
-                $stmtUpdate->execute([$menu_id]);
+            if ($hasActiveOrders) {
+                // Si commande en cours : Soft delete obligatoire
+               MenuManager::deactivate($db, (int)$menu_id);
 
                 $db->commit();
-                header('Location: index.php?page=menu-management&success=deactivated');
+                header('Location: index.php?page=menu-management&success=deactivated_active_orders');
             } else {
-                // Si aucune commande: Suppression ok
-                $stmtDelLinks = $db->prepare("DELETE FROM vg_menu_plat WHERE menu_id = ?");
-                $stmtDelLinks->execute([$menu_id]);
+                // Pas de commande en cours : Application du choix (soft delete ou suppression définitive)
+                if ($actionType === 'disable') {
+                    MenuManager::deactivate($db, (int)$menu_id);
 
-                $stmtDelMenu = $db->prepare("DELETE FROM vg_menu WHERE menu_id = ?");
-                $stmtDelMenu->execute([$menu_id]);
 
-                $db->commit();
-                header('Location: index.php?page=menu-management&success=deleted');
+                    $db->commit();
+                    header('Location: index.php?page=menu-management&success=deactivated');
+                } else {
+                    // Suppression définitive
+                 MenuManager::deleteLinks($db, (int)$menu_id);
+MenuManager::deleteHard($db, (int)$menu_id);
+
+                    $db->commit();
+                    header('Location: index.php?page=menu-management&success=deleted');
+                }
             }
         } catch (\Exception $e) {
             if ($db->inTransaction()) {
@@ -298,8 +233,10 @@ class MenuManagementController
         }
 
         try {
-            $stmt = $db->prepare("UPDATE vg_menu SET is_active = 1 WHERE menu_id = ?");
-            $stmt->execute([$menu_id]);
+            
+MenuManager::activate($db, (int)$menu_id);
+
+
 
             header('Location: index.php?page=menu-management&success=activated');
         } catch (\Exception $e) {
@@ -312,6 +249,22 @@ class MenuManagementController
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
         header('Content-Type: application/json');
+
+        $csrfToken = $_POST['csrf_token'] ?? '';
+        $sessionToken = $_SESSION['csrf_token'] ?? '';
+
+        if (
+            empty($sessionToken) ||
+            empty($csrfToken) ||
+            !hash_equals($sessionToken, $csrfToken)
+        ) {
+            http_response_code(403);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Requête invalide ou session expirée.'
+            ]);
+            exit();
+        }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $titre_plat = $_POST['titre_plat'] ?? '';
@@ -326,56 +279,59 @@ class MenuManagementController
             }
 
             $photoPath = null;
+
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
                 $fileTmpPath = $_FILES['photo']['tmp_name'];
-                $fileName = $_FILES['photo']['name'];
-                $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+                $fileSize = (int)$_FILES['photo']['size'];
 
-                $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
-                if (in_array($fileExtension, $allowedExtensions)) {
-                    $newFileName = md5(time() . $fileName) . '.' . $fileExtension;
-                    $uploadFileDir = ROOT_PATH . '/public/assets/uploads/plats/';
-                    if (!is_dir($uploadFileDir)) {
-                        mkdir($uploadFileDir, 0755, true);
-                    }
-                    if (move_uploaded_file($fileTmpPath, $uploadFileDir . $newFileName)) {
-                        $photoPath = 'assets/uploads/plats/' . $newFileName;
-                    }
+                $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                $mime = $finfo->file($fileTmpPath);
+
+                $allowedMimeTypes = [
+                    'image/jpeg' => 'jpg',
+                    'image/png'  => 'png',
+                    'image/webp' => 'webp'
+                ];
+
+                if (!isset($allowedMimeTypes[$mime])) {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Format d’image non autorisé. Utilisez JPG, PNG ou WebP.'
+                    ]);
+                    exit();
                 }
+
+                if ($fileSize > 5 * 1024 * 1024) {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'L’image ne doit pas dépasser 5 Mo.'
+                    ]);
+                    exit();
+                }
+
+                $safeExtension = $allowedMimeTypes[$mime];
+                $newFileName = bin2hex(random_bytes(16)) . '.' . $safeExtension;
+                $uploadDir = ROOT_PATH . '/public/assets/uploads/plats/';
+
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                if (!move_uploaded_file($fileTmpPath, $uploadDir . $newFileName)) {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Impossible d’enregistrer l’image.'
+                    ]);
+                    exit();
+                }
+
+                $photoPath = 'assets/uploads/plats/' . $newFileName;
             }
-
             try {
-                $db->beginTransaction();
-
-                // Insertion du plat
-                $sql = "INSERT INTO vg_plat (titre_plat, description_plat, categorie, photo) 
-                    VALUES (:titre_plat, :description_plat, :categorie, :photo)";
-                $stmt = $db->prepare($sql);
-                $stmt->execute([
-                    'titre_plat' => $titre_plat,
-                    'description_plat' => $description,
-                    'categorie' => $categorie,
-                    'photo' => $photoPath
-                ]);
-
-                $plat_id = $db->lastInsertId();
-
-                //Insertion des liens dans la table pivot des allergènes
-                if (!empty($allergenes) && is_array($allergenes)) {
-                    $sqlPivot = "INSERT INTO vg_allergene_plat (plat_id, allergene_id) VALUES (?, ?)";
-                    $stmtPivot = $db->prepare($sqlPivot);
-                    foreach ($allergenes as $allergene_id) {
-                        $stmtPivot->execute([(int)$plat_id, (int)$allergene_id]);
-                    }
-                }
-
-                $db->commit();
+                $plat_id = PlatManager::create($db, $titre_plat, $description, $categorie, $photoPath, $allergenes);
                 echo json_encode(['success' => true, 'plat_id' => $plat_id]);
                 exit();
             } catch (\Exception $e) {
-                if ($db->inTransaction()) {
-                    $db->rollBack();
-                }
                 echo json_encode(['success' => false, 'message' => $e->getMessage()]);
                 exit();
             }
@@ -385,12 +341,12 @@ class MenuManagementController
     public static function MenuManagement(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
-        $menus = self::getMenus($db);
-        $all_plats = self::getAllPlats($db);
+        $menus = MenuManager::getMenusManagement($db);
+        $all_plats = PlatManager::getAllWithMenuCount($db);
         $all_allergenes = MenuManager::getAllAllergenes($db);
         $specific_styles = [
             'assets/css/bootstrap/bootstrap.min.css',
-            'assets/css/Admin/AdminEmployee.css'
+            'assets/css/AdminEmployee/AdminEmployee.css'
         ];
         $specific_scripts = [
             'assets/javascript/AddMenu.js',

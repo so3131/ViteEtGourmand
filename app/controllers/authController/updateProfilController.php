@@ -5,6 +5,8 @@ namespace App\Controllers\AuthController;
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 
 use App\Controllers\AuthController\Auth;
+use App\Helpers\SecurityManager;
+use App\Managers\UserManager;
 
 // Class UpdateProfilController pour gérer la mise à jour du profil des utilisateurs
 class UpdateProfilController
@@ -14,24 +16,19 @@ class UpdateProfilController
     {
         Auth::checkLogin();
 
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         $error = null;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérification CSRF
-           if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
+            if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
                 $error = "Session expirée ou requête invalide. Veuillez recharger la page.";
             }
-            $updates = [];
-            $params = ['id' => $_SESSION['user_id']];
+
+
 
             // Charger les données actuelles depuis la DB
-            $sqlGet = "SELECT nom, prenom, telephone, ville, pays, adresse_postale FROM vg_utilisateur WHERE utilisateur_id = :id";
-            $stmtGet = $pdo->prepare($sqlGet);
-            $stmtGet->execute(['id' => $_SESSION['user_id']]);
-            $currentData = $stmtGet->fetch(\PDO::FETCH_ASSOC);
+            $currentData = UserManager::findById($db, $_SESSION['user_id']);
 
             // Mapping des champs du formulaire vers les colonnes de la base de données
             $champsModifiables = [
@@ -42,27 +39,23 @@ class UpdateProfilController
                 'ville'         => 'ville',
                 'pays'          => 'pays'
             ];
-
+            $updates = [];
             foreach ($champsModifiables as $postKey => $dbCol) {
                 if (isset($_POST[$postKey]) && $_POST[$postKey] !== '') {
                     $value = htmlspecialchars(trim($_POST[$postKey]));
 
                     // Vérifier si la valeur a changé par rapport à la base
                     if (!isset($currentData[$dbCol]) || $value !== $currentData[$dbCol]) {
-                        $updates[] = "$dbCol = :$dbCol";
-                        $params[$dbCol] = $value;
+                        $updates[$dbCol] = $value;
                         $_SESSION[$dbCol] = $value;
                     }
                 }
             }
 
-            // Si pas d'erreurs et qu'il y a des mises à jour à faire, on exécute la requête
+            // Si pas d'erreurs et qu'il y a des mises à jour à faire, on exécute
             if ($error === null && !empty($updates)) {
                 try {
-                    $sql = "UPDATE vg_utilisateur SET " . implode(', ', $updates) . " WHERE utilisateur_id = :id";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute($params);
-
+                    UserManager::updateProfil($db, $_SESSION['user_id'], $updates);
                     header('Location: index.php?page=dashboard-user&success=1');
                     exit();
                 } catch (\PDOException $e) {

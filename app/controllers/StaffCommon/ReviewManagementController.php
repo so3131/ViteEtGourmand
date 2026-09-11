@@ -14,8 +14,6 @@ class ReviewManagementController
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
 
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         $statusFilter = $_GET['status'] ?? null;
 

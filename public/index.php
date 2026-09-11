@@ -1,6 +1,8 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+//! Production : ne jamais afficher les erreurs
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
 // Ce fichier est le point d'entrée de l'application. Il reçoit toutes les requêtes, gère la session, et redirige vers le bon contrôleur en fonction de la page demandée.
@@ -13,9 +15,20 @@ require_once dirname(__DIR__) . '/app/Helpers/FormHelper.php';
 
 \App\Autoloader::register();
 
+// Configuration sécurisée des cookies de session
+session_set_cookie_params([
+    'lifetime' => 0,                 // (Cookie de session)
+    'path'     => '/',
+    'domain'   => '',
+    'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',  // true uniquement en HTTPS (prod)
+    'httponly' => true, // (anti-XSS)
+    'samesite' => 'Lax'              // (Anti-CSRF)
+]);
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
@@ -104,6 +117,12 @@ $route = match ($page) {
         'action' => 'storeReview',
         'params' => ['db']
     ],
+    'deactivate-account' => [
+        'class' => '\App\Controllers\AuthController\DeactivateAccountController',
+        'action' => 'deactivateAccount',
+        'params' => ['db']
+    ],
+
 
     // Admin
 
@@ -123,6 +142,7 @@ $route = match ($page) {
     ],
     'ban-user'           => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'banUser'],
     'unban-user'         => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'unBanUser'],
+    
 
 
 
@@ -168,7 +188,7 @@ $route = match ($page) {
         'action' => 'createPlatAjax',
         'params' => ['db']
     ],
-        'add-plat-process' => [
+    'add-plat-process' => [
         'class' => '\App\Controllers\StaffCommon\MenuManagementController',
         'action' => 'addPlatProcess',
         'params' => ['db']

@@ -14,7 +14,9 @@
 <div class="container mt-4">
     <div class="card p-4 shadow-sm">
         <form action="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=2" method="POST">
-            
+          <input type="hidden"
+       name="csrf_token"
+       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">  
  <div class="mb-3">
     <label class="form-label">Souhaitez-vous louer du matériel de service ?</label>
 

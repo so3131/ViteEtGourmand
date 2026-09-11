@@ -31,6 +31,10 @@
             <?php else: ?>
                 <!-- Formulaire de réinitialisation -->
                 <form action="index.php?page=reset-password&token=<?= htmlspecialchars($_GET['token'] ?? '') ?>" method="POST">
+                    <input type="hidden"
+       name="csrf_token"
+       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+
                     
                     <div class="mb-3">
                         <?php 

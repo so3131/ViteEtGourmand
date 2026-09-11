@@ -1,49 +1,120 @@
+/* ===== TYPOGRAPHIE ===== */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
 /* ==========================================================================
-   CHARTE GRAPHIQUE : DORÉ & VERT OLIVE (Vite & Gourmand)
+   CHARTE GRAPHIQUE : DORÉ Accent & VERT OLIVE (Vite & Gourmand)
    ========================================================================== */
 
 /* 1. PALETTE DE COULEURS ET VARIABLES */
 :root {
-    --color-gold: #DAA520;           /* Jaune Doré chaud */
-    --color-gold-hover: #b8860b;     /* Doré plus foncé pour le survol */
-    --color-olive: #556B2F;          /* Vert Olive profond */
-    --color-olive-light: #6b8e23;    /* Vert Olive clair */
-    --color-dark: #212529;           /* Anthracite / Fond sombre */
-    --color-bg-light: #f8f9fa;       /* Blanc cassé pour le fond */
-    --color-bg-dark: #343a40;        /* Gris foncé pour le texte sur fond clair */
+  --color-olive: #556b2f; /* Vert Olive profond */
 
-    /* ===== TYPOGRAPHIE ===== */
-    --font-family: 'Lexend', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-size-base: 1rem;
-    --font-size-h1-accueil: 2.5rem;
-    --font-size-h2-accueil: 2rem;
-    --font-size-lead: 1.25rem;
+  --color-olive-light: #6b8e23; /* Vert Olive clair */
+  --color-dark: #212529; /* Anthracite / Fond sombre */
+  --color-bg-light: #f8f9fa; /* Blanc cassé pour le fond */
+  --color-bg-dark: #343a40; /* Gris foncé */
+  --color-white: #ffffff; /* Blanc pur */
+  
+  /* ===== PRINCIPALE (Charcoal élégant) ===== */
+  --color-primary: #2c3e50; /* Bleu nuit / Charcoal */
 
-    /* ===== ESPACEMENTS ===== */
-    --spacing-xs: 0.25rem;  
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
-    --spacing-3xl: 3rem;
+  /* ===== ACCENT (Or ) ===== */
+  --color-accent: #c9a227; /* Or antique  */
+  --color-accent-hover: #92631d; /* Or foncé au survol */
 
-    /* ===== OMBRES (SHADOWS) ===== */
-    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.1);
-    --shadow-button: 0 4px 15px rgba(218, 165, 32, 0.3);      /* Harmonisé en doré */
-    --shadow-button-hover: 0 6px 20px rgba(218, 165, 32, 0.4); /* Harmonisé en doré */
+  /* ===== NEUTRES (Fonds et textes) ===== */
+  --color-bg: #f4f6f8; /* Gris bleuté très clair (fond page) */
+  --color-surface: #ffffff; /* Blanc (cards, top-bar) */
+  --color-sidebar: #1a252f; /* Fond sidebar */
 
-    /* ===== RAYONS DE BORDURE (BORDER RADIUS) ===== */
-    --border-radius-sm: 0.5rem;
-    --border-radius-md: 12px;
-    --border-radius-lg: 1rem;
-    --border-radius-card: 16px;
+  /* ===== TEXTES ===== */
+  --color-text: #2c3e50; /* Texte principal (charcoal) */
 
-    /* ===== TRANSITIONS ===== */
-    --transition-fast: 150ms ease;
-    --transition-base: all 0.3s ease;
+  /* ===== ACTIONS ===== */
+  --color-danger: #dc3545; /* Rouge (logout, suppression) */
+  --color-success: #198754; /* Vert (succès, validation) */
+  --color-info: #0d6efd; /* Bleu (info) */
 
-    /* ===== DIMENSIONS CONTENEUR ===== */
-    --max-width-container: 1200px;
+  /* ===== BORDURES ===== */
+  --color-border: #e9ecef; /* Bordure claire */
+  --color-border-dark: rgba(255, 255, 255, 0.1); /* Bordure sur fond foncé */
+
+  --font-family-public-body: "Inter", sans-serif;
+  --font-family-public-heading: "Plus Jakarta Sans", sans-serif;
+  --font-family-gestion:
+    system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* ===== POIDS POLICE ===== */
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ===== ACCESSIBILITÉ ===== */
+  --min-touch-target: 44px;
+
+  /* ===== BORDURES COMPOSITES ===== */
+  --border-accent: 2px solid var(--color-accent);
+
+  /* ===== PADDING COMPOSITES ===== */
+  --padding-btn: 12px 15px;
+
+  /* ===== ALIGNEMENT ===== */
+  --text-align-center: center;
+  --text-align-left: left;
+  --text-align-right: right;
+
+
+  --font-size-base: 1rem;
+  --font-size-h1-accueil: 2.5rem;
+  --font-size-h2-accueil: 2rem;
+  --font-size-lead: 1.25rem;
+
+  /* ===== ESPACEMENTS ===== */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-3xl: 3rem;
+
+  /* ===== OMBRES (SHADOWS) ===== */
+  --shadow-xs: 0 2px 5px rgba(0, 0, 0, 0.05);
+
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.1);
+  --shadow-button: 0 4px 15px rgba(218, 165, 32, 0.3); /* Harmonisé en doré */
+  --shadow-button-hover: 0 6px 20px rgba(218, 165, 32, 0.4); /* Harmonisé en doré */
+
+  /* ===== RAYONS DE BORDURE (BORDER RADIUS) ===== */
+  --border-radius-sm: 0.5rem;
+  --border-radius-md: 12px;
+  --border-radius-lg: 1rem;
+  --border-radius-card: 16px;
+
+  /* ===== TRANSITIONS ===== */
+  --transition-fast: 150ms ease;
+  --transition-base: all 0.3s ease;
+
+  /* ===== DIMENSIONS CONTENEUR ===== */
+  --max-width-container: 1200px;
+
+  /* ===== DIMENSIONS ===== */
+  --sidebar-width: 260px;
+}
+
+body {
+  font-family: var(--font-family-public-body);
+}
+
+h1,
+h2,
+h3,
+.card-title {
+  font-family: var(--font-family-public-heading);
+}
+
+/* Bascule automatique pour l'espace admin/staff */
+body.admin-theme {
+  --font-family-public-body: var(--font-family-gestion);
+  --font-family-public-heading: var(--font-family-gestion);
 }

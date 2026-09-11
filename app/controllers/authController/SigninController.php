@@ -7,6 +7,7 @@ require_once __DIR__ . '/Auth.php';
 
 use App\Helpers\MailService;
 use App\Controllers\AuthController\Auth;
+use App\Managers\UserManager;
 
 // Class SigninController pour gérer l'inscription des utilisateurs
 class SigninController
@@ -20,9 +21,8 @@ class SigninController
         if (isset($_GET['redirect'])) {
             $_SESSION['redirect_after_login'] = $_GET['redirect'];
         }
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $error = null;
+       
+       
 
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -58,11 +58,9 @@ class SigninController
 
             if (empty($errors)) {
 
+$existingUser = UserManager::findByEmail($db, $email);
+if ($existingUser) {
 
-                $stmtCheck = $db->prepare("SELECT email FROM vg_utilisateur WHERE email = :email");
-                $stmtCheck->execute(['email' => $email]);
-
-                if ($stmtCheck->fetch()) {
                     $errors['email'] = "Cet email est déjà utilisé par un autre compte.";
                 } else {
 
@@ -70,27 +68,18 @@ class SigninController
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
                     try {
-                        $sql = "INSERT INTO vg_utilisateur (nom, prenom, telephone, email, password, role_id, adresse_postale, ville, pays) 
-                        VALUES (:nom, :prenom, :telephone, :email, :password, 3, :adresse_postale, :ville, :pays)";
+                    $userId = UserManager::create($db, [
+                        'nom' => $nom,
+                        'prenom' => $prenom,
+                        'telephone' => $gsm,
+                        'email' => $email,
+                        'password' => $hashedPassword,
+                        'adresse_postale' => $adresse_postale,
+                        'ville' => $ville,
+                        'pays' => $pays
+                    ]);
+                    $user = UserManager::findById($db, $userId);
 
-                        $stmt = $db->prepare($sql);
-                        $stmt->execute([
-                            'nom'             => $nom,
-                            'prenom'          => $prenom,
-                            'telephone'       => $gsm,
-                            'email'           => $email,
-                            'password'        => $hashedPassword,
-                            'adresse_postale' => $adresse_postale,
-                            'ville'           => $ville,
-                            'pays'            => $pays
-                        ]);
-
-                        $userId = $db->lastInsertId();
-
-                        // Récupération des données pour la session
-                        $stmtSelect = $db->prepare("SELECT * FROM vg_utilisateur WHERE utilisateur_id = :id");
-                        $stmtSelect->execute(['id' => $userId]);
-                        $user = $stmtSelect->fetch(\PDO::FETCH_ASSOC);
 
                         if ($user) {
                             Auth::setUserSession($user);

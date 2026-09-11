@@ -101,17 +101,35 @@
                             <?= !empty($menu['conditions_stockage']) ? htmlspecialchars($menu['conditions_stockage']) : 'Aucune précaution particulière' ?>
                         </strong>
                     </p>
-                   <?php if ($canOrder): ?>
+                    <!-- Bouton de commande ou redirection vers la page de connexion, sauf si staff button grisé avec message -->
+               
+
+<?php if ((int)($menu['quantite_restante'] ?? 0) <= 0): ?>
+    <!-- Menu en rupture de stock -->
+    <button class="btn btn-secondary btn-lg w-100" disabled>
+        <i class="fa-solid fa-triangle-exclamation"></i> Rupture de stock
+    </button>
+<?php elseif ($canOrder): ?>
+    <!-- Utilisateur connecté et peut commander -->
     <a href="index.php?page=order-menu&menu_id=<?= $menu['menu_id'] ?>&step=0" 
        class="btn btn-primary btn-lg w-100">
        Commander ce menu
     </a>
 <?php else: ?>
+    <!-- Utilisateur non connecté -->
     <a href="index.php?page=login&redirect=<?= urlencode('index.php?page=order-menu&menu_id=' . $menu['menu_id'] . '&step=0') ?>" 
        class="btn btn-primary btn-lg w-100">
        Nous rejoindre pour commander
     </a>
 <?php endif; ?>
+
+<!-- Message staff -->
+<?php if (isset($_SESSION['role_id']) && in_array((int)$_SESSION['role_id'], [ROLE_ADMIN, ROLE_EMPLOYE])): ?>
+    <div class="alert alert-warning mt-3">
+        <strong>Note :</strong> En tant que membre du staff, vous ne pouvez pas passer de commandes. Merci de vous connecter en tant qu'utilisateur pour commander.
+    </div>
+<?php endif; ?>
+
                     
                 </div>
 

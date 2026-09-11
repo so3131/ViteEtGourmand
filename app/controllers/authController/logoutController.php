@@ -10,8 +10,6 @@ class LogoutController
     // function pour gérer la déconnexion des utilisateurs
     public static function logOut(\PDO $db)
     {
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         //  Récupère la session avant de tester son statut
         if (session_status() == PHP_SESSION_NONE) {
             session_start();

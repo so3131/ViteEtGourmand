@@ -1,8 +1,26 @@
+.titre-search{
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    text-align: center;
+    
+    background-color: var(--color-bg-light);
+    
+}
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    text-align: center;
+    
+    background-color: var(--color-bg-light);
+    
+}
 .carousel-item img {
-    width: 100%;       /* L'image prend toute la largeur de la boîte */
-    height: 400px;     /* Tu fixes une hauteur précise pour ton carrousel */
-    object-fit: cover; /* L'image est "rognée" intelligemment pour remplir la boîte sans être étirée */
-    object-position: center; /* Centre l'image si elle est rognée */
+    width: 100%;       
+    height: 400px;     
+    object-fit: cover; 
+    object-position: center; 
 }
 .card {
     max-width: 100%;
@@ -16,28 +34,28 @@
     height: auto;
     object-fit: cover;
 }
-/* 1. Bouton "Voir le détail" (Fond Doré -> Texte Anthracite pour le contraste) */
+/* 1. Bouton "Voir le détail" */
 .card .btn-primary {
-    background-color: var(--color-gold) !important;
-    border-color: var(--color-gold-hover) !important;
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent-hover) !important;
     color: var(--color-dark) !important;
     border-radius: var(--border-radius-md);
     transition: var(--transition-base);
 }
-
+/* 1. Bouton "Voir le détail" au survol */
 .card .btn-primary:hover {
-    background-color: var(--color-gold-hover) !important;
-    border-color: var(--color-gold-hover) !important;
+    background-color: var(--color-accent-hover) !important;
+    border-color: var(--color-accent-hover) !important;
     color: var(--color-dark) !important;
     transform: translateY(-2px);
     box-shadow: var(--shadow-button);
 }
 
-/* 2. Bouton "Appliquer les filtres" (Fond Vert Olive -> Texte Blanc) */
+/* 2. Bouton "Appliquer les filtres" */
 #filterForm > button[type="submit"] {
-    background-color: var(--color-olive) !important;
+    background-color: var(--color-accent) !important;
     border-color: var(--color-olive) !important;
-    color: #ffffff !important;
+    color: var(--color-dark) !important;
     font-weight: 500;
     transition: var(--transition-base);
 }
@@ -45,10 +63,22 @@
 #filterForm > button[type="submit"]:hover {
     background-color: var(--color-olive-light) !important;
     border-color: var(--color-olive-light) !important;
-    color: #ffffff !important;
+    color:var(--color-dark) !important;
+}
+#reset-filters {
+    background-color: var(--color-white) !important;
+    border-color: var(--color-accent) !important;
+    color: var(--color-dark) !important;
+    font-weight: 500;
+    transition: var(--transition-base);
+}
+#reset-filters:hover {
+    background-color: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+    color: var(--color-white) !important;
 }
 .noUi-connect {
-    background-color: var(--color-olive, #556B2F) !important;
+    background-color: var(--color-bg-dark) !important;
 }
 /* ==========================================================================
    CORRECTION GLOBALE DES SELECTS SUR MOBILE

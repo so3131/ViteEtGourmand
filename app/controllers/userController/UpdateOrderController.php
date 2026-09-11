@@ -2,15 +2,17 @@
 
 namespace App\Controllers\UserController;
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 
 use App\Managers\MenuManager;
 use App\Managers\OrderManager;
 use App\models\Menu;
 use App\Config\constants;
+use App\Helpers\SecurityManager;
+use App\Managers\LieuManager;
+
+###
+
 
 use App\Controllers\AuthController\Auth;
 // class UpdateOrderController pour gérer la mise à jour des commandes
@@ -27,6 +29,16 @@ class UpdateOrderController
         Auth::check([ROLE_USER]);
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = json_decode(file_get_contents('php://input'), true);
+
+            if (!is_array($data)) {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Données JSON invalides.'
+                ]);
+                exit();
+            }
+
+            SecurityManager::validateJson($data);
             $rental = !empty($data['pret_materiel']) ? 1 : 0;
             $depot = ($rental === 1) ? DEPOT_GARANTIE_MATERIEL : 0.0;
 
@@ -35,24 +47,10 @@ class UpdateOrderController
                 exit();
             }
             $pdo = $db;
-            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+            $result = OrderManager::getOrderWithDetailsForUser($db, (int)$commande_id, (int)$_SESSION['user_id']);
             try {
-                $sqlCheck = "SELECT c.utilisateur_id, c.statut, m.titre as menu_titre, 
-                    c.prix_total, c.nombre_personne,
-                    c.date_prestation, c.heure_livraison, 
-                    l.adresse, l.ville, l.code_postal, l.id as lieu_id,
-                    u.prenom as utilisateur_prenom, u.email as utilisateur_email
-               FROM vg_commande c
-               JOIN vg_menu m ON c.menu_id = m.menu_id
-               JOIN vg_lieu_prestation l ON c.lieu_prestation_id = l.id
-               JOIN vg_utilisateur u ON c.utilisateur_id = u.utilisateur_id
-               WHERE c.commande_id = :orderID";
-
-                $stmtCheck = $pdo->prepare($sqlCheck);
-                $stmtCheck->execute(['orderID' => $commande_id]);
-                $result = $stmtCheck->fetch(\PDO::FETCH_ASSOC);
-
-                if (!$result || (int)$result['utilisateur_id'] !== (int)$_SESSION['user_id']) {
+                if (!$result) {
                     throw new \Exception("Commande non trouvée ou accès refusé.");
                 }
 
@@ -61,18 +59,42 @@ class UpdateOrderController
                     throw new \Exception("Seules les commandes en attente peuvent être modifiées ou supprimées.");
                 }
 
-                $menuData = MenuManager::getById($db, (int)$data['menu_id']);
-                if (!empty($data['adresse_livraison'])) {
+                $menuId = (int)$result['menu_id'];
+                $menuData = MenuManager::getById($db, $menuId);
+
+                $ancienneAdresse = trim((string)$result['adresse']);
+                $ancienneVille = trim((string)$result['ville']);
+
+                $adresse = trim($data['adresse_livraison'] ?? '');
+                $ville = trim($data['ville'] ?? '');
+
+                $adresseIdentique =
+                    $adresse === $ancienneAdresse &&
+                    $ville === $ancienneVille;
+
+                if ($adresseIdentique) {
+
+                    $lieu_id = (int)$result['lieu_prestation_id'];
+                } else {
+                    if (
+                        empty($adresse) ||
+                        empty($ville) ||
+                        empty($data['lat']) ||
+                        empty($data['lon'])
+                    ) {
+                        throw new \Exception(
+                            "Veuillez sélectionner une nouvelle adresse dans la liste."
+                        );
+                    }
+
                     $lieu_id = \App\Managers\LieuManager::getOrInsert(
                         $db,
-                        $data['adresse_livraison'] ?? '',
+                        $adresse,
                         $data['code_postal'] ?? '',
-                        $data['ville'] ?? '',
-                        !empty($data['lat']) ? (float)$data['lat'] : null,
-                        !empty($data['lon']) ? (float)$data['lon'] : null
+                        $ville,
+                        (float)$data['lat'],
+                        (float)$data['lon']
                     );
-                } else {
-                    $lieu_id = (int)($data['lieu_prestation_id'] ?? 0);
                 }
                 $delaiCommande = (int)($menuData['delai_commande'] ?? 0);
 
@@ -107,10 +129,12 @@ class UpdateOrderController
                     $menuData['regime_libelle'] ?? ''
                 );
 
-                // Récupération des infos du lieu pour calculer les frais
-                $stmtLieu = $db->prepare("SELECT ville, latitude, longitude FROM vg_lieu_prestation WHERE id = ?");
-                $stmtLieu->execute([$lieu_id]);
-                $lieu = $stmtLieu->fetch(\PDO::FETCH_ASSOC);
+                // Récupération des infos du lieu pour calculer les frais de livraison
+                $lieu = LieuManager::getById($db, (int)$lieu_id);
+
+
+
+
 
                 $fraisLivraison = 0.00;
                 if ($lieu && !empty($lieu['latitude']) && !empty($lieu['longitude'])) {
@@ -134,39 +158,54 @@ class UpdateOrderController
                     (float)$fraisLivraison,
                     (float)$depot
                 );
-                $sqlUpdate = "UPDATE vg_commande 
-              SET date_prestation = :date, 
-                  heure_livraison = :heure,  
-                  lieu_prestation_id = :lieu_id, 
-                  prix_total = :prix,
-                  pret_materiel = :materiel, 
-                  depot_garantie = :depot,
-                  nombre_personne = :nb_personne
-              WHERE commande_id = :id AND utilisateur_id = :user_id";
 
-                $stmtUpdate = $pdo->prepare($sqlUpdate);
-                $stmtUpdate->execute([
-                    'date'       => $data['date_prestation'],
-                    'heure'      => $data['heure_livraison'],
-                    'lieu_id'    => $lieu_id,
-                    'prix'       => $nouveauPrix,
-                    'materiel'   => $rental,
-                    'depot'      => $depot,
-                    'nb_personne' => (int)$data['nombre_personne'],
-                    'id'         => $commande_id,
-                    'user_id'    => $_SESSION['user_id']
-                ]);
+                $ancienneQuantite = (int)$result['nombre_personne'];
+                $nouvelleQuantite = (int)$data['nombre_personne'];
+                $delta = $nouvelleQuantite - $ancienneQuantite;
+                $pdo->beginTransaction();
 
                 try {
-                    $stmtLieu = $pdo->prepare("SELECT adresse, code_postal, ville FROM vg_lieu_prestation WHERE id = :id");
-                    $stmtLieu->execute(['id' => $lieu_id]);
-                    $lieuInfo = $stmtLieu->fetch(\PDO::FETCH_ASSOC);
 
-                    $lieuTexte = $lieuInfo['adresse'] . ', ' . $lieuInfo['code_postal'] . ' ' . $lieuInfo['ville'];
+                    MenuManager::ajusterStock($db, $menuId, $delta);
 
 
-                    \App\Helpers\MailService::sendOrderUpdateEmail($result['utilisateur_email'], [
-                        'prenom'          => $result['utilisateur_prenom'],
+                    OrderManager::updateOrder($db, (int)$commande_id, [
+                        'date_prestation'    => $data['date_prestation'],
+                        'heure_livraison'    => $data['heure_livraison'],
+                        'lieu_prestation_id' => $lieu_id,
+                        'prix_total'         => $nouveauPrix,
+                        'pret_materiel'      => $rental,
+                        'depot_garantie'     => $depot,
+                        'nombre_personne'    => $nouvelleQuantite,
+                    ], (int)$_SESSION['user_id']);
+
+
+
+                    $pdo->commit();
+                } catch (\Exception $e) {
+                    if ($pdo->inTransaction()) {
+                        $pdo->rollBack();
+                    }
+
+                    throw $e;
+                }
+
+                $lieuInfo = LieuManager::getById($db, (int)$lieu_id);
+
+
+
+                $lieuTexte = '';
+
+                if ($lieuInfo) {
+                    $lieuTexte = trim(
+                        $lieuInfo['adresse'] . ', ' .
+                            $lieuInfo['code_postal'] . ' ' .
+                            $lieuInfo['ville']
+                    );
+                }
+                try {
+                    \App\Helpers\MailService::sendOrderUpdateEmail($result['email'], [
+                        'prenom'          => $result['prenom'],
                         'menu'            => $menuData['titre'],
                         'quantite'        => (int)$data['nombre_personne'],
                         'date_prestation' => $data['date_prestation'],
@@ -198,19 +237,32 @@ class UpdateOrderController
         try {
             $json = file_get_contents('php://input');
             $data = json_decode($json, true);
-
-            if (!$data) {
-                echo json_encode(['nouveau_prix' => '0.00', 'error' => 'Données JSON invalides']);
+            if (!is_array($data)) {
+                echo json_encode([
+                    'nouveau_prix' => '0.00',
+                    'error' => 'Données JSON invalides'
+                ]);
                 exit();
             }
-
+            SecurityManager::validateJson($data);
             $pret_materiel = !empty($data['pret_materiel']) ? 1 : 0;
             $montant_depot = ($pret_materiel === 1) ? DEPOT_GARANTIE_MATERIEL : 0.0;
 
+
             $commande_id = isset($_GET['commande_id']) ? (int)$_GET['commande_id'] : 0;
+
+            $orderData = OrderManager::getOrderLight($db, $commande_id);
+
+            if (!$orderData || (int)$orderData['utilisateur_id'] !== (int)$_SESSION['user_id']) {
+                echo json_encode(['nouveau_prix' => '0.00', 'error' => 'Commande non trouvée ou accès refusé.']);
+                exit();
+            }
+
+            $menu_id = (int)$orderData['menu_id'];
+
             $lieu_id = 0;
             if (!empty($data['adresse_livraison']) && !empty($data['lat']) && !empty($data['lon'])) {
-                $lieu_id = \App\Managers\LieuManager::getOrInsert(
+                $lieu_id = LieuManager::getOrInsert(
                     $db,
                     $data['adresse_livraison'],
                     $data['code_postal'] ?? '',
@@ -218,16 +270,15 @@ class UpdateOrderController
                     (float)$data['lat'],
                     (float)$data['lon']
                 );
-            } elseif ($commande_id > 0) {
-                $stmtOrder = $db->prepare("SELECT lieu_prestation_id FROM vg_commande WHERE commande_id = ?");
-                $stmtOrder->execute([$commande_id]);
-                $lieu_id = (int)$stmtOrder->fetchColumn();
             } else {
-                $lieu_id = (int)($data['lieu_prestation_id'] ?? 0);
+                $lieu_id = (int)$orderData['lieu_prestation_id'];
             }
-            $stmtLieu = $db->prepare("SELECT ville, latitude, longitude FROM vg_lieu_prestation WHERE id = ?");
-            $stmtLieu->execute([$lieu_id]);
-            $lieu = $stmtLieu->fetch(\PDO::FETCH_ASSOC);
+
+            $lieu = LieuManager::getById($db, $lieu_id);
+
+
+
+
 
             $frais = 0.00;
             if ($lieu && !empty($lieu['latitude']) && !empty($lieu['longitude'])) {
@@ -242,8 +293,9 @@ class UpdateOrderController
                 );
             }
 
-            $quantite = (int)($data['nombre_personne'] ?? 0);
-            $menu_id = (int)($data['menu_id'] ?? 0);
+
+
+            $menu_id = (int)$orderData['menu_id'];
 
             $menuData = MenuManager::getById($db, $menu_id);
 
@@ -264,8 +316,10 @@ class UpdateOrderController
                 $menuData['theme_libelle'] ?? '',
                 $menuData['regime_libelle'] ?? ''
             );
+            $quantite = (int)($data['nombre_personne'] ?? 0);
 
             $total = $menu->calculerTotal($quantite, (float)$frais, $montant_depot);
+
 
             echo json_encode([
                 'nouveau_prix' => number_format($total, 2, '.', ''),
@@ -289,9 +343,8 @@ class UpdateOrderController
     public static function editOrderView(\PDO $db, int $commande_id)
     {
         Auth::check([ROLE_USER]);
-        $stmt = $db->prepare("SELECT * FROM vg_commande WHERE commande_id = :id");
-        $stmt->execute(['id' => $commande_id]);
-        $commande = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $commande = OrderManager::getOrderWithDetailsForUser($db, (int)$commande_id, (int)$_SESSION['user_id']);
+
         if (!$commande) {
             throw new \Exception("Commande introuvable.");
         }
@@ -301,7 +354,7 @@ class UpdateOrderController
             throw new \Exception("Menu introuvable.");
         }
         // 2. Récupérer les lieux pour le select
-        $lieux = $db->query("SELECT * FROM vg_lieu_prestation")->fetchAll();
+        $lieux = LieuManager::getAll($db);
         $specific_scripts = ["assets/javascript/editOrder.js"];
         require_once ROOT_PATH . '/app/views/layout/header.php';
         require_once ROOT_PATH . '/app/views/user/order/edit.order.view.php';

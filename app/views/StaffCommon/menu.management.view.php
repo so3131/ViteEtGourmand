@@ -1,3 +1,10 @@
+<?php
+
+ /**
+  * @var array $all_plats
+  * @var array $platsParCategorie
+  */
+?>
 <div class="row g-4">
     <!-- Section Menus & Plats -->
     <div class="card shadow-sm p-4">
@@ -8,98 +15,117 @@
             </button>
         </div>
 
-        <div class="table-responsive">
-             <table class="table table-hover align-middle table-sm" id="menusTable">
-                <thead class="table-light">
-                    <tr>
-                        <th>Menu</th>
-                        <th>Prix/Pers</th>
-                        <th>Plats inclus</th>
-                        <th>Qté Restante</th>
-                        <th>Statut / Commandes</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $menus = $menus ?? []; ?>
 
-                    <?php foreach ($menus as $menu): ?>
-                        <tr>
-                            <td><strong><?php echo htmlspecialchars($menu['titre']); ?></strong></td>
-                            <td><?php echo number_format($menu['prix_par_personne'], 2); ?> €</td>
-                            <td>
-                                <small class="text-muted">
-                                    <?php echo htmlspecialchars($menu['liste_plats'] ?? 'Aucun plat associé'); ?>
-                                </small>
-                            </td>
-                            <td>
-                                <span class="badge <?php echo ($menu['quantite_restante'] < 5) ? 'bg-danger' : 'bg-success'; ?>">
-                                    <?php echo $menu['quantite_restante']; ?>
-                                </span>
-                            </td>
-                            <td>
-                                <!-- Indicateur de liaison et d'état -->
-                                <?php if (($menu['nb_commandes'] ?? 0) > 0): ?>
-                                    <span class="badge bg-warning text-dark" title="Ce menu possède des commandes liées">
-                                        <i class="fa-solid fa-link"></i> <?= $menu['nb_commandes'] ?> cmd(s) en cours
-                                    </span>
-                                <?php else: ?>
-                                    <span class="badge bg-secondary">Libre</span>
-                                <?php endif; ?>
+        <!-- Tableau des Menus -->
+<div class="table-responsive">
+    <table class="table table-hover align-middle table-sm" id="menusTable">
+        <thead class="table-light">
+            <tr>
+                <th>Menu</th>
+                <th>Prix/Pers</th>
+                <th>Plats inclus</th>
+                <th>Qté Restante</th>
+                <th>Statut / Commandes</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $menus =$menus ?? []; ?>
 
-                                <?php if (isset($menu['is_active']) && $menu['is_active'] == 0): ?>
-                                    <span class="badge bg-dark">Inactif</span>
-                                <?php endif; ?>
-                            </td>
-                      <td>
-    <div class="d-flex gap-2 align-items-center">
-        <a href="index.php?page=edit-menu&id=<?= $menu['menu_id'] ?>" class="btn btn-sm btn-outline-warning" title="Modifier">
-            <i class="fa-solid fa-pen"></i>
-        </a>
-        
-        <?php 
-        $isActive = ($menu['is_active'] ?? 1) == 1;
-        $hasOrders = ($menu['nb_commandes'] ?? 0) > 0;
-        ?>
-
-        <?php if (!$isActive): ?>
-            <!-- Bouton pour Activer -->
-            <form action="index.php?page=activate-menu&menu_id=<?= $menu['menu_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('Voulez-vous réactiver ce menu ?');">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                <input type="hidden" name="id" value="<?= $menu['menu_id'] ?>">
-                
-                <button type="submit" class="btn btn-sm btn-outline-success" title="Activer">
-                    <i class="fa-solid fa-check"></i> Activer
-                </button>
-            </form>
-        <?php else: ?>
-            <!-- Bouton pour Désactiver ou Supprimer -->
-            <?php 
-            $actionText = $hasOrders ? 'Désactiver' : 'Supprimer';
-            $confirmMsg = $hasOrders 
-                ? "Ce menu possède des commandes. Il sera désactivé (soft delete) au lieu d'être supprimé. Continuer ?" 
-                : "Voulez-vous vraiment supprimer ce menu ?";
-            $btnClass = $hasOrders ? 'btn-outline-secondary' : 'btn-outline-danger';
-            $iconClass = $hasOrders ? 'fa-ban' : 'fa-trash';
-            ?>
-
-            <form action="index.php?page=delete-menu&menu_id=<?= $menu['menu_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('<?= $confirmMsg ?>');">
-                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                <input type="hidden" name="id" value="<?= $menu['menu_id'] ?>">
-                
-                <button type="submit" class="btn btn-sm <?= $btnClass ?>" title="<?= $actionText ?>">
-                    <i class="fa-solid <?= $iconClass ?>"></i> <?= $actionText ?>
-                </button>
-            </form>
-        <?php endif; ?>
-    </div>
+            <?php foreach ($menus as$menu): ?>
+                <tr>
+                    <td><strong><?php echo htmlspecialchars($menu['titre']); ?></strong></td>
+                    <td><?php echo number_format($menu['prix_par_personne'], 2); ?> €</td>
+                    <td>
+                        <small class="text-muted">
+                            <?php echo htmlspecialchars($menu['liste_plats'] ?? 'Aucun plat associé'); ?>
+                        </small>
+                    </td>
+                    <td>
+    <?php if ((int)$menu['quantite_restante'] <= 0): ?>
+        <span class="badge bg-dark"><i class="fa-solid fa-triangle-exclamation"></i> Rupture</span>
+    <?php elseif ((int)$menu['quantite_restante'] < 5): ?>
+        <span class="badge bg-danger"><i class="fa-solid fa-triangle-exclamation"></i> <?= $menu['quantite_restante']; ?></span>
+    <?php else: ?>
+        <span class="badge bg-success"><?= $menu['quantite_restante']; ?></span>
+    <?php endif; ?>
 </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                    <td>
+                        <!-- Indicateur de liaison et d'état -->
+                        <?php if (($menu['nb_commandes'] ?? 0) > 0): ?>
+                            <span class="badge bg-warning text-dark" title="Ce menu possède des commandes liées">
+                                <i class="fa-solid fa-link"></i> <?= $menu['nb_commandes'] ?> cmd(s) active(s)
+                            </span>
+                        <?php else: ?>
+                            <span class="badge bg-secondary">Libre</span>
+                        <?php endif; ?>
+
+                        <?php if (isset($menu['is_active']) &&$menu['is_active'] == 0): ?>
+                            <span class="badge bg-dark">Inactif</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-2 align-items-center">
+                            <a href="index.php?page=edit-menu&id=<?= $menu['menu_id'] ?>" class="btn btn-sm btn-outline-warning" title="Modifier">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            
+                            <?php 
+                            $isActive = ($menu['is_active'] ?? 1) == 1;
+                            $hasOrders = ($menu['nb_commandes'] ?? 0) > 0;
+                            ?>
+
+                            <?php if (!$isActive): ?>
+                                <!-- Bouton pour Activer -->
+                                <form action="index.php?page=activate-menu&menu_id=<?= $menu['menu_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('Voulez-vous réactiver ce menu ?');">
+                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                    <input type="hidden" name="id" value="<?= $menu['menu_id'] ?>">
+                                    
+                                    <button type="submit" class="btn btn-sm btn-outline-success" title="Activer">
+                                        <i class="fa-solid fa-check"></i> Activer
+                                    </button>
+                                </form>
+                            <?php else: ?>
+                                <?php if ($hasOrders): ?>
+                                    <!-- Si commandes en cours : Seulement le bouton Désactiver (Soft delete forcé) -->
+                                    <form action="index.php?page=delete-menu&menu_id=<?= $menu['menu_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('Ce menu possède des commandes en cours. Il sera désactivé (soft delete). Continuer ?');">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="id" value="<?= $menu['menu_id'] ?>">
+                                        <input type="hidden" name="action_type" value="disable">
+                                        
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary" title="Désactiver">
+                                            <i class="fa-solid fa-ban"></i> Désactiver
+                                        </button>
+                                    </form>
+                                <?php else: ?>
+                                    <!-- Si pas de commandes : Choix entre Désactiver ou Supprimer définitivement -->
+                                    <form action="index.php?page=delete-menu&menu_id=<?= $menu['menu_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('Voulez-vous désactiver ce menu ?');">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="id" value="<?= $menu['menu_id'] ?>">
+                                        <input type="hidden" name="action_type" value="disable">
+                                        
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary" title="Désactiver">
+                                            <i class="fa-solid fa-ban"></i> Désactiver
+                                        </button>
+                                    </form>
+
+                                    <form action="index.php?page=delete-menu&menu_id=<?= $menu['menu_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('Attention : Cette action supprimera définitivement le menu et ses liaisons. Continuer ?');">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                        <input type="hidden" name="id" value="<?= $menu['menu_id'] ?>">
+                                        <input type="hidden" name="action_type" value="delete">
+                                        
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer définitivement">
+                                            <i class="fa-solid fa-trash"></i> Supprimer
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
            <!-- Tableau des Plats  -->
       <div class="card shadow-sm p-4 mt-4">
@@ -200,22 +226,22 @@
 
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Prix / Pers (€)</label>
-                            <input type="number" step="0.01" name="prix" class="form-control" required>
+                            <input type="number" step="0.01" name="prix" class="form-control"min="0" required>
                         </div>
 
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Qté Restante</label>
-                            <input type="number" name="quantite" class="form-control" required>
+                            <input type="number" name="quantite" class="form-control"min="0" required>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Minimum de personnes</label>
-                            <input type="number" name="min_personne" class="form-control" required>
+                            <input type="number" name="min_personne" class="form-control"min="1" required>
                         </div>
 
                         <div class="col-md-4 mb-3">
                             <label class="form-label">Délai (en jours)</label>
-                            <input type="number" name="delai" class="form-control" required>
+                            <input type="number" name="delai" class="form-control"min="0" required>
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -316,7 +342,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-success">Enregistrer le menu</button>
+                    <button type="submit" name="submit" class="btn btn-success">Enregistrer le menu</button>
                 </div>
             </form>
         </div>

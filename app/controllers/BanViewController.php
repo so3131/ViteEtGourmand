@@ -10,10 +10,7 @@ class BanViewController
     public static function errorBanMessage(\PDO $db)
     {
         $title = "Utilisateur désactivé - Vite & Gourmand";
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-
+       
         $dossierApp = dirname(__DIR__);
 
         require_once $dossierApp . '/views/layout/header.php';

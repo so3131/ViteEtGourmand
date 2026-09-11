@@ -34,10 +34,12 @@ class ReviewManager
         $sql = "SELECT a.*, 
                        CONCAT(u.prenom, ' ', u.nom) AS nom_auteur,
                        u.email AS auteur_email,
-                       c.numero_commande
+                       c.numero_commande,
+                       m.titre AS nom_menu
                 FROM vg_avis a
                 JOIN vg_utilisateur u ON a.utilisateur_id = u.utilisateur_id
                 LEFT JOIN vg_commande c ON a.commande_id = c.commande_id
+                LEFT JOIN vg_menu m ON c.menu_id = m.menu_id
                 WHERE 1=1";
         $params = [];
 
@@ -95,9 +97,12 @@ class ReviewManager
     {
         $stmt = $db->prepare(
             "SELECT a.*, 
-                    CONCAT(u.prenom, ' ', u.nom) AS nom_auteur
+                    CONCAT(u.prenom, ' ', u.nom) AS nom_auteur,
+                    m.titre AS titre
              FROM vg_avis a
              JOIN vg_utilisateur u ON a.utilisateur_id = u.utilisateur_id
+             LEFT JOIN vg_commande c ON a.commande_id = c.commande_id
+             LEFT JOIN vg_menu m ON c.menu_id = m.menu_id
              WHERE a.statut = 'approved'
              ORDER BY a.created_at DESC
              LIMIT :limit"
@@ -106,4 +111,12 @@ class ReviewManager
         $stmt->execute();
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+    public static function getCompletedOrderForUser(\PDO $db, int $commandeId, int $userId): ?array
+{
+    $stmt = $db->prepare("SELECT * FROM vg_commande 
+                          WHERE commande_id = ? AND utilisateur_id = ? AND statut = 'terminee'");
+    $stmt->execute([$commandeId, $userId]);
+    $order = $stmt->fetch(\PDO::FETCH_ASSOC);
+    return $order ?: null;
+}
 }

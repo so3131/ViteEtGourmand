@@ -13,8 +13,8 @@
         </div>
 
         <div class="col-md-4">
-            <label class="form-label">Statut</label>
-            <select name="status" class="form-select">
+            <label for="filter-status" class="form-label">Statut</label>
+<select name="status" id="filter-status" class="form-select">
                 <option value="">Tous les statuts</option>
                 <option value="en_attente" <?php echo (($_GET['status'] ?? '') === 'en_attente') ? 'selected' : ''; ?>>En attente</option>
                 <option value="acceptee" <?php echo (($_GET['status'] ?? '') === 'acceptee') ? 'selected' : ''; ?>>Acceptée</option>
@@ -27,11 +27,13 @@
             </select>
         </div>
         <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Filtrer</button>
-        </div>
-        <div class="col-md-2">
-            <a href="index.php?page=order-management" class="btn btn-outline-secondary w-100">Réinitialiser</a>
-        </div>
+    <label class="visually-hidden">Filtrer</label>
+    <button type="submit" class="btn btn-primary w-100">Filtrer</button>
+</div>
+<div class="col-md-2">
+    <label class="visually-hidden">Réinitialiser</label>
+    <a href="index.php?page=order-management" class="btn btn-outline-secondary w-100">Réinitialiser</a>
+</div>
     </form>
 
     <div class="table-responsive">
@@ -76,24 +78,24 @@
                             <td><?php echo htmlspecialchars($order['menu_titre'] ?? 'N/A'); ?></td>
                             <td><?php echo htmlspecialchars(date('d/m/Y', strtotime($order['date_prestation'] ?? 'now')) . ' à ' . substr($order['heure_livraison'] ?? '00:00', 0, 5)); ?></td>
                             <td>
-                                <?php 
-                                    $statutLabels = [
-                                        'en_attente' => 'En attente',
-                                        'acceptee' => 'Acceptée',
-                                        'en_preparation' => 'En préparation',
-                                        'en_cours_livraison' => 'En livraison',
-                                        'livree' => 'Livrée',
-                                        'en_attente_retour_materiel' => 'Retour matériel',
-                                        'terminee' => 'Terminée',
-                                        'annulee' => 'Annulée'
-                                    ];
+                                <?php
+                                $statutLabels = [
+                                    'en_attente' => 'En attente',
+                                    'acceptee' => 'Acceptée',
+                                    'en_preparation' => 'En préparation',
+                                    'en_cours_livraison' => 'En livraison',
+                                    'livree' => 'Livrée',
+                                    'en_attente_retour_materiel' => 'Retour matériel',
+                                    'terminee' => 'Terminée',
+                                    'annulee' => 'Annulée'
+                                ];
 
-                                    $badgeClass = match ($order['statut']) {
-                                        'annulee' => 'bg-danger',
-                                        'terminee', 'livree' => 'bg-success',
-                                        'en_attente' => 'bg-warning',
-                                        default => 'bg-info'
-                                    };
+                                $badgeClass = match ($order['statut']) {
+                                    'annulee' => 'bg-danger',
+                                    'terminee', 'livree' => 'bg-success',
+                                    'en_attente' => 'bg-warning',
+                                    default => 'bg-info'
+                                };
                                 ?>
                                 <span class="badge <?php echo $badgeClass; ?>">
                                     <?php echo $statutLabels[$order['statut']] ?? htmlspecialchars($order['statut']); ?>
@@ -110,53 +112,59 @@
                                 <?= $estEnRetard ? 'RETARD' : ($dateLimite ? $dateLimite->format('d/m/Y') : 'N/A') ?>
                             </td>
                             <td>
-                                <div class="d-flex flex-wrap gap-2 align-items-center">
+                              
+
+                                <!-- 3. Formulaire de changement rapide de statut -->
+                                <form action="index.php?page=update-order-status" method="POST" class="d-inline m-0">
+                                    <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
+                                    <input type="hidden" name="commande_id" value="<?= $order['commande_id'] ?>">
+<label for="status-<?= $order['commande_id'] ?>" class="visually-hidden">Changer le statut de la commande</label>
+                                    <select name="nouveau_statut" id="status-<?= $order['commande_id'] ?>" class="form-select form-select-sm d-inline-block" style="width: 140px;" onchange="this.form.submit()" <?= $isLocked ? 'disabled' : '' ?>>
+                                        <?php
+                                        $optionsList = [
+                                            'en_attente' => 'En attente',
+                                            'acceptee' => 'Acceptée',
+                                            'en_preparation' => 'En préparation',
+                                            'en_cours_livraison' => 'En livraison',
+                                            'livree' => 'Livrée',
+                                            'en_attente_retour_materiel' => 'Retour matériel',
+                                            'terminee' => 'Terminée',
+                                            'annulee' => 'Annulée'
+                                        ];
+
+                                        foreach ($optionsList as $key => $label):
+                                            $optionWeight = $workflow[$key] ?? 0;
+                                            $isDisabled = ($optionWeight < $currentWeight && $key !== $order['statut'] && $key !== 'annulee');
+                                        ?>
+                                            <option value="<?= $key ?>" <?= ($order['statut'] === $key) ? 'selected' : '' ?> <?= $isDisabled ? 'disabled class="text-muted"' : '' ?>>
+                                                <?= $label ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    
+                                </form>
+                                              <div class="d-flex flex-wrap gap-2 align-items-center">
                                     <!-- 1. Bouton "Voir" -->
                                     <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#modal-<?php echo $order['commande_id']; ?>" title="Voir les détails">
                                         <i class="fa-solid fa-eye"></i> Voir
                                     </button>
 
                                     <!-- 2. Bouton "Modification" -->
-                                    <a href="index.php?page=edit-order-common&commande_id=<?php echo urlencode($order['commande_id']); ?>"
-                                        class="btn btn-sm btn-warning" title="Modifier">Modif.</a>
-
-                                    <!-- 3. Formulaire de changement rapide de statut -->
-                                    <form action="index.php?page=update-order-status" method="POST" class="d-inline m-0">
-                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
-                                        <input type="hidden" name="commande_id" value="<?= $order['commande_id'] ?>">
-                                        
-                                        <select name="nouveau_statut" class="form-select form-select-sm d-inline-block" style="width: 140px;" onchange="this.form.submit()" <?= $isLocked ? 'disabled' : '' ?>>
-                                            <?php
-                                            $optionsList = [
-                                                'en_attente' => 'En attente',
-                                                'acceptee' => 'Acceptée',
-                                                'en_preparation' => 'En préparation',
-                                                'en_cours_livraison' => 'En livraison',
-                                                'livree' => 'Livrée',
-                                                'en_attente_retour_materiel' => 'Retour matériel',
-                                                'terminee' => 'Terminée',
-                                                'annulee' => 'Annulée'
-                                            ];
-
-                                            foreach ($optionsList as $key => $label):
-                                                $optionWeight = $workflow[$key] ?? 0;
-                                                $isDisabled = ($optionWeight < $currentWeight && $key !== $order['statut'] && $key !== 'annulee');
-                                            ?>
-                                                <option value="<?= $key ?>" <?= ($order['statut'] === $key) ? 'selected' : '' ?> <?= $isDisabled ? 'disabled class="text-muted"' : '' ?>>
-                                                    <?= $label ?>
-                                                </option>
-                                            <?php endforeach; ?>
-                                        </select>
-                                    </form>
-
-                                    <!-- 4. Bouton "Annuler" conditionné -->
-                                    <?php if ($canCancel): ?>
-                                        <button type="button" class="btn btn-sm btn-danger"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#cancelModal<?= $order['commande_id'] ?>" title="Annuler la commande">
-                                            Annuler
-                                        </button>
-                                    <?php endif; ?>
+                                                                            <?php if (!$isLocked): ?>
+                                        <a href="index.php?page=edit-order-common&commande_id=<?= urlencode($order['commande_id']) ?>"
+                                        class="btn btn-sm btn-warning"
+                                        title="Modifier">
+                                        Modif.
+                                    </a>
+                                <?php endif; ?>
+                                <!-- 4. Bouton "Annuler" conditionné -->
+                                <?php if ($canCancel): ?>
+                                    <button type="button" class="btn btn-sm btn-danger"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#cancelModal<?= $order['commande_id'] ?>" title="Annuler la commande">
+                                        Annuler
+                                    </button>
+                                <?php endif; ?>
                                 </div>
                             </td>
                         </tr>
@@ -208,7 +216,7 @@
                         <?php if (!empty($order['date_limite_restitution'])): ?>
                             <p><strong>Date limite de restitution :</strong> <?= date('d/m/Y', strtotime($order['date_limite_restitution'])) ?></p>
                         <?php endif; ?>
-                        
+
                         <div class="mt-4 pt-3 border-top">
                             <h6 class="text-muted mb-3"><i class="fa-solid fa-address-book"></i> Contacter le client</h6>
                             <div class="d-flex gap-2">
@@ -217,7 +225,7 @@
                                         <i class="fa-solid fa-envelope"></i> Envoyer un e-mail
                                     </a>
                                 <?php endif; ?>
-                                
+
                                 <?php if (!empty($order['client_telephone'])): ?>
                                     <a href="tel:<?= htmlspecialchars($order['client_telephone']) ?>" class="btn btn-sm btn-outline-success">
                                         <i class="fa-solid fa-phone"></i> Appeler
@@ -237,15 +245,15 @@
                     <form action="index.php?page=cancel-order-common" method="POST">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                         <input type="hidden" name="commande_id" value="<?= htmlspecialchars($order['commande_id']) ?>">
-                        
+
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Annuler la commande n°<?= htmlspecialchars($order['numero_commande'] ?? $order['commande_id']) ?></h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
-                                <label class="form-label">Mode de contact utilisé :</label>
-                                <select name="mode_contact" class="form-select" required>
+                               <label for="mode-contact-<?= $order['commande_id'] ?>" class="form-label">Mode de contact utilisé :</label>
+<select name="mode_contact" id="mode-contact-<?= $order['commande_id'] ?>" class="form-select" required>
                                     <option value="tel">Appel GSM</option>
                                     <option value="mail">Email</option>
                                 </select>

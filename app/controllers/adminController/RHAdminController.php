@@ -16,37 +16,32 @@ class RhAdminController
     {
         Auth::check([ROLE_ADMIN]);
 
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
         try {
             // Récupération des employés (rôle 2)
-            $stmtEmp = $pdo->query("SELECT * FROM vg_utilisateur WHERE role_id = 2");
-            $employes = $stmtEmp->fetchAll(\PDO::FETCH_ASSOC);
+            $employes = UserAdminManager::getByRoleId($db, 2);
 
             // Récupération des utilisateurs pour la modération (avec filtres de recherche)
-            $searchTerm = isset($_GET['search-user']) ? trim($_GET['search-user']) : '';
-            $roleFilter = isset($_GET['filter-role']) ? trim($_GET['filter-role']) : '';
+          $searchTerm = isset($_GET['search-user']) ? trim($_GET['search-user']) : '';
+            $roleFilter = (isset($_GET['filter-role']) && $_GET['filter-role'] !== '') ? (int)$_GET['filter-role'] : null;
 
-            require_once ROOT_PATH . '/app/managers/UserAdminManager.php';
-
-            if (!empty($searchTerm) || !empty($roleFilter)) {
-                $listeUtilisateurs = UserAdminManager::search($pdo, $searchTerm, $roleFilter);
+            if ($searchTerm !== '' || $roleFilter !== null) {
+                $listeUtilisateurs = UserAdminManager::search($db, $searchTerm, $roleFilter);
             } else {
-                $listeUtilisateurs = UserAdminManager::findAll($pdo);
+                $listeUtilisateurs = UserAdminManager::findAll($db);
             }
 
             // Récupération des rôles pour le menu déroulant
-            $stmtRoles = $pdo->query("SELECT * FROM vg_role ORDER BY libelle ASC");
-            $listeRoles = $stmtRoles->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            die($e->getMessage());
+            $listeRoles = UserAdminManager::getAllRoles($db);
+        } catch (\Exception $e) {
+            $_SESSION['error'] = "Erreur lors du chargement de la page : " . $e->getMessage();
+            header('Location: index.php?page=dashboard-admin');
+            exit();
         }
 
         $title = "Gestion des employés et des utilisateurs - Vite & Gourmand";
         $specific_styles = [
             'assets/css/bootstrap/bootstrap.min.css',
-            'assets/css/Admin/AdminEmployee.css',
+            'assets/css/AdminEmployee/AdminEmployee.css',
             'https://cdn.datatables.net/1.13.6/dataTables.bootstrap5.min.css'
         ];
         $specific_scripts = [
@@ -72,10 +67,11 @@ class RhAdminController
             $roleId = 2; // ID du rôle employé
 
             try {
-                $stmt = $db->prepare("INSERT INTO vg_utilisateur (email, password, role_id) VALUES (?, ?, ?)");
-                $success = $stmt->execute([$email, $hashedPassword, $roleId]);
+                if (UserAdminManager::createStaff($db, $email, $hashedPassword, $roleId)) {
+                    $_SESSION['success_message'] = "L'employé a été créé avec succès et averti par mail.";
 
-                if ($success) {
+
+
                     MailService::sendAccountCreationEmail($email);
                     $_SESSION['success'] = "L'employé a été créé avec succès et averti par mail.";
                 }
@@ -94,12 +90,10 @@ class RhAdminController
     public static function deleteEmploye(\PDO $db)
     {
         Auth::check([ROLE_ADMIN]);
-        $id = (int)($_POST['id'] ?? 0);
         $id = SecurityManager::validatePost('?page=rh-admin');
         if (!empty($id)) {
             try {
-                $stmt = $db->prepare("DELETE FROM vg_utilisateur WHERE utilisateur_id = :id");
-                $stmt->execute(['id' => $id]);
+                UserAdminManager::deleteById($db, (int)$id);
 
                 $_SESSION['success'] = "L'employé a été supprimé avec succès.";
             } catch (\PDOException $e) {
@@ -115,13 +109,13 @@ class RhAdminController
     public static function toggleEmployeStatus(\PDO $db, ?int $id)
     {
         Auth::check([ROLE_ADMIN]);
-        $id = (int)($_POST['id'] ?? $id ?? 0);
+
         $id = SecurityManager::validatePost('?page=rh-admin');
 
         if (!empty($id)) {
             try {
-                $stmt = $db->prepare("UPDATE vg_utilisateur SET est_actif = NOT est_actif WHERE utilisateur_id = :id");
-                $stmt->execute(['id' => $id]);
+
+                UserAdminManager::toggleActive($db, (int)$id);
 
                 $_SESSION['success'] = "Le statut de l'employé a été mis à jour avec succès.";
             } catch (\PDOException $e) {
@@ -139,11 +133,14 @@ class RhAdminController
         Auth::check([ROLE_ADMIN]);
         $id = SecurityManager::validatePost('?page=rh-admin');
         try {
-            require_once ROOT_PATH . '/app/managers/UserAdminManager.php';
-            UserAdminManager::ban($db, $id);
-            $_SESSION['success_message'] = 'Utilisateur désactivé avec succès !';
-        } catch (\PDOException $e) {
-            die($e->getMessage());
+            if (UserAdminManager::ban($db, $id)) {
+                $_SESSION['success_message'] = 'Utilisateur désactivé avec succès !';
+            }
+        } catch (\Exception $e) {
+            $_SESSION['error'] = "Erreur lors de la désactivation de l'utilisateur : " . $e->getMessage();
+
+            header('Location: index.php?page=rh-admin');
+            exit();
         }
 
         header('Location: index.php?page=rh-admin');
@@ -157,11 +154,13 @@ class RhAdminController
         $id = SecurityManager::validatePost('?page=rh-admin');
 
         try {
-            require_once ROOT_PATH . '/app/managers/UserAdminManager.php';
+
             UserAdminManager::unBan($db, $id);
             $_SESSION['success_message'] = 'Utilisateur réactivé avec succès !';
-        } catch (\PDOException $e) {
-            die($e->getMessage());
+        } catch (\Exception $e) {
+            $_SESSION['error'] = "Erreur lors de la réactivation de l'utilisateur : " . $e->getMessage();
+            header('Location: index.php?page=rh-admin');
+            exit();
         }
 
         header('Location: index.php?page=rh-admin');

@@ -1,3 +1,6 @@
+<div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+<script src="<?= BASE_URL ?>/public/assets/javascript/notifications.js"></script>
 <!-- 1. jQuery-->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
@@ -23,6 +26,8 @@
     console.log("Bootstrap version:", typeof bootstrap !== 'undefined' ? "Chargé" : "Non chargé");
     console.log("jQuery version:", typeof jQuery !== 'undefined' ? jQuery.fn.jquery : "Non chargé");
 </script>
-
+</section>
+        </main>
+    </div>
 </body>
 </html>

@@ -1,3 +1,23 @@
+<?php
+
+// Affichage des messages flash
+if (isset($_SESSION['error'])): ?>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <?= htmlspecialchars($_SESSION['error']) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+<input type="hidden"
+       name="csrf_token"
+       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+<?php if (isset($_SESSION['success'])): ?>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <?= htmlspecialchars($_SESSION['success']) ?>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <?php unset($_SESSION['success']); ?>
+<?php endif; ?>
 <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
     <div id="success-alert" class="alert alert-success alert-dismissible fade show shadow-sm mb-4" role="alert">
         <i class="fa-solid fa-circle-check me-2"></i> Vos informations ont été mises à jour avec succès !

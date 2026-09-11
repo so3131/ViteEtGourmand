@@ -3,6 +3,8 @@
 namespace App\Controllers\AuthController;
 
 use App\Helpers\MailService;
+use App\Helpers\SecurityManager;
+use App\Managers\UserManager;
 
 require_once dirname(__DIR__, 2) . '/config/constants.php';
 require_once ROOT_PATH . '/app/helpers/FormHelper.php';
@@ -16,29 +18,29 @@ class ResetPasswordController
 
         $errors = [];
         $token = $_GET['token'] ?? null;
+        $tokenHash = hash('sha256', $token ?? '');
         $success = null;
         if (empty($_GET['token'])) {
             header('Location: index.php?page=forgot-password');
             exit;
         }
-        // Vérification du token
-        $stmt = $db->prepare("SELECT email FROM vg_password_resets WHERE token = :token AND expires_at > NOW()");
-        $stmt->execute(['token' => $token]);
-        $resetData = $stmt->fetch(\PDO::FETCH_ASSOC);
+        // Vérification du token 
+
+        $resetData = UserManager::findPasswordResetToken($db, $tokenHash);
 
         if (!$resetData) {
             $errors['general'] = "Ce lien est invalide ou a expiré.";
         } else {
             // Récupèrer le prénom de l'utilisateur séparément pour éviter les conflit
-            $stmtUser = $db->prepare("SELECT prenom FROM vg_utilisateur WHERE email = :email");
-            $stmtUser->execute(['email' => $resetData['email']]);
-            $userData = $stmtUser->fetch(\PDO::FETCH_ASSOC);
-
-            // Ajouter le prénom au tableau $resetData
-            $resetData['prenom'] = $userData['prenom'] ?? 'client';
+            // Récupérer le prénom de l'utilisateur pour l'email de confirmation
+            $userRecord = UserManager::findByEmail($db, $resetData['email']);
+            $resetData['prenom'] = $userRecord['prenom'] ?? 'client';
         }
         // Traitement du formulaire
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors)) {
+            SecurityManager::validatePost(
+                '?page=reset-password&token=' . urlencode($token)
+            );
             $password = $_POST['password'] ?? '';
             $password_confirm = $_POST['password_confirm'] ?? '';
 
@@ -54,9 +56,8 @@ class ResetPasswordController
                 } else {
                     // Mise à jour en base
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                    $update = $db->prepare("UPDATE vg_utilisateur SET password = :password WHERE email = :email");
-                    $update->execute(['password' => $hashedPassword, 'email' => $resetData['email']]);
-                    $db->prepare("DELETE FROM vg_password_resets WHERE token = :token")->execute(['token' => $token]);
+                    UserManager::updatePassword($db, $resetData['email'], $hashedPassword);
+                    UserManager::deletePasswordResetToken($db, $tokenHash);
 
                     $success = "Votre mot de passe a été modifié.";
                     \App\Helpers\MailService::sendResetConfirmationEmail($resetData['email'], $resetData['prenom'] ?? 'client');

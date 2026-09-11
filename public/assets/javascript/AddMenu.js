@@ -4,11 +4,16 @@ function addNewPlat(categorie) {
     const photoInput = document.getElementById('photoPlat' + categorie);
 
     if (!titre) {
-        alert("Le titre du plat est obligatoire.");
+        showToast("Le titre du plat est obligatoire.", "error");
         return;
     }
 
     const formData = new FormData();
+    const csrfToken = document.querySelector('input[name="csrf_token"]')?.value;
+
+if (csrfToken) {
+    formData.append('csrf_token', csrfToken);
+}
     formData.append('titre_plat', titre);
     formData.append('description_plat', description);
     formData.append('categorie', categorie);
@@ -63,14 +68,19 @@ function addNewPlat(categorie) {
             const bsCollapse = bootstrap.Collapse.getInstance(collapseElement) || new bootstrap.Collapse(collapseElement);
             bsCollapse.hide();
 
+            showToast("Plat ajouté avec succès.");
+
         } else {
-            alert("Erreur : " + (data.message || 'Erreur inconnue'));
+            showToast("Erreur : " + (data.message || 'Erreur inconnue'), "error");
         }
     })
-    .catch(error => {
-        console.error('Erreur:', error);
-        alert("Une erreur technique est survenue.");
-    });
+  .catch(error => {
+    console.error('Erreur:', error);
+    showToast(
+        "Erreur technique : " + error.message,
+        "error"
+    );
+});
 }
 
 // éviter les failles XSS lors de l'affichage du titre

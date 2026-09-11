@@ -23,7 +23,7 @@ SET
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `test_transit_ecf`
+-- Structure de la table : `test_transit_ecf`
 --
 CREATE DATABASE IF NOT EXISTS `test_transit_ecf` DEFAULT CHARACTER
 SET
@@ -53,25 +53,23 @@ CREATE TABLE
 
 -- --------------------------------------------------------
 --
-CREATE TABLE `vg_avis` (
-  `avis_id` int(11) NOT NULL AUTO_INCREMENT,
-  `note` int(11) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `statut` varchar(20) NOT NULL DEFAULT 'pending',
-  `utilisateur_id` int(11) NOT NULL,
-  `commande_id` int(11) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `validated_by` int(11) DEFAULT NULL,
-  `validated_by_name` varchar(100) DEFAULT NULL,
-  `validated_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`avis_id`),
-  UNIQUE KEY `un_seule_avis_par_commande` (`commande_id`),
-  KEY `fk_avis_utilisateur` (`utilisateur_id`),
-  KEY `fk_avis_commande` (`commande_id`),
-  CONSTRAINT `fk_avis_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `vg_utilisateur` (`utilisateur_id`) ON DELETE CASCADE,
-  CONSTRAINT `fk_avis_commande` FOREIGN KEY (`commande_id`) REFERENCES `vg_commande` (`commande_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
+CREATE TABLE
+  `vg_avis` (
+    `avis_id` int (11) NOT NULL AUTO_INCREMENT,
+    `note` int (11) NOT NULL,
+    `description` varchar(255) NOT NULL,
+    `statut` varchar(20) NOT NULL DEFAULT 'pending',
+    `utilisateur_id` int (11) NOT NULL,
+    `commande_id` int (11) NOT NULL,
+    `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+    `validated_by` int (11) DEFAULT NULL,
+    `validated_by_name` varchar(100) DEFAULT NULL,
+    `validated_at` datetime DEFAULT NULL,
+    PRIMARY KEY (`avis_id`),
+    UNIQUE KEY `un_seule_avis_par_commande` (`commande_id`),
+    KEY `fk_avis_utilisateur` (`utilisateur_id`),
+    KEY `fk_avis_commande` (`commande_id`)
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 --
@@ -147,20 +145,6 @@ CREATE TABLE
     `distance_bordeaux` decimal(5, 2) DEFAULT 0.00
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
--
--- --------------------------------------------------------
---
--- Structure de la table `vg_membres_equipe`
---
-CREATE TABLE
-  `vg_membres_equipe` (
-    `id` int (11) NOT NULL,
-    `nom` varchar(255) NOT NULL,
-    `prenom` varchar(255) NOT NULL,
-    `fonction` varchar(255) DEFAULT NULL,
-    `photo_path` varchar(255) DEFAULT NULL
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
-
 -- --------------------------------------------------------
 --
 -- Structure de la table `vg_menu`
@@ -209,12 +193,13 @@ CREATE TABLE
 --
 CREATE TABLE
   `vg_plat` (
-    `plat_id` int (11) NOT NULL,
+    `plat_id` int (11) NOT NULL AUTO_INCREMENT,
     `titre_plat` varchar(50) NOT NULL,
     `description_plat` varchar(255) DEFAULT NULL,
     `photo` varchar(255) DEFAULT NULL,
     `categorie` varchar(50) DEFAULT NULL,
-    'is_active' tinyint (1) NOT NULL DEFAULT 1
+    `is_active` tinyint (1) NOT NULL DEFAULT 1,
+    PRIMARY KEY (`plat_id`)
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -293,13 +278,6 @@ ALTER TABLE `vg_allergene_plat` ADD PRIMARY KEY (`plat_id`, `allergene_id`),
 ADD KEY `allergene_id` (`allergene_id`);
 
 --
--- Index pour la table `vg_avis`
---
-ALTER TABLE `vg_avis` ADD PRIMARY KEY (`avis_id`),
-ADD KEY `fk_avis_utilisateur` (`utilisateur_id`),
-ADD KEY `fk_avis_menu` (`menu_id`);
-
---
 -- Index pour la table `vg_commande`
 --
 ALTER TABLE `vg_commande` ADD PRIMARY KEY (`commande_id`),
@@ -324,11 +302,6 @@ ALTER TABLE `vg_horaire` ADD PRIMARY KEY (`horaire_id`);
 ALTER TABLE `vg_lieu_prestation` ADD PRIMARY KEY (`id`);
 
 --
--- Index pour la table `vg_membres_equipe`
---
-ALTER TABLE `vg_membres_equipe` ADD PRIMARY KEY (`id`);
-
---
 -- Index pour la table `vg_menu`
 --
 ALTER TABLE `vg_menu` ADD PRIMARY KEY (`menu_id`),
@@ -345,11 +318,6 @@ ADD KEY `plat_id` (`plat_id`);
 -- Index pour la table `vg_password_resets`
 --
 ALTER TABLE `vg_password_resets` ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `vg_plat`
---
-ALTER TABLE `vg_plat` ADD PRIMARY KEY (`plat_id`);
 
 --
 -- Index pour la table `vg_regime`
@@ -388,10 +356,6 @@ ALTER TABLE `vg_allergene` MODIFY `allergene_id` int (11) NOT NULL AUTO_INCREMEN
 AUTO_INCREMENT = 15;
 
 --
--- AUTO_INCREMENT pour la table `vg_avis`
---
-ALTER TABLE `vg_avis` MODIFY `avis_id` int (11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT pour la table `vg_commande`
 --
@@ -417,27 +381,10 @@ ALTER TABLE `vg_lieu_prestation` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
 AUTO_INCREMENT = 54;
 
 --
--- AUTO_INCREMENT pour la table `vg_membres_equipe`
---
-ALTER TABLE `vg_membres_equipe` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT pour la table `vg_menu`
---
-ALTER TABLE `vg_menu` MODIFY `menu_id` int (11) NOT NULL AUTO_INCREMENT,
-AUTO_INCREMENT = 9;
-
---
 -- AUTO_INCREMENT pour la table `vg_password_resets`
 --
 ALTER TABLE `vg_password_resets` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
 AUTO_INCREMENT = 7;
-
---
--- AUTO_INCREMENT pour la table `vg_plat`
---
-ALTER TABLE `vg_plat` MODIFY `plat_id` int (11) NOT NULL AUTO_INCREMENT,
-AUTO_INCREMENT = 27;
 
 --
 -- AUTO_INCREMENT pour la table `vg_regime`
@@ -479,17 +426,17 @@ ALTER TABLE `vg_allergene_plat` ADD CONSTRAINT `allergene_plat_ibfk_1` FOREIGN K
 ADD CONSTRAINT `allergene_plat_ibfk_2` FOREIGN KEY (`allergene_id`) REFERENCES `vg_allergene` (`allergene_id`) ON DELETE CASCADE;
 
 --
--- Contraintes pour la table `vg_avis`
---
-ALTER TABLE `vg_avis` ADD CONSTRAINT `fk_avis_menu` FOREIGN KEY (`menu_id`) REFERENCES `vg_menu` (`menu_id`) ON DELETE CASCADE,
-ADD CONSTRAINT `fk_avis_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `vg_utilisateur` (`utilisateur_id`) ON DELETE CASCADE;
-
---
 -- Contraintes pour la table `vg_commande`
 --
 ALTER TABLE `vg_commande` ADD CONSTRAINT `fk_commande_lieu_prestation` FOREIGN KEY (`lieu_prestation_id`) REFERENCES `vg_lieu_prestation` (`id`) ON UPDATE CASCADE,
 ADD CONSTRAINT `fk_commande_menu` FOREIGN KEY (`menu_id`) REFERENCES `vg_menu` (`menu_id`) ON DELETE CASCADE,
 ADD CONSTRAINT `fk_commande_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `vg_utilisateur` (`utilisateur_id`) ON DELETE CASCADE;
+
+--
+-- Contraintes pour la table `vg_avis`
+--
+ALTER TABLE `vg_avis` ADD CONSTRAINT `fk_avis_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `vg_utilisateur` (`utilisateur_id`) ON DELETE CASCADE,
+ADD CONSTRAINT `fk_avis_commande` FOREIGN KEY (`commande_id`) REFERENCES `vg_commande` (`commande_id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `vg_commande_statut_historique`

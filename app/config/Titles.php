@@ -13,8 +13,7 @@ return [
     'edit-menu-admin'   => 'Modifier un menu',
     'update-menu-process' => 'Mettre à jour le menu',
     'ban-user-admin'    => 'Gestion des utilisateurs bannis',
-    'ban-action-admin'  => 'Bannir un utilisateur',
-    'unban-action-admin' => 'Débannir un utilisateur',
+    'unban-user-admin'  => 'Gestion des utilisateurs débannis',
 
 
     // Espace Employé / Utilisateur 
@@ -27,7 +26,7 @@ return [
     'cancel-order-employee' => 'Annuler une commande',
     'edit-order-employee'  => 'Modifier une commande',
     'edit-menu-employee'   => 'Modifier un menu',
-    'update-menu-process' => 'Mettre à jour le menu',
+    
 
 
 
@@ -44,4 +43,5 @@ return [
     'error-ban'         => 'Accès interdit',
     'forgot-password'   => 'Mot de passe oublié',
     'reset-password'    => 'Réinitialiser le mot de passe',
+    'rgpd'              => 'Politique de confidentialité et RGPD',
 ];

@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 use Brevo\Brevo;
 use Brevo\TransactionalEmails\Requests\SendTransacEmailRequest;
+use GuzzleHttp\Client;
 use Brevo\TransactionalEmails\Types\SendTransacEmailRequestSender;
 use Brevo\TransactionalEmails\Types\SendTransacEmailRequestToItem;
 
@@ -22,8 +23,12 @@ class MailService
         }
 
         try {
-            $brevo = new Brevo($apiKey);
-
+            $brevo = new Brevo($apiKey, [
+    'client' => new Client([
+        'connect_timeout' => 5,
+        'timeout'         => 10,
+    ]),
+]);
             $sender = new SendTransacEmailRequestSender([
                 'name' => 'Vite Gourmand',
                 'email' => 'sofiene31@hotmail.com'
@@ -95,13 +100,13 @@ class MailService
         return self::sendEmail('sofiene31@hotmail.com', 'Sofiene', $sujet, '', $htmlContent);
     }
     //function pour envoyer un email de réinitialisation de mot de passe à un utilisateur
-    public static function sendResetEmail(string $toEmail, string $resetLink): bool
-    {
-        $subject = "Réinitialisation de votre mot de passe";
-        $textContent = "Bonjour,\n\nVous avez demandé à réinitialiser votre mot de passe.\n\nCliquez sur le lien suivant pour procéder à la réinitialisation :\n" . $resetLink . "\n\nSi vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail.\n\nCordialement,\nL'équipe Vite Gourmand.";
+  public static function sendResetEmail(string $toEmail, string $resetLink, string $prenom = 'Client'): bool
+{
+    $subject = "Réinitialisation de votre mot de passe";
+    $textContent = "Bonjour " . $prenom . ",\n\nVous avez demandé à réinitialiser votre mot de passe.\n\nCliquez sur le lien suivant pour procéder à la réinitialisation :\n" . $resetLink . "\n\nSi vous n'êtes pas à l'origine de cette demande, vous pouvez ignorer cet e-mail.\n\nCordialement,\nL'équipe Vite Gourmand.";
 
-        return self::sendEmail($toEmail, 'Client', $subject, $textContent);
-    }
+    return self::sendEmail($toEmail, $prenom, $subject, $textContent);
+}
     //function pour envoyer un email de confirmation de réinitialisation de mot de passe à un utilisateur
     public static function sendResetConfirmationEmail(string $toEmail, string $prenom = 'client'): bool
     {

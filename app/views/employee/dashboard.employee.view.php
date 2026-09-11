@@ -5,6 +5,8 @@
  * @var int $finishedOrders
  * @var int $totalOrders
  * @var int $pendingReviews
+ * @var array $horairesList
+ * @var int $ruptureCount
  */
 ?>
 <div class="container py-4">
@@ -64,7 +66,17 @@
                 </div>
             </a>
         </div>
-
+<div class="col-md-3 mb-3">
+    <a href="index.php?page=menu-management" class="text-decoration-none">
+        <div class="card bg-dark text-white shadow-sm h-100 card-hover p-2">
+            <div class="card-body py-2 px-3">
+                <h2 class="card-title text-uppercase fw-bold fs-7 mb-1">Rupture de stock</h2>
+                <p class="fs-2 fw-bold mb-1"><?= $ruptureCount ?></p>
+                <small class="text-warning">Voir les menus →</small>
+            </div>
+        </div>
+    </a>
+</div>
     </div>
 </div>
 <!-- Zone de Travail Principale -->

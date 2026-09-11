@@ -14,6 +14,7 @@ use App\Models\Order;
 use App\Managers\OrderManager;
 use App\Helpers\MailService;
 use App\Managers\MongoStatsManager;
+use App\Helpers\SecurityManager;
 
 // class OrderMenuController pour gérer le processus de commande d'un menu
 class OrderMenuController
@@ -52,14 +53,30 @@ class OrderMenuController
 
         // Chargement des données nécessaires pour le step 0 et le step 1
         $menuInfo = MenuManager::getById($db, $menuID);
+        // Bloquer l'accès au tunnel de commande si le menu est désactivé
+if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['is_active'] ?? 1) === 0)) {
+    error_message("Ce menu n'est plus disponible.");
+    header('Location: index.php?page=search');
+    exit();
+}
+// Bloquer l'accès au tunnel de commande si le menu est en rupture de stock
+if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['quantite_restante'] ?? 0) <= 0)) {
+    error_message("Ce menu est temporairement en rupture de stock.");
+    header('Location: index.php?page=search');
+    exit();
+}
         $tousLesLieux = LieuManager::getAll($db);
         $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
         $dateMinimale = ($delaiCommande > 0) ? (new \DateTime('today'))->modify('+' . $delaiCommande . ' days')->format('Y-m-d') : null;
         $timetables = \App\Models\Timetable::ShowTimetable($db);
 
         //Lancement des différents steps du tunnel de commande
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            switch ($step) {
+       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    SecurityManager::validatePost(
+        '?page=order-menu&menu_id=' . (int)$menuID . '&step=' . $step
+    );
+
+    switch ($step) {
 
                 // --- STEP 0 : Récupération des informations de prestation et validation de la date ---
                 case 0:
@@ -88,6 +105,11 @@ class OrderMenuController
 
                     $menuInfo = MenuManager::getById($db, $menuID);
 
+                    if (!$menuInfo || (int)($menuInfo['is_active'] ?? 1) === 0) {
+    error_message("Ce menu n'est plus disponible.");
+    header('Location: index.php?page=search');
+    exit();
+}
                     if (!$menuInfo) {
                         error_message("Menu introuvable.");
                         header('Location: index.php?page=home');

@@ -13,9 +13,7 @@ class StatsAdminController
     //function pour afficher la page de statistiques admin
     public static function adminStats(\PDO $db)
     {
-        $pdo = $db;
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
+       
         Auth::check([ROLE_ADMIN]);
 
         //Récupération des filtres depuis l'URL
@@ -58,7 +56,7 @@ class StatsAdminController
         $title = "Statistiques - Vite&Gourmand";
         $specific_styles = [
             'assets/css/bootstrap/bootstrap.min.css',
-           'assets/css/Admin/AdminEmployee.css'
+           'assets/css/AdminEmployee/AdminEmployee.css'
         ];
         $specific_scripts = ["https://cdn.jsdelivr.net/npm/chart.js", 'assets/javascript/chart.js'];
 

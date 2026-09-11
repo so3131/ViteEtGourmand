@@ -19,14 +19,17 @@ document.getElementById('updateOrderForm').addEventListener('submit', async (e) 
 
         const result = await response.json();
         if (result.success) {
-            alert('Commande mise à jour avec succès !');
+            showToast('Commande mise à jour avec succès !');
             window.location.href = '?page=dashboard-user';
         } else {
-            alert('Erreur : ' + result.message);
+            showToast('Erreur : ' + result.message, 'error');
         }
     } catch (err) {
         console.error("Détail de l'erreur :", err); 
-        alert('Erreur technique lors de la communication avec le serveur.');
+        showToast(
+    'Erreur technique lors de la communication avec le serveur.',
+    'error'
+);
     }
 });
 
@@ -35,8 +38,16 @@ const inputAdresse = document.getElementById('adresse_livraison');
 const divSuggestions = document.getElementById('suggestions-adresse');
 
 if (inputAdresse) {
+    inputAdresse.addEventListener('input', () => {
+        document.getElementById('ville').value = '';
+        document.getElementById('code_postal').value = '';
+        document.getElementById('lat').value = '';
+        document.getElementById('lon').value = '';
+    });
+
     inputAdresse.addEventListener('input', async (e) => {
         const query = e.target.value.trim();
+
         if (query.length < 3) {
             divSuggestions.style.display = 'none';
             return;
@@ -106,12 +117,12 @@ document.querySelectorAll('input, select').forEach(el => {
                 const result = await response.json();
                 console.log("Réponse reçue du serveur :", result);
                 
-                // 1. Mise à jour du prix total si présent
+                // 1. Mise à jour du prix total
                 if (result.nouveau_prix !== undefined) {
                     document.getElementById('total-display').innerText = result.nouveau_prix + ' €';
                 }
                 
-                // 2. Mise à jour des frais de livraison si présents
+                // 2. Mise à jour des frais de livraison 
                 if (result.frais_livraison !== undefined) {
                     document.getElementById('montant-frais').innerText = result.frais_livraison;
                 }
@@ -124,7 +135,7 @@ document.querySelectorAll('input, select').forEach(el => {
             } catch (err) {
         console.error("Détail complet de l'erreur fetch :", err); 
         console.error("Message :", err.message);
-        alert('Erreur technique : ' + err.message);
+        showToast('Erreur technique : ' + err.message, 'error');
     }
         });
     });

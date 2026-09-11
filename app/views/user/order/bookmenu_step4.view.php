@@ -22,6 +22,9 @@
         <p class="lead">Montant total à régler : <strong><?= number_format($total_general ?? 0, 2) ?> €</strong></p>
         
         <form action="index.php?page=order-menu&step=5" method="POST">
+            <input type="hidden"
+       name="csrf_token"
+       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
             <button type="submit" class="btn btn-success">
                 <i class="bi bi-credit-card"></i> Paiement sécurisé
             </button>

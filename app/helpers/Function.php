@@ -12,4 +12,26 @@ if (!function_exists('success_message')) {
     {
         $_SESSION['flash_success'] = $message;
     }
+    // Définit un message flash et redirige
+function flash(string $type, string $message, string $redirect): void
+{
+    if (!in_array($type, ['error', 'success', 'info', 'warning'])) {
+        $type = 'info';
+    }
+    $_SESSION[$type] = $message;
+    header('Location: index.php' . $redirect);
+    exit();
+}
+
+// Raccourcis pratiques
+function flashError(string $message, string $redirect = '?page=home'): void
+{
+    flash('error', $message, $redirect);
+}
+
+function flashSuccess(string $message, string $redirect = '?page=home'): void
+{
+    flash('success', $message, $redirect);
+}
+
 }

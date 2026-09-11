@@ -29,7 +29,9 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
         <?php endif; ?>
 
         <form id="formulaire" method="POST" action="index.php?page=contact" novalidate class="mt-4">
-
+<input type="hidden"
+       name="csrf_token"
+       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
           <?php
           $motifsTickets = [
             'commande'    => 'Suivi de commande en cours',

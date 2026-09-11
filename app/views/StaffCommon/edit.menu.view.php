@@ -18,22 +18,24 @@
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Prix/Pers (€)</label>
-                    <input type="number" step="0.01" name="prix" class="form-control" value="<?= htmlspecialchars($menu['prix_par_personne'] ?? '') ?>" required>
+                    <input type="number"
+                    step="0.01" name="prix" class="form-control no-spin" value="<?= htmlspecialchars($menu['prix_par_personne'] ?? '') ?>"min="0" required>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Qté Restante</label>
-                    <input type="number" name="quantite" class="form-control" value="<?= htmlspecialchars($menu['quantite_restante'] ?? '') ?>" required>
+                    <input type="number" name="quantite" class="form-control" value="<?= htmlspecialchars($menu['quantite_restante'] ?? '') ?>"min="0" required>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Nb Personnes Minimum</label>
-                    <input type="number" name="nombre_personne_minimum" class="form-control" value="<?= htmlspecialchars($menu['nombre_personne_minimum'] ?? '') ?>">
+                    <input type="number" name="nombre_personne_minimum" class="form-control" value="<?= htmlspecialchars($menu['nombre_personne_minimum'] ?? '') ?>"
+                    min="1">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Délai de commande (jours)</label>
-                    <input type="number" name="delai_commande" class="form-control" value="<?= htmlspecialchars($menu['delai_commande'] ?? '') ?>">
+                    <input type="number" name="delai_commande" class="form-control" value="<?= htmlspecialchars($menu['delai_commande'] ?? '') ?>"min="0">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Thème</label>

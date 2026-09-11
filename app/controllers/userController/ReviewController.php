@@ -18,9 +18,7 @@ class ReviewController
         $utilisateur_id = $_SESSION['user_id'] ?? null;
 
         // Verifier que la commande appartient bien à l'utilisateur et qu'elle est sur le statut "terminee"
-        $stmt = $db->prepare("SELECT * FROM vg_commande WHERE commande_id = ? AND utilisateur_id = ? AND statut = 'terminee'");
-        $stmt->execute([$commande_id, $utilisateur_id]);
-        $order = $stmt->fetch();
+       $order = ReviewManager::getCompletedOrderForUser($db, $commande_id, $utilisateur_id);
 
         if (!$order) {
             header('Location: index.php?page=dashboard-user&error=invalid_order');
@@ -45,9 +43,7 @@ class ReviewController
         $utilisateur_id = $_SESSION['user_id'] ?? null;
 
         // Vérifier que la commande appartient à l'utilisateur et qu'elle est terminée
-        $stmt = $db->prepare("SELECT * FROM vg_commande WHERE commande_id = ? AND utilisateur_id = ? AND statut = 'terminee'");
-        $stmt->execute([$commande_id, $utilisateur_id]);
-        $order = $stmt->fetch();
+        $order = ReviewManager::getCompletedOrderForUser($db, $commande_id, $utilisateur_id);
 
         
         if (!$order || $commande_id <= 0 || $rating < 1 || $rating > 5 || empty($comment)) {

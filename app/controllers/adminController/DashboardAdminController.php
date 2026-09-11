@@ -6,7 +6,8 @@ use App\Controllers\AuthController\Auth;
 use App\Managers\MongoStatsManager;
 use App\Managers\ReviewManager;
 use App\Managers\StatAdminManager;
-
+use App\Managers\MenuManager;
+use App\Managers\HoraireManager;
 class DashboardAdminController
 {
     //function pour afficher la page du tableau de bord admin
@@ -23,8 +24,7 @@ class DashboardAdminController
                 $ouverture = !empty($_POST['heure_ouverture']) ? str_replace(':', 'h', $_POST['heure_ouverture']) : null;
                 $fermeture = !empty($_POST['heure_fermeture']) ? str_replace(':', 'h', $_POST['heure_fermeture']) : null;
             }
-            $stmt = $db->prepare("UPDATE vg_horaire SET heure_ouverture = ?, heure_fermeture = ? WHERE jour = ?");
-            $stmt->execute([$ouverture, $fermeture, $jour]);
+            HoraireManager::update($db, $jour, $ouverture, $fermeture);
             header('Location: ?page=dashboard-admin');
             exit();
         }
@@ -44,14 +44,13 @@ class DashboardAdminController
         $totalOrders    = $sqlStats['total_commandes'];
         $pendingOrders  = $sqlStats['pending_orders'];
         $finishedOrders = $sqlStats['finished_orders'];
-
+        $ruptureCount = MenuManager::countRuptureStock($db);
         // Récupération des horaires
-        $stmtHoraires = $db->query("SELECT * FROM vg_horaire");
-        $horairesList = $stmtHoraires->fetchAll(\PDO::FETCH_ASSOC);
+        $horairesList = HoraireManager::getAll($db);
 
         $specific_styles = [
             'assets/css/bootstrap/bootstrap.min.css',
-            'assets/css/Admin/AdminEmployee.css'
+            'assets/css/AdminEmployee/AdminEmployee.css'
         ];
         $specific_scripts = [
             ''
