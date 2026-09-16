@@ -3,7 +3,7 @@
 $request_uri = $_SERVER['REQUEST_URI'];
 $current_page = basename($request_uri, '.php');
 // Enlève les slashes au début et fin
-$current_page = $_GET['page'] ?? 'dashboard-employee';// Si c'est vide ou /, c'est la page d'accueil
+$current_page = $_GET['page'] ?? 'dashboard-employee'; // Si c'est vide ou /, c'est la page d'accueil
 if ($current_page === '' || $current_page === '/') {
     $current_page = 'index';
 }
@@ -30,8 +30,8 @@ if ($current_page === '' || $current_page === '/') {
     <?php endif; ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="../public/assets/css/trame.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../public/assets/css/variables.css">
 
@@ -43,8 +43,8 @@ if ($current_page === '' || $current_page === '/') {
 <body class="gestion-theme">
 
     <!-- Sidebar -->
-<div class="d-flex wrapperstyle">       
-     <aside class="sidebar flex-shrink-0">
+    <div class="d-flex wrapperstyle">
+        <aside class="sidebar flex-shrink-0">
             <div class="sidebar-header">
                 <h2>Vite & Gourmand <span>Employee</span></h2>
             </div>
@@ -77,7 +77,7 @@ if ($current_page === '' || $current_page === '/') {
                         </a>
                     </li>
 
-                                    
+
 
                     <!-- 6. Accès Front-office -->
                     <li class="nav-item">
@@ -95,18 +95,18 @@ if ($current_page === '' || $current_page === '/') {
 
         <main class="main-content flex-grow-1">
             <header class="top-bar">
-               <?php
-    $pageTitles = require ROOT_PATH . '/app/config/titles.php';
-    $pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
-?>
+                <?php
+                $pageTitles = require ROOT_PATH . '/app/Config/titles.php';
+                $pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
+                ?>
 
-<div class="breadcrumb">
-    <span style="color: var(--color-text-lighter)">Administration /</span> 
-    <strong><?= htmlspecialchars($pageName) ?></strong>
-</div>
+                <div class="breadcrumb">
+                    <span style="color: var(--color-dark-lighter)">Administration /</span>
+                    <strong><?= htmlspecialchars($pageName) ?></strong>
+                </div>
                 <div class="Employee-profile">
                     <span style="margin-right: var(--spacing-sm)">Bienvenue, <strong>Employee</strong></span>
-                    <i class="fas fa-user-circle fa-lg" style="color: var(--color-primary)"></i>
+                    <i class="fas fa-user-circle fa-lg" style="color: var(--color-dark)"></i>
                 </div>
             </header>
 

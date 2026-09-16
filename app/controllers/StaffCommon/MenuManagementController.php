@@ -34,7 +34,8 @@ class MenuManagementController
                 header("Location: index.php?page=menu-management&success=1");
                 exit();
             } catch (\Exception $e) {
-                $_SESSION['error'] = "Erreur lors de l'ajout du menu : " . $e->getMessage();
+                error_log("Erreur addMenu : " . $e->getMessage());
+                $_SESSION['error'] = "Impossible d'ajouter le menu. Vérifie les données saisies.";
                 header("Location: index.php?page=menu-management&error=1");
                 exit();
             }
@@ -47,6 +48,7 @@ class MenuManagementController
         $all_plats = PlatManager::getAllWithMenuCount($db);
         return $all_plats;
     }
+
     // Fonction pour supprimer un plat (Soft delete possiblesi lié à un menu)
     public static function deletePlat(\PDO $db, $plat_id = null)
     {
@@ -78,15 +80,15 @@ class MenuManagementController
                 $_SESSION['success'] = "Le plat a été définitivement supprimé.";
             }
         } catch (\PDOException $e) {
-            $_SESSION['error'] = "Erreur lors de la suppression : " . $e->getMessage();
+            error_log("Erreur deletePlat : " . $e->getMessage());
+            $_SESSION['error'] = "Impossible de supprimer le plat.";
         }
 
         header('Location: index.php?page=menu-management');
         exit();
     }
+
     // Function pour ajouter un plat
-
-
     public static function addPlatProcess(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -121,35 +123,46 @@ class MenuManagementController
 
             $maxFileSize = 5 * 1024 * 1024;
 
-            if (
-                isset($allowedMimeTypes[$mime]) &&
-                $_FILES['photo']['size'] <= $maxFileSize
-            ) {
-                $safeExtension = $allowedMimeTypes[$mime];
-                $newFileName = bin2hex(random_bytes(16)) . '.' . $safeExtension;
-
-                $uploadDir = ROOT_PATH . '/public/assets/uploads/plats/';
-
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
-
-                if (move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
-                    $photoPath = 'assets/uploads/plats/' . $newFileName;
-                }
+            if (!isset($allowedMimeTypes[$mime])) {
+                $_SESSION['error'] = "Format d'image non supporté (JPG, PNG ou WebP uniquement). Le plat n'a pas été créé.";
+                header('Location: index.php?page=menu-management');
+                exit();
             }
+
+            if ($_FILES['photo']['size'] > $maxFileSize) {
+                $_SESSION['error'] = "L'image ne doit pas dépasser 5 Mo. Le plat n'a pas été créé.";
+                header('Location: index.php?page=menu-management');
+                exit();
+            }
+
+            $safeExtension = $allowedMimeTypes[$mime];
+            $newFileName = bin2hex(random_bytes(16)) . '.' . $safeExtension;
+
+            $uploadDir = ROOT_PATH . '/public/assets/img/plats/';
+
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            if (!move_uploaded_file($fileTmp, $uploadDir . $newFileName)) {
+                $_SESSION['error'] = "Impossible d'enregistrer l'image sur le serveur. Le plat n'a pas été créé.";
+                header('Location: index.php?page=menu-management');
+                exit();
+            }
+
+            $photoPath = '/public/assets/img/plats/' . $newFileName;
         }
 
         try {
-            $platId = PlatManager::create($db, $titre, $description, $categorie, $photoPath, $allergenes);
+            PlatManager::create($db, $titre, $description, $categorie, $photoPath, $allergenes);
+            $_SESSION['success'] = "Le plat a été ajouté avec succès.";
+            header('Location: index.php?page=menu-management&success=1');
+            exit();
         } catch (\Exception $e) {
-
             $_SESSION['error'] = "Erreur lors de l'ajout du plat : " . $e->getMessage();
+            header('Location: index.php?page=menu-management');
+            exit();
         }
-
-
-        header('Location: index.php?page=menu-management');
-        exit();
     }
     // Fonction pour réactiver un plat désactivé
     public static function activatePlat(\PDO $db, $plat_id = null)
@@ -186,14 +199,14 @@ class MenuManagementController
         try {
             // Vérifier si le menu est lié à au moins une commande EN COURS
 
-        $hasActiveOrders = MenuManager::countActiveOrders($db, (int)$menu_id) > 0;
+            $hasActiveOrders = MenuManager::countActiveOrders($db, (int)$menu_id) > 0;
 
 
             $db->beginTransaction();
 
             if ($hasActiveOrders) {
                 // Si commande en cours : Soft delete obligatoire
-               MenuManager::deactivate($db, (int)$menu_id);
+                MenuManager::deactivate($db, (int)$menu_id);
 
                 $db->commit();
                 header('Location: index.php?page=menu-management&success=deactivated_active_orders');
@@ -207,8 +220,8 @@ class MenuManagementController
                     header('Location: index.php?page=menu-management&success=deactivated');
                 } else {
                     // Suppression définitive
-                 MenuManager::deleteLinks($db, (int)$menu_id);
-MenuManager::deleteHard($db, (int)$menu_id);
+                    MenuManager::deleteLinks($db, (int)$menu_id);
+                    MenuManager::deleteHard($db, (int)$menu_id);
 
                     $db->commit();
                     header('Location: index.php?page=menu-management&success=deleted');
@@ -233,8 +246,8 @@ MenuManager::deleteHard($db, (int)$menu_id);
         }
 
         try {
-            
-MenuManager::activate($db, (int)$menu_id);
+
+            MenuManager::activate($db, (int)$menu_id);
 
 
 
@@ -311,7 +324,7 @@ MenuManager::activate($db, (int)$menu_id);
 
                 $safeExtension = $allowedMimeTypes[$mime];
                 $newFileName = bin2hex(random_bytes(16)) . '.' . $safeExtension;
-                $uploadDir = ROOT_PATH . '/public/assets/uploads/plats/';
+                $uploadDir = ROOT_PATH . 'assets/img/plats/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
@@ -325,14 +338,18 @@ MenuManager::activate($db, (int)$menu_id);
                     exit();
                 }
 
-                $photoPath = 'assets/uploads/plats/' . $newFileName;
+                $photoPath = 'assets/img/plats/' . $newFileName;
             }
             try {
                 $plat_id = PlatManager::create($db, $titre_plat, $description, $categorie, $photoPath, $allergenes);
                 echo json_encode(['success' => true, 'plat_id' => $plat_id]);
                 exit();
             } catch (\Exception $e) {
-                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+                error_log("Erreur createPlatAjax : " . $e->getMessage());
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Impossible d’enregistrer le plat.'
+                ]);
                 exit();
             }
         }
@@ -344,6 +361,8 @@ MenuManager::activate($db, (int)$menu_id);
         $menus = MenuManager::getMenusManagement($db);
         $all_plats = PlatManager::getAllWithMenuCount($db);
         $all_allergenes = MenuManager::getAllAllergenes($db);
+        $all_themes = MenuManager::getAllThemes($db);
+        $all_regimes = MenuManager::getAllRegimes($db);
         $specific_styles = [
             'assets/css/bootstrap/bootstrap.min.css',
             'assets/css/AdminEmployee/AdminEmployee.css'
@@ -355,17 +374,17 @@ MenuManager::activate($db, (int)$menu_id);
 
         $userRole = $_SESSION['role_id'] ?? null;
         if ($userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_header.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_header.php';
         }
 
-        require_once ROOT_PATH . '/app/views/StaffCommon/menu.management.view.php';
+        require_once ROOT_PATH . '/app/Views/StaffCommon/menu.management.view.php';
 
         if ($userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_footer.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_footer.php';
         }
     }
 }

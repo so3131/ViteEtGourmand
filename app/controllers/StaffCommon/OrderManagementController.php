@@ -38,16 +38,16 @@ class OrderManagementController
 
         $userRole = $_SESSION['role_id'] ?? null;
         if ($userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_header.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_header.php';
         }
-        require_once ROOT_PATH . '/app/views/StaffCommon/order.management.view.php';
+        require_once ROOT_PATH . '/app/Views/StaffCommon/order.management.view.php';
 
         if ($userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_footer.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_footer.php';
         }
     }
 
@@ -228,5 +228,4 @@ class OrderManagementController
             exit();
         }
     }
-    
 }

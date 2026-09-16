@@ -2,7 +2,7 @@
 
 namespace App\Controllers\AdminController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 
 use App\Controllers\AuthController\Auth;
 use App\Managers\MongoStatsManager;
@@ -13,7 +13,7 @@ class StatsAdminController
     //function pour afficher la page de statistiques admin
     public static function adminStats(\PDO $db)
     {
-       
+
         Auth::check([ROLE_ADMIN]);
 
         //Récupération des filtres depuis l'URL
@@ -56,12 +56,12 @@ class StatsAdminController
         $title = "Statistiques - Vite&Gourmand";
         $specific_styles = [
             'assets/css/bootstrap/bootstrap.min.css',
-           'assets/css/AdminEmployee/AdminEmployee.css'
+            'assets/css/AdminEmployee/AdminEmployee.css'
         ];
         $specific_scripts = ["https://cdn.jsdelivr.net/npm/chart.js", 'assets/javascript/chart.js'];
 
-        require_once ROOT_PATH . '/app/views/layout/admin_header.php';
-        require_once ROOT_PATH . '/app/views/admin/stats.admin.view.php';
-        require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/admin_header.php';
+        require_once ROOT_PATH . '/app/Views/admin/stats.admin.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/admin_footer.php';
     }
 }

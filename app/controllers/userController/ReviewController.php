@@ -5,7 +5,7 @@ namespace App\Controllers\UserController;
 use App\Controllers\AuthController\Auth;
 use App\Managers\ReviewManager;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 // class ReviewController pour gérer la soumission et le stockage des avis
 class ReviewController
 {
@@ -18,7 +18,7 @@ class ReviewController
         $utilisateur_id = $_SESSION['user_id'] ?? null;
 
         // Verifier que la commande appartient bien à l'utilisateur et qu'elle est sur le statut "terminee"
-       $order = ReviewManager::getCompletedOrderForUser($db, $commande_id, $utilisateur_id);
+        $order = ReviewManager::getCompletedOrderForUser($db, $commande_id, $utilisateur_id);
 
         if (!$order) {
             header('Location: index.php?page=dashboard-user&error=invalid_order');
@@ -45,7 +45,7 @@ class ReviewController
         // Vérifier que la commande appartient à l'utilisateur et qu'elle est terminée
         $order = ReviewManager::getCompletedOrderForUser($db, $commande_id, $utilisateur_id);
 
-        
+
         if (!$order || $commande_id <= 0 || $rating < 1 || $rating > 5 || empty($comment)) {
             header('Location: index.php?page=dashboard-user&error=invalid_data');
             exit();
@@ -70,5 +70,4 @@ class ReviewController
             exit();
         }
     }
-
 }

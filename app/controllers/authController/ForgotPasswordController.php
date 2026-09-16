@@ -5,8 +5,8 @@ namespace App\Controllers\AuthController;
 use App\Helpers\MailService;
 use App\Helpers\SecurityManager;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
-require_once ROOT_PATH . '/app/helpers/FormHelper.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once ROOT_PATH . '/app/Helpers/FormHelper.php';
 
 use App\Controllers\AuthController\Auth;
 use App\Managers\UserManager;
@@ -53,8 +53,8 @@ class ForgotPasswordController
         }
 
         // Chargement de la vue
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/Auth/forgot.password.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/Auth/forgot.password.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }

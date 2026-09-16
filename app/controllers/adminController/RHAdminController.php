@@ -2,12 +2,12 @@
 
 namespace App\Controllers\AdminController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 
 use App\Controllers\AuthController\Auth;
 use App\Managers\UserAdminManager;
 use App\Helpers\MailService;
-use app\Helpers\SecurityManager;
+use App\Helpers\SecurityManager;
 
 class RhAdminController
 {
@@ -21,7 +21,7 @@ class RhAdminController
             $employes = UserAdminManager::getByRoleId($db, 2);
 
             // Récupération des utilisateurs pour la modération (avec filtres de recherche)
-          $searchTerm = isset($_GET['search-user']) ? trim($_GET['search-user']) : '';
+            $searchTerm = isset($_GET['search-user']) ? trim($_GET['search-user']) : '';
             $roleFilter = (isset($_GET['filter-role']) && $_GET['filter-role'] !== '') ? (int)$_GET['filter-role'] : null;
 
             if ($searchTerm !== '' || $roleFilter !== null) {
@@ -33,7 +33,8 @@ class RhAdminController
             // Récupération des rôles pour le menu déroulant
             $listeRoles = UserAdminManager::getAllRoles($db);
         } catch (\Exception $e) {
-            $_SESSION['error'] = "Erreur lors du chargement de la page : " . $e->getMessage();
+            error_log("Erreur adminRH : " . $e->getMessage());
+            $_SESSION['error'] = "Erreur lors du chargement de la page.";
             header('Location: index.php?page=dashboard-admin');
             exit();
         }
@@ -48,9 +49,9 @@ class RhAdminController
             "assets/javascript/tables.js"
         ];
 
-        require_once ROOT_PATH . '/app/views/layout/admin_header.php';
-        require_once ROOT_PATH . '/app/views/admin/rh.admin.view.php';
-        require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/admin_header.php';
+        require_once ROOT_PATH . '/app/Views/admin/rh.admin.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/admin_footer.php';
     }
 
     //function pour créer un employé
@@ -68,10 +69,6 @@ class RhAdminController
 
             try {
                 if (UserAdminManager::createStaff($db, $email, $hashedPassword, $roleId)) {
-                    $_SESSION['success_message'] = "L'employé a été créé avec succès et averti par mail.";
-
-
-
                     MailService::sendAccountCreationEmail($email);
                     $_SESSION['success'] = "L'employé a été créé avec succès et averti par mail.";
                 }
@@ -97,7 +94,8 @@ class RhAdminController
 
                 $_SESSION['success'] = "L'employé a été supprimé avec succès.";
             } catch (\PDOException $e) {
-                $_SESSION['error'] = "Erreur lors de la suppression : " . $e->getMessage();
+                error_log("Erreur deleteEmploye : " . $e->getMessage());
+                $_SESSION['error'] = "Impossible de supprimer l'employé.";
             }
         }
 
@@ -119,7 +117,8 @@ class RhAdminController
 
                 $_SESSION['success'] = "Le statut de l'employé a été mis à jour avec succès.";
             } catch (\PDOException $e) {
-                $_SESSION['error'] = "Erreur lors de la modification du statut : " . $e->getMessage();
+                error_log("Erreur toggleEmployeStatus : " . $e->getMessage());
+                $_SESSION['error'] = "Impossible de modifier le statut de l'employé.";
             }
         }
 
@@ -137,7 +136,8 @@ class RhAdminController
                 $_SESSION['success_message'] = 'Utilisateur désactivé avec succès !';
             }
         } catch (\Exception $e) {
-            $_SESSION['error'] = "Erreur lors de la désactivation de l'utilisateur : " . $e->getMessage();
+            error_log("Erreur banUser : " . $e->getMessage());
+            $_SESSION['error'] = "Impossible de désactiver l'utilisateur.";
 
             header('Location: index.php?page=rh-admin');
             exit();
@@ -158,7 +158,8 @@ class RhAdminController
             UserAdminManager::unBan($db, $id);
             $_SESSION['success_message'] = 'Utilisateur réactivé avec succès !';
         } catch (\Exception $e) {
-            $_SESSION['error'] = "Erreur lors de la réactivation de l'utilisateur : " . $e->getMessage();
+            error_log("Erreur unbanUser : " . $e->getMessage());
+            $_SESSION['error'] = "Impossible de réactiver l'utilisateur.";
             header('Location: index.php?page=rh-admin');
             exit();
         }

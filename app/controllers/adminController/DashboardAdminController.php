@@ -8,6 +8,8 @@ use App\Managers\ReviewManager;
 use App\Managers\StatAdminManager;
 use App\Managers\MenuManager;
 use App\Managers\HoraireManager;
+use App\Helpers\SecurityManager;
+
 class DashboardAdminController
 {
     //function pour afficher la page du tableau de bord admin
@@ -15,8 +17,10 @@ class DashboardAdminController
     {
         Auth::check([ROLE_ADMIN]);
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_horaire'])) {
+            SecurityManager::validatePost('?page=dashboard-admin');
+
             $jour = $_POST['jour'];
-           
+
             if (!empty($_POST['est_ferme'])) {
                 $ouverture = null;
                 $fermeture = null;
@@ -44,6 +48,7 @@ class DashboardAdminController
         $totalOrders    = $sqlStats['total_commandes'];
         $pendingOrders  = $sqlStats['pending_orders'];
         $finishedOrders = $sqlStats['finished_orders'];
+        $pendingReturnOrders = $sqlStats['en_attente_retour_materiel'];
         $ruptureCount = MenuManager::countRuptureStock($db);
         // Récupération des horaires
         $horairesList = HoraireManager::getAll($db);
@@ -56,8 +61,8 @@ class DashboardAdminController
             ''
         ];
 
-        require ROOT_PATH . '/app/views/layout/admin_header.php';
-        require ROOT_PATH . '/app/views/admin/dashboard.admin.view.php';
-        require ROOT_PATH . '/app/views/layout/admin_footer.php';
+        require ROOT_PATH . '/app/Views/layout/admin_header.php';
+        require ROOT_PATH . '/app/Views/admin/dashboard.admin.view.php';
+        require ROOT_PATH . '/app/Views/layout/admin_footer.php';
     }
 }

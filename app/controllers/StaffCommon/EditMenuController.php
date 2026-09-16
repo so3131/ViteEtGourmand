@@ -5,6 +5,7 @@ namespace App\Controllers\StaffCommon;
 use App\Controllers\AuthController\Auth;
 use App\Managers\MenuManager;
 use App\Managers\PlatManager;
+use App\Helpers\SecurityManager;
 // Class EditMenuController pour gérer l'édition des menus (accessible aux admins et employés)
 class EditMenuController
 {
@@ -34,7 +35,7 @@ class EditMenuController
         $all_plats = PlatManager::getAll($db);
 
         // Récupérer les thèmes et régimes pour les selects
-        $all_themes =MenuManager::getAllThemes($db);
+        $all_themes = MenuManager::getAllThemes($db);
         $all_regimes = MenuManager::getAllRegimes($db);
 
         // Récupérer les plats associés au menu a éditer pour pré-cocher les checkboxes
@@ -58,15 +59,15 @@ class EditMenuController
 
         $userRole = $_SESSION['role_id'] ?? null;
         if ($userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_header.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_header.php';
         }
-        require_once ROOT_PATH . '/app/views/StaffCommon/edit.menu.view.php';
+        require_once ROOT_PATH . '/app/Views/StaffCommon/edit.menu.view.php';
         if ($userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_footer.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_footer.php';
         }
     }
     //function pour mettre à jour un menu
@@ -82,6 +83,10 @@ class EditMenuController
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $menu_id = $_GET['menu_id'] ?? $_GET['id'] ?? null;
+
+            SecurityManager::validatePost('?page=edit-menu&id=' . $menu_id);
+
             $titre = $_POST['titre'] ?? '';
             $prix = $_POST['prix'] ?? 0;
             $quantite = max(0, (int)($_POST['quantite'] ?? 0));
@@ -93,7 +98,7 @@ class EditMenuController
             $stockage = $_POST['conditions_stockage'] ?? null;
             $plats = $_POST['plats'] ?? [];
 
-          try {
+            try {
                 MenuManager::update($db, (int)$menu_id, [
                     'titre'                   => $titre,
                     'prix'                    => $prix,
@@ -113,7 +118,7 @@ class EditMenuController
                 $_SESSION['error'] = "Erreur lors de la modification : " . $e->getMessage();
                 header('Location: index.php?page=edit-menu&id=' . $menu_id);
                 exit();
-            }  
+            }
         }
     }
 }

@@ -6,13 +6,6 @@
 /** @var int $delaiCommande */
 ?>
 
-<?php if (!empty($_SESSION['flash_error'])): ?>
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <?= htmlspecialchars($_SESSION['flash_error']) ?>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    <?php unset($_SESSION['flash_error']); ?>
-<?php endif; ?>
 
 <div class="container mt-4">
     <h1 class="mb-4">Informations de livraison</h1>
@@ -103,6 +96,7 @@
 
                 <!-- Champs cachés pour stocker la ville, la latitude et la longitude envoyés au contrôleur -->
                 <input type="hidden" name="ville" id="ville" required value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['ville'] ?? '') ?>">
+  <input type="hidden" name="code_postal" id="code_postal" value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['code_postal'] ?? '') ?>">
                 <input type="hidden" name="lat" id="lat" required value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['lat'] ?? '') ?>">
                 <input type="hidden" name="lon" id="lon" required value="<?= htmlspecialchars($_SESSION['current_order']['prestation']['lon'] ?? '') ?>">
 

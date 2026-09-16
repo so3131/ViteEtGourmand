@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-require_once dirname(__DIR__) . '/config/constants.php';
+require_once dirname(__DIR__) . '/Config/constants.php';
 // class ErrorController pour gérer l'affichage de la page d'erreur 404
 class ErrorController
 {
@@ -10,11 +10,11 @@ class ErrorController
     public static function notFound(\PDO $db)
     {
         $title = "Page introuvable - Vite & Gourmand";
-   
 
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/404.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/404.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
         exit();
     }
 }

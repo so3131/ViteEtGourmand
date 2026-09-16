@@ -4,7 +4,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <?php unset($_SESSION['success_message']); ?>
-<?php endif; 
+<?php endif;
 
 /** @var array $listeRoles */
 /** @var array $listeUtilisateurs */
@@ -56,8 +56,8 @@
                     <?php foreach ($listeUtilisateurs as $user): ?>
                         <tr class="<?= isset($user['est_actif']) && $user['est_actif'] == 0 ? 'account-disabled' : '' ?>">
                             <td><strong><?= (!empty($user['prenom']) && !empty($user['nom']))
-                                    ? htmlspecialchars($user['prenom'] . ' ' . $user['nom'])
-                                    : (!empty($user['pseudo']) ? htmlspecialchars($user['pseudo']) : 'Utilisateur') ?>
+                                            ? htmlspecialchars($user['prenom'] . ' ' . $user['nom'])
+                                            : (!empty($user['pseudo']) ? htmlspecialchars($user['pseudo']) : 'Utilisateur') ?>
                                 </strong></td>
                             <td><span class="role-badge <?= strtolower($user['role_nom'] ?? '') ?>"><?= htmlspecialchars($user['role_nom'] ?? 'Inconnu') ?></span></td>
                             <td><?= htmlspecialchars($user['email']) ?></td>
@@ -65,16 +65,20 @@
                             <td>
                                 <!-- Si l'utilisateur est actif, on affiche le bouton de bannissement, sinon le bouton de réactivation -->
                                 <?php if (!isset($user['est_actif']) || (int)$user['est_actif'] === 1): ?>
-                                    <form action="index.php?page=ban-user" method="POST" 
-                                          onsubmit="return confirm('Êtes-vous sûr de vouloir désactiver cet utilisateur ?');" 
-                                          style="display:inline;">
+                                    <form action="index.php?page=ban-user" method="POST"
+                                        onsubmit="return confirm('Êtes-vous sûr de vouloir désactiver cet utilisateur ?');"
+                                        style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+
                                         <input type="hidden" name="id" value="<?= $user['utilisateur_id'] ?>">
                                         <button type="submit" class="btn btn-danger btn-sm">Désactiver</button>
                                     </form>
                                 <?php else: ?>
-                                    <form action="index.php?page=unban-user" method="POST" 
-                                          onsubmit="return confirm('Êtes-vous sûr de vouloir réactiver cet utilisateur ?');" 
-                                          style="display:inline;">
+                                    <form action="index.php?page=unban-user" method="POST"
+                                        onsubmit="return confirm('Êtes-vous sûr de vouloir réactiver cet utilisateur ?');"
+                                        style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+
                                         <input type="hidden" name="id" value="<?= $user['utilisateur_id'] ?>">
                                         <button type="submit" class="btn btn-success btn-sm">Réactiver</button>
                                     </form>

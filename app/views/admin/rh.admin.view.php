@@ -19,7 +19,7 @@
                         <?php render_form_input('email', 'Email (Username)', 'email', 'Entrez l\'email...', ''); ?>
                     </div>
                     <div class="col-md-5">
-                        <?php render_form_input('password', 'Mot de passe temporaire', 'password', 'Mot de passe...', ''); ?>
+                        <?php render_form_input('password', 'Mot de passe temporaire', 'password', 'Mot de passe...', '','new-password'); ?>
                     </div>
                     <div class="col-md-2 mb-3">
                         <button type="submit" class="btn btn-primary btn-sm w-100 py-2">Créer</button>

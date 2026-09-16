@@ -43,7 +43,14 @@ class OrderManager
             );
 
 
-            $result = self::create($db, $order);
+            self::create($db, $order);
+            $commandeId = (int)$db->lastInsertId();
+            $sqlHistorique = "INSERT INTO vg_commande_statut_historique (commande_id, statut) VALUES (:commande_id, :statut)";
+$stmtHistorique = $db->prepare($sqlHistorique);
+$stmtHistorique->execute([
+    'commande_id' => $commandeId,
+    'statut'      => 'en_attente',
+]);
 
             // MISE À JOUR DU STOCK
 
@@ -404,7 +411,8 @@ public static function cancelOrder(\PDO $db, int $commandeId, string $motif, str
         $row = $db->query("
             SELECT COUNT(*) AS total,
                    SUM(statut = 'en_attente') AS en_attente,
-                   SUM(statut = 'terminee') AS terminee
+                   SUM(statut = 'terminee') AS terminee,
+                   SUM(statut = 'en_attente_retour_materiel') AS en_attente_retour_materiel
             FROM vg_commande
         ")->fetch(\PDO::FETCH_ASSOC);
 
@@ -412,6 +420,8 @@ public static function cancelOrder(\PDO $db, int $commandeId, string $motif, str
             'total'      => (int)($row['total'] ?? 0),
             'en_attente' => (int)($row['en_attente'] ?? 0),
             'terminee'   => (int)($row['terminee'] ?? 0),
+            'en_attente_retour_materiel' => (int)($row['en_attente_retour_materiel'] ?? 0),
         ];
     }
+  
 }

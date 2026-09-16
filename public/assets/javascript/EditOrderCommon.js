@@ -35,8 +35,7 @@ document
         );
       }
     } catch (err) {
-      console.error("Détail de l'erreur :", err);
-      showToast(
+            showToast(
         "Erreur technique lors de la communication avec le serveur.",
         "error",
       );
@@ -107,7 +106,7 @@ if (inputAdresse && divSuggestions) {
         divSuggestions.style.display = "none";
       }
     } catch (err) {
-      console.error("Erreur autocomplétion adresse :", err);
+      
     }
   });
 
@@ -160,7 +159,7 @@ async function recalculerPrix() {
       if (fraisDisplay) fraisDisplay.innerText = result.frais_livraison + " €";
     }
   } catch (err) {
-    console.error("Détail de l'erreur :", err);
+    
     showToast("Erreur technique : " + err.message, "error");
   }
 }

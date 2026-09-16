@@ -2,7 +2,7 @@
 
 namespace App\Controllers\AuthController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 
 use App\Controllers\AuthController\Auth;
 use App\Helpers\SecurityManager;
@@ -68,8 +68,8 @@ class UpdateProfilController
         $specific_styles = [];
         $specific_scripts = ["../public/assets/javascript/auth.js",];
 
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/auth/update.profile.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/auth/update.profile.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }

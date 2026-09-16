@@ -2,7 +2,8 @@
 
 namespace App\Controllers\StaffCommon;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+
 use App\Managers\ReviewManager;
 use App\Controllers\AuthController\Auth;
 
@@ -18,7 +19,7 @@ class ReviewManagementController
         $statusFilter = $_GET['status'] ?? null;
 
 
-         $reviews = \App\Managers\ReviewManager::getAllReviews($db, $statusFilter);
+        $reviews = \App\Managers\ReviewManager::getAllReviews($db, $statusFilter);
         $pendingReviews = \App\Managers\ReviewManager::getAllReviews($db, 'pending');
         $countPendingReviews = count($pendingReviews);
 
@@ -26,20 +27,20 @@ class ReviewManagementController
         $userRole = $_SESSION['role_id'] ?? null;
 
         if ($userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_header.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_header.php';
         }
 
-        require_once ROOT_PATH . '/app/views/StaffCommon/review.management.view.php';
+        require_once ROOT_PATH . '/app/Views/StaffCommon/review.management.view.php';
 
         if ($userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_footer.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_footer.php';
         }
     }
-     //function pour mettre à jour le statut d'un avis
+    //function pour mettre à jour le statut d'un avis
     public static function updateReviewStatus(\PDO $db)
     {
         Auth::check([ROLE_ADMIN, ROLE_EMPLOYE]);
@@ -87,5 +88,4 @@ class ReviewManagementController
             exit();
         }
     }
-
 }

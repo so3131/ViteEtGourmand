@@ -1,7 +1,7 @@
 <?php
 // Inclusion du fichier de configuration pour les constantes et du helper pour les formulaires
-require_once dirname(__DIR__, 2) . '/config/constants.php';
-require_once ROOT_PATH . '/app/helpers/FormHelper.php'; ?>
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once ROOT_PATH . '/app/Helpers/FormHelper.php'; ?>
 
 <main class="d-flex align-items-center min-vh-75 mt-5">
     <div class="container">

@@ -7,6 +7,7 @@ use App\Managers\ReviewManager;
 use App\Managers\MenuManager;
 use App\Managers\HoraireManager;
 use App\Managers\OrderManager;
+use App\Helpers\SecurityManager;
 
 
 
@@ -17,7 +18,9 @@ class DashboardEmployeeController
     public static function employeeDashboard(\PDO $db)
     {
         Auth::check([ROLE_EMPLOYE]);
-         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_horaire'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_horaire'])) {
+            SecurityManager::validatePost('?page=dashboard-employee');
+
             $jour = $_POST['jour'];
             // Si la case "Fermé" est cochée, on enregistre NULL pour les deux heures
             if (!empty($_POST['est_ferme'])) {
@@ -31,33 +34,35 @@ class DashboardEmployeeController
             header('Location: ?page=dashboard-employee');
             exit();
         }
-       
-   // COMPTEURS 
+
+        // COMPTEURS 
         $stats = OrderManager::getDashboardStats($db);
         $totalOrders = $stats['total'];
         $pendingOrders = $stats['en_attente'];
         $finishedOrders = $stats['terminee'];
+        $pendingReturnOrders = $stats['en_attente_retour_materiel'];
         // Récupérer les avis et comptage des avis en attente (depuis MongoDB)
-       $reviewsList = ReviewManager::getAllReviews($db);
-$pendingReviews = count(array_filter($reviewsList, fn($r) => ($r['statut'] ?? 'pending') === 'pending'));
+        $reviewsList = ReviewManager::getAllReviews($db);
+        $pendingReviews = count(array_filter($reviewsList, fn($r) => ($r['statut'] ?? 'pending') === 'pending'));
 
 
         // Données annexes pour les listes
-        
+
         $commandesList = OrderManager::getRecentOrders($db, 10);
 
 
         // Récupération des horaires
-         $horairesList = HoraireManager::getAll($db);
+        $horairesList = HoraireManager::getAll($db);
 
         // Récupération du nombre de menus en rupture de stock
-$ruptureCount = MenuManager::countRuptureStock($db);
+        $ruptureCount = MenuManager::countRuptureStock($db);
+
 
 
         $title = "Tableau de bord Employé - Vite & Gourmand";
 
-        require_once ROOT_PATH . '/app/views/layout/employee_header.php';
-        require_once ROOT_PATH . '/app/views/employee/dashboard.employee.view.php';
-        require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/employee_header.php';
+        require_once ROOT_PATH . '/app/Views/employee/dashboard.employee.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/employee_footer.php';
     }
 }

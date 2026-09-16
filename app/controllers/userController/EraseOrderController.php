@@ -4,7 +4,8 @@ namespace App\Controllers\UserController;
 
 
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+
 use App\Helpers\SecurityManager;
 use App\Controllers\AuthController\Auth;
 use App\Managers\OrderManager;
@@ -25,7 +26,7 @@ class EraseOrderController
                 exit();
             }
 
-            
+
             try {
                 // Récupérer les infos nécessaires
                 $result = OrderManager::getOrderWithDetailsForUser($db, (int)$commande_id, (int)$_SESSION['user_id']);
@@ -38,9 +39,9 @@ class EraseOrderController
                     throw new \Exception("Seules les commandes en attente peuvent être annulées.");
                 }
 
-               
 
-OrderManager::cancelOrderForUser($db, (int)$commande_id, (int)$_SESSION['user_id']);
+
+                OrderManager::cancelOrderForUser($db, (int)$commande_id, (int)$_SESSION['user_id']);
 
 
                 try {

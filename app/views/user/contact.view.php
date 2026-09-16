@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 ?>
 
 <main class="container my-5">
@@ -29,9 +29,9 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
         <?php endif; ?>
 
         <form id="formulaire" method="POST" action="index.php?page=contact" novalidate class="mt-4">
-<input type="hidden"
-       name="csrf_token"
-       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+          <input type="hidden"
+            name="csrf_token"
+            value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
           <?php
           $motifsTickets = [
             'commande'    => 'Suivi de commande en cours',
@@ -67,15 +67,15 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
           <fieldset id="message-section" class="border p-3 rounded mb-4">
             <legend class="float-none w-auto px-2 fs-5 fw-semibold text-dark">Message</legend>
 
-            <?php 
+            <?php
             render_textarea_field(
-                'message', 
-                'Votre message...', 
-                6, 
-                'erreurChampMessage', 
-                $_POST['message'] ?? '', 
-                $errors ?? []
-            ); 
+              'message',
+              'Votre message...',
+              6,
+              'erreurChampMessage',
+              $_POST['message'] ?? '',
+              $errors ?? []
+            );
             ?>
 
             <button type="submit" class="btn btn-primary w-100 py-2 mt-3 fw-semibold">Envoyer le message</button>
@@ -92,25 +92,25 @@ require_once dirname(__DIR__, 2) . '/config/constants.php';
         <div class="row row-cols-1 g-4">
 
           <div class="col text-center d-flex flex-column align-items-center">
-            <img src="assets/img/others/chef-ratatouille.jpeg" alt="Photo du Chef José" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
+            <img src="assets/img/others/chef-ratatouille.webp" alt="Photo du Chef José" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
             <div class="small fw-bold">Chef José</div>
             <div class="text-muted small">Chef de cuisine</div>
           </div>
 
           <div class="col text-center d-flex flex-column align-items-center">
-            <img src="assets/img/others/maeva_boumi.jpeg" alt="Photo de Maeva Boumi, Responsable Logistique" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
+            <img src="assets/img/others/maeva-boumi.webp" alt="Photo de Maeva Boumi, Responsable Logistique" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
             <div class="small fw-bold">Maeva Boumi</div>
             <div class="text-muted small">Responsable logistique</div>
           </div>
 
           <div class="col text-center d-flex flex-column align-items-center">
-            <img src="assets/img/others/kenza-beco.jpeg" alt="Photo de Kenza Beco, Service client" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
+            <img src="assets/img/others/kenza-beco.webp" alt="Photo de Kenza Beco, Service client" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
             <div class="small fw-bold">Kenza Beco</div>
             <div class="text-muted small">Service client</div>
           </div>
 
           <div class="col text-center d-flex flex-column align-items-center">
-            <img src="assets/img/others/younes-detail.jpeg" alt="Photo de Younes Detail, Relation traiteur & événements" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
+            <img src="assets/img/others/younes-detail.webp" alt="Photo de Younes Detail, Relation traiteur & événements" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
             <div class="small fw-bold">Younes Detail</div>
             <div class="text-muted small">Relation traiteur & événements</div>
           </div>

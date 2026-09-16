@@ -20,7 +20,7 @@ use App\Models\Timetable; ?>
                 <ul class="list-unstyled small">
                     <?php
                     if (isset($db)) {
-                        require_once ROOT_PATH . '/app/models/Timetable.php';
+                        require_once ROOT_PATH . '/app/Models/Timetable.php';
                         $timetables = Timetable::ShowTimetable($db);
                         foreach ($timetables as $timetable): ?>
                             <li><?= htmlspecialchars($timetable->jour) ?> :

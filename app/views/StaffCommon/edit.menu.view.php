@@ -10,6 +10,8 @@
         </div>
 
         <form action="index.php?page=update-menu-process&id=<?= $menu['menu_id'] ?>" method="POST">
+        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+
             <!-- Infos Principales -->
             <div class="row">
                 <div class="col-md-6 mb-3">

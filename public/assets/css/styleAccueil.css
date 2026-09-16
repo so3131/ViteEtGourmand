@@ -1,118 +1,116 @@
 /* importation des variabes CSS */
-@import url('variables.css');
+@import url("variables.css");
 
 body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    overflow-x: hidden; /* Sécurité ultime pour couper net tout dépassement horizontal */
+  background-color: var(--color-bg);
+  color: var(--color-dark);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden; /* Sécurité ultime pour couper net tout dépassement horizontal */
 }
 
 /* Section pleine largeur propre et sans scroll horizontal */
 section.full-width-section {
-    width: 100%;
-    position: relative;
-    left: 50%;
-    right: 50%;
-    transform: translateX(-50%);
-    background-color: var(--color-bg-dark); 
-    color: var(--color-white);
-    margin-top: var(--spacing-xs);
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+  width: 100%;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  transform: translateX(-50%);
+  background-color: var(--color-bg-dark-hero);
+  color: var(--color-white);
+  margin-top: var(--spacing-xs);
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
-
 
 section.bg-light {
-    background-color: var(--color-white) !important;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
-    padding: 3rem 2rem;
+  background-color: var(--color-white) !important;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 3rem 2rem;
 }
 
-
 .section {
-    background-color: var(--color-white);
-    border-radius: var(--border-radius-lg, 30px);
-    padding: 3rem 2rem;
-    margin-bottom: 2.5rem;
-    box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
-    color: var(--color-text, #212529);
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-lg, 30px);
+  padding: 3rem 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
+  color: var(--color-dark, #212529);
 }
 
 /* Style de l'image dans la hero section */
 .hero-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    object-fit: cover;
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
 }
 
 .team-img:hover {
-    transform: scale(1.05);
-    border-color: var(--color-accent); /* Devient doré au survol */
+  transform: scale(1.05);
+  border-color: var(--color-accent); /* Devient doré au survol */
 }
 
 .titre-1 {
-    font-size: var(--font-size-h1-accueil);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-accent);
-    text-align: var(--text-align-center);
-    margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-h1-accueil);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  text-align: var(--text-align-center);
+  margin-bottom: var(--spacing-md);
 }
- 
 
 .slogan-2 {
-    font-size: var(--font-size-h2-accueil);
-    font-weight: var(--font-weight-semibold);
-    border-radius: var(--border-radius-md);
-    color: var(--color-accent);
-    text-align: var(--text-align-center);
-    margin-top: var(--spacing-md);
+  font-size: var(--font-size-h2-accueil);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--border-radius-md);
+  color: var(--color-accent);
+  text-align: var(--text-align-center);
+  margin-top: var(--spacing-md);
 }
 /* ==========================================================================
    4. PERSONNALISATION DES SECTIONS ACCUEIL (ÉQUIPE & PRÉSENTATION)
    ========================================================================== */
 section.bg-dark {
-    background-color: var(--color-dark) !important;
+  background-color: var(--color-dark) !important;
 }
 
 section.bg-dark h2 {
-    color: var(--color-accent);
-    font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  font-weight: var(--font-weight-bold);
 }
 
 .plat-presentation-img {
-    max-height: 350px;
-    width: 100%;
-    object-fit: cover;
-    border: var(--border-accent);
+  max-height: 350px;
+  width: 100%;
+  object-fit: cover;
+  border: var(--border-accent);
 }
 
 .bg-light.rounded {
-    background-color: var(--color-bg-light) !important;
-    border-top: 4px solid var(--color-olive);
+  background-color: var(--color-bg) !important;
+  border-top: 4px solid var(--color-olive);
 }
 
 .team-img {
-    width: 130px;
-    height: 130px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: var(--border-accent);
-    box-shadow: var(--shadow-sm);
-    transition: transform var(--transition-base), border-color var(--transition-base);
-    background-color: var(--color-border);
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: var(--border-accent);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--transition-base),
+    border-color var(--transition-base);
+  background-color: var(--color-border);
 }
-.team-role{
-    border-radius: 50%;
-    border: var(--border-accent);
+.team-role {
+  border-radius: 50%;
+  border: var(--border-accent);
 }
-
 
 /* 
 /* 
@@ -121,16 +119,18 @@ section.bg-dark h2 {
    5. AVIS CLIENTS ET ÉTOILES
    ========================================================================== */
 .reviews-section .text-warning {
-    color: var(--color-accent, #ffc107) !important;
+  color: var(--color-accent, #ffc107) !important;
 }
 
 .card {
-    border: none !important;
-    border-radius: var(--border-radius-md);
-    transition: transform var(--transition-base), box-shadow var(--transition-base);
+  border: none !important;
+  border-radius: var(--border-radius-md);
+  transition:
+    transform var(--transition-base),
+    box-shadow var(--transition-base);
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
 }

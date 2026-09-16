@@ -2,7 +2,7 @@
 
 namespace App\Controllers\UserController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 
 use App\Managers\MenuManager;
 // class MenuController pour gérer l'affichage et la recherche des menus
@@ -30,21 +30,18 @@ class MenuController
         }
 
         $title = "Rechercher un menu - Vite Gourmand";
-        $specific_fonts = ["https://fonts.googleapis.com/css?family=Lexend&display=swap"];
+
         $specific_styles = ["assets/css/styleSearch.css", "assets/css/trame.css"];
         $specific_scripts = ["assets/javascript/recherche.js"];
 
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/user/search.Menu.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/user/search.Menu.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 
     //function pour filtrer les menus en JSON pour l'interface utilisateur
     public static function filterJson(\PDO $db)
     {
-        // Si select a une valeur, l'utiliser. Sinon utiliser le slider.
-        error_log("DEBUG: filterJson appelée");
-
         $filters = [
             'theme_id'                => $_GET['theme_id'] ?? null,
             'regime_id'               => $_GET['regime_id'] ?? null,
@@ -52,21 +49,17 @@ class MenuController
             'prix_max'                => $_GET['prix_max_slider'] ?? null,
             'nombre_personne_minimum' => $_GET['nombre_personne_minimum'] ?? null
         ];
-        error_log("DEBUG: Filters = " . json_encode($filters));
-
-
-        $menus = MenuManager::get($db, null, $filters, true);
-
-        error_log("DEBUG: Menus retournés = " . print_r($menus, true));
 
         header('Content-Type: application/json');
-        error_log("DEBUG: Avant json_encode");
-        $json = json_encode($menus);
-        error_log("JSON error: " . json_last_error_msg());
-        error_log("JSON result length: " . strlen($json));
-        error_log("PHOTO DEBUG = " . print_r($menus[0]['plats_structures'] ?? null, true));
 
-        echo $json;
+        try {
+            $menus = MenuManager::get($db, null, $filters, true);
+            echo json_encode($menus);
+        } catch (\Exception $e) {
+            error_log("Erreur filterJson : " . $e->getMessage());
+            echo json_encode([]);
+        }
+
         exit;
     }
     //function pour afficher les détails d'un menu spécifique avec ses plats et allergènes
@@ -90,11 +83,11 @@ class MenuController
         $allergenes = MenuManager::getAllergenesByMenuId($db, $menuID);
         $title = "Détail du menu - Vite Gourmand";
 
-        $specific_fonts = ["https://fonts.googleapis.com/css?family=Lexend&display=swap"];
+
         $specific_styles = ["assets/css/styleSearch.css"];
         $specific_scripts = [];
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/user/detail.menu.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/user/detail.menu.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }

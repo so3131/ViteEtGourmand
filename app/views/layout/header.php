@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 
 // Récupère la page actuelle pour la classe active du menu
 $request_uri = $_SERVER['REQUEST_URI'];
@@ -104,6 +104,6 @@ if ($current_page === '' || $current_page === '/') {
         </div>
     </nav>
   
-<?php require_once ROOT_PATH . '/app/views/layout/partials/flash-messages.php'; ?>
+<?php require_once ROOT_PATH . '/app/Views/layout/partials/flash-messages.php'; ?>
 </div>
 </header>

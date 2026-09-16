@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 ?>
 
 <main class="container-fluid py-4">

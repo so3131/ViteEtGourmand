@@ -27,12 +27,12 @@ class EditOrderController
         }
 
         // Récupérer les données de la commande avec l'adresse associée
-       $commande = OrderManager::getOrderWithDetails($db, (int)$commande_id);
-if (!$commande) {
-    $_SESSION['error'] = "Commande introuvable.";
-    header('Location: index.php?page=order-management');
-    exit();
-}
+        $commande = OrderManager::getOrderWithDetails($db, (int)$commande_id);
+        if (!$commande) {
+            $_SESSION['error'] = "Commande introuvable.";
+            header('Location: index.php?page=order-management');
+            exit();
+        }
 
         if (in_array($commande['statut'], ['annulee', 'terminee'], true)) {
             $_SESSION['error'] = "Cette commande ne peut plus être modifiée.";
@@ -53,17 +53,17 @@ if (!$commande) {
         $userRole = $_SESSION['role_id'] ?? null;
 
         if ((int)$userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_header.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_header.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_header.php';
         }
 
-        require_once ROOT_PATH . '/app/views/StaffCommon/edit.order.view.php';
+        require_once ROOT_PATH . '/app/Views/StaffCommon/edit.order.view.php';
 
         if ((int)$userRole === ROLE_ADMIN) {
-            require_once ROOT_PATH . '/app/views/layout/admin_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/admin_footer.php';
         } else {
-            require_once ROOT_PATH . '/app/views/layout/employee_footer.php';
+            require_once ROOT_PATH . '/app/Views/layout/employee_footer.php';
         }
     }
 
@@ -102,7 +102,7 @@ if (!$commande) {
 
             try {
 
-             $result = OrderManager::getOrderWithDetails($db, (int)$commande_id);
+                $result = OrderManager::getOrderWithDetails($db, (int)$commande_id);
 
                 if (!$result) {
                     throw new \Exception("Commande introuvable.");
@@ -114,7 +114,7 @@ if (!$commande) {
                     );
                 }
 
-           
+
                 $menu_id = (int)$result['menu_id'];
                 $menuData = MenuManager::getById($db, $menu_id);
                 if (!$menuData) {
@@ -218,7 +218,7 @@ if (!$commande) {
                 // Mise à jour du stock et de la commande
                 $pdo->beginTransaction();
 
-                 try {
+                try {
                     MenuManager::ajusterStock($db, $menu_id, $delta);
 
                     OrderManager::updateOrder($db, (int)$commande_id, [
@@ -241,7 +241,7 @@ if (!$commande) {
                 }
 
                 // Envoi de l'e-mail au client
-                
+
                 $client = UserManager::findById($db, (int)$result['utilisateur_id']);
 
 
@@ -265,7 +265,8 @@ if (!$commande) {
                 exit();
             } catch (\Exception $e) {
 
-                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+                error_log("Erreur processUpdate : " . $e->getMessage());
+                echo json_encode(['success' => false, 'message' => 'Erreur lors de la mise à jour de la commande.']);
                 exit();
             }
         }
@@ -283,14 +284,14 @@ if (!$commande) {
         $quantite = (int)($data['nombre_personne'] ?? 0);
         $commande_id = (int)($_GET['commande_id'] ?? 0);
 
-    $menu_id = OrderManager::getMenuIdByCommandeId($db, $commande_id);
+        $menu_id = OrderManager::getMenuIdByCommandeId($db, $commande_id);
 
         if (!$menu_id) {
             echo json_encode(['nouveau_prix' => '0.00', 'error' => 'Commande introuvable.']);
             exit();
         }
 
-       
+
         $lat = (float)($data['lat'] ?? 0);
         $lon = (float)($data['lon'] ?? 0);
         $ville = trim($data['ville'] ?? '');

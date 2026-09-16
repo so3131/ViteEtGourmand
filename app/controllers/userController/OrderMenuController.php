@@ -3,8 +3,8 @@
 namespace App\Controllers\UserController;
 
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
-require_once ROOT_PATH . '/app/helpers/Function.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once ROOT_PATH . '/app/Helpers/Function.php';
 
 use App\Models\Menu;
 use App\Managers\MenuManager;
@@ -54,29 +54,29 @@ class OrderMenuController
         // Chargement des données nécessaires pour le step 0 et le step 1
         $menuInfo = MenuManager::getById($db, $menuID);
         // Bloquer l'accès au tunnel de commande si le menu est désactivé
-if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['is_active'] ?? 1) === 0)) {
-    error_message("Ce menu n'est plus disponible.");
-    header('Location: index.php?page=search');
-    exit();
-}
-// Bloquer l'accès au tunnel de commande si le menu est en rupture de stock
-if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['quantite_restante'] ?? 0) <= 0)) {
-    error_message("Ce menu est temporairement en rupture de stock.");
-    header('Location: index.php?page=search');
-    exit();
-}
+        if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['is_active'] ?? 1) === 0)) {
+            error_message("Ce menu n'est plus disponible.");
+            header('Location: index.php?page=search');
+            exit();
+        }
+        // Bloquer l'accès au tunnel de commande si le menu est en rupture de stock
+        if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['quantite_restante'] ?? 0) <= 0)) {
+            error_message("Ce menu est temporairement en rupture de stock.");
+            header('Location: index.php?page=search');
+            exit();
+        }
         $tousLesLieux = LieuManager::getAll($db);
         $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
         $dateMinimale = ($delaiCommande > 0) ? (new \DateTime('today'))->modify('+' . $delaiCommande . ' days')->format('Y-m-d') : null;
         $timetables = \App\Models\Timetable::ShowTimetable($db);
 
         //Lancement des différents steps du tunnel de commande
-       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    SecurityManager::validatePost(
-        '?page=order-menu&menu_id=' . (int)$menuID . '&step=' . $step
-    );
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            SecurityManager::validatePost(
+                '?page=order-menu&menu_id=' . (int)$menuID . '&step=' . $step
+            );
 
-    switch ($step) {
+            switch ($step) {
 
                 // --- STEP 0 : Récupération des informations de prestation et validation de la date ---
                 case 0:
@@ -106,10 +106,10 @@ if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['quantite_restante'] ?? 0) <= 
                     $menuInfo = MenuManager::getById($db, $menuID);
 
                     if (!$menuInfo || (int)($menuInfo['is_active'] ?? 1) === 0) {
-    error_message("Ce menu n'est plus disponible.");
-    header('Location: index.php?page=search');
-    exit();
-}
+                        error_message("Ce menu n'est plus disponible.");
+                        header('Location: index.php?page=search');
+                        exit();
+                    }
                     if (!$menuInfo) {
                         error_message("Menu introuvable.");
                         header('Location: index.php?page=home');
@@ -134,12 +134,21 @@ if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['quantite_restante'] ?? 0) <= 
                         header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
                         exit();
                     }
-
-                    if (empty($datePrestation) || empty($ville)) {
-                        error_message("Veuillez remplir la date et sélectionner une adresse de livraison valide.");
+                    if (
+                        empty($datePrestation) || empty($ville) || empty($codePostal)
+                        || $latClient === 0.0 || $lonClient === 0.0
+                    ) {
+                        error_message("Veuillez remplir la date et sélectionner une adresse de livraison complete.");
                         header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
                         exit();
                     }
+                    // Une adresse de livraison doit commencer par un numéro de rue
+                    if (!preg_match('/^\s*\d+/', $adresseLivraison)) {
+                        error_message("Adresse de livraison invalide : un numéro de rue est requis.");
+                        header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
+                        exit();
+                    }
+
 
                     // Calcul des frais de livraison si la ville n'est pas Bordeaux
                     $fraisLivraison = 0.00;
@@ -462,14 +471,15 @@ if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['quantite_restante'] ?? 0) <= 
         /** @var array $timetables */
 
         $specific_scripts = ["assets/javascript/orderMenu.js"];
-        $vue = ROOT_PATH . '/app/views/user/order/bookmenu_step' . $step . '.view.php';
-        require_once ROOT_PATH . '/app/views/layout/header.php';
+        $vue = ROOT_PATH . '/app/Views/user/order/bookmenu_step' . $step . '.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
         if (file_exists($vue)) {
             require_once $vue;
         } else {
-            echo "<p>Erreur : Étape introuvable.</p>";
+            header('Location: index.php?page=404');
+            exit();
         }
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
     //function pour afficher les frais de livraison estimés en fonction du lieu sélectionné par l'utilisateur
     public static function ajaxFraisLivraison($db)
@@ -492,9 +502,9 @@ if ($menuID > 0 && (!$menuInfo || (int)($menuInfo['quantite_restante'] ?? 0) <= 
     public static function orderSuccess(\PDO $db)
     {
         // Affiche simplement une vue de succès
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/user/order/order-success.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/user/order/order-success.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
     //function pour annuler une commande en cours et nettoyer la session
     public static function cancelOrder()

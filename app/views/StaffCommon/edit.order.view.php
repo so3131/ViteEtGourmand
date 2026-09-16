@@ -57,15 +57,29 @@
 
             <div class="mb-3">
                 <label>Nombre de personnes :</label>
-                <input type="number" name="nombre_personne" class="form-control" value="<?= $commande['nombre_personne'] ?>"min="1" required>
+                <input type="number" name="nombre_personne" class="form-control" value="<?= $commande['nombre_personne'] ?>" min="1" required>
             </div>
 
             <!-- Adresse de livraison / Recherche (OpenRoute / API Géocodage) -->
             <div class="col-md-12 mb-3 position-relative">
                 <label for="adresse_livraison" class="form-label">Adresse de livraison complète <span class="text-danger">*</span></label>
+                <?php
+                $adresse = trim((string)($commande['adresse'] ?? ''));
+                $ville = trim((string)($commande['ville'] ?? ''));
+                $code_postal = trim((string)($commande['code_postal'] ?? ''));
+                $latitude = trim((string)($commande['latitude'] ?? ''));
+                $longitude = trim((string)($commande['longitude'] ?? ''));
+
+                $adresseAffichee = implode(', ', array_filter([
+                $adresse,
+                $code_postal,
+                $ville
+                ]));
+                ?>
                 <input type="text" name="adresse_livraison" id="adresse_livraison" class="form-control"
                     placeholder="Commencez à taper votre adresse..."
-                    value="<?= htmlspecialchars($commande['adresse'] ?? '') ?>" autocomplete="off" required>
+value="<?= htmlspecialchars($adresseAffichee, ENT_QUOTES, 'UTF-8') ?>"
+                    autocomplete="off" required>
                 <div class="form-text">Entrez l'adresse pour le calcul automatique des frais de livraison par route.</div>
 
                 <!-- Conteneur pour les suggestions d'adresses (Autocomplete) -->
@@ -79,6 +93,7 @@
                 </div>
             </div>
 
+            
             <!-- Champs cachés pour stocker l'adresse, la ville, le code postal, la latitude et la longitude -->
             <input type="hidden" name="ville" id="ville" required value="<?= htmlspecialchars($commande['ville'] ?? '') ?>">
             <input type="hidden" name="code_postal" id="code_postal" required value="<?= htmlspecialchars($commande['code_postal'] ?? '') ?>">

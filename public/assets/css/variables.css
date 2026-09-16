@@ -6,28 +6,14 @@
 
 /* 1. PALETTE DE COULEURS ET VARIABLES */
 :root {
-  --color-olive: #556b2f; /* Vert Olive profond */
-
-  --color-olive-light: #6b8e23; /* Vert Olive clair */
-  --color-dark: #212529; /* Anthracite / Fond sombre */
-  --color-bg-light: #f8f9fa; /* Blanc cassé pour le fond */
-  --color-bg-dark: #343a40; /* Gris foncé */
-  --color-white: #ffffff; /* Blanc pur */
-  
-  /* ===== PRINCIPALE (Charcoal élégant) ===== */
-  --color-primary: #2c3e50; /* Bleu nuit / Charcoal */
-
-  /* ===== ACCENT (Or ) ===== */
+  --color-olive: #637a2e; /* Vert Olive clair */
   --color-accent: #c9a227; /* Or antique  */
-  --color-accent-hover: #92631d; /* Or foncé au survol */
-
-  /* ===== NEUTRES (Fonds et textes) ===== */
-  --color-bg: #f4f6f8; /* Gris bleuté très clair (fond page) */
-  --color-surface: #ffffff; /* Blanc (cards, top-bar) */
   --color-sidebar: #1a252f; /* Fond sidebar */
+  --color-bg-dark-hero: #343a40; /* Gris foncé */
+  --color-dark: #2c3e50; /* Anthracite / Fond sombre */
 
-  /* ===== TEXTES ===== */
-  --color-text: #2c3e50; /* Texte principal (charcoal) */
+  --color-bg: #f4f6f8; /* Gris bleuté très clair (fond page) */
+  --color-white: #ffffff; /* Blanc pur */
 
   /* ===== ACTIONS ===== */
   --color-danger: #dc3545; /* Rouge (logout, suppression) */
@@ -61,7 +47,6 @@
   --text-align-center: center;
   --text-align-left: left;
   --text-align-right: right;
-
 
   --font-size-base: 1rem;
   --font-size-h1-accueil: 2.5rem;

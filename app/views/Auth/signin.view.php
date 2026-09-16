@@ -2,8 +2,8 @@
 
 /** @var array $errors */
 $errors = $errors ?? [];
-require_once dirname(__DIR__, 2) . '/config/constants.php';
-require_once ROOT_PATH . '/app/helpers/FormHelper.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once ROOT_PATH . '/app/Helpers/FormHelper.php';
 ?>
 
 

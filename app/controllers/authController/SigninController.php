@@ -2,7 +2,7 @@
 
 namespace App\Controllers\AuthController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 require_once __DIR__ . '/Auth.php';
 
 use App\Helpers\MailService;
@@ -21,13 +21,13 @@ class SigninController
         if (isset($_GET['redirect'])) {
             $_SESSION['redirect_after_login'] = $_GET['redirect'];
         }
-       
-       
+
+
 
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-              // Vérification CSRF
-           if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
+            // Vérification CSRF
+            if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
                 $errors['general'] = "Session expirée ou requête invalide. Veuillez recharger la page.";
             }
             $email = trim($_POST['email']);
@@ -58,8 +58,8 @@ class SigninController
 
             if (empty($errors)) {
 
-$existingUser = UserManager::findByEmail($db, $email);
-if ($existingUser) {
+                $existingUser = UserManager::findByEmail($db, $email);
+                if ($existingUser) {
 
                     $errors['email'] = "Cet email est déjà utilisé par un autre compte.";
                 } else {
@@ -68,17 +68,17 @@ if ($existingUser) {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
                     try {
-                    $userId = UserManager::create($db, [
-                        'nom' => $nom,
-                        'prenom' => $prenom,
-                        'telephone' => $gsm,
-                        'email' => $email,
-                        'password' => $hashedPassword,
-                        'adresse_postale' => $adresse_postale,
-                        'ville' => $ville,
-                        'pays' => $pays
-                    ]);
-                    $user = UserManager::findById($db, $userId);
+                        $userId = UserManager::create($db, [
+                            'nom' => $nom,
+                            'prenom' => $prenom,
+                            'telephone' => $gsm,
+                            'email' => $email,
+                            'password' => $hashedPassword,
+                            'adresse_postale' => $adresse_postale,
+                            'ville' => $ville,
+                            'pays' => $pays
+                        ]);
+                        $user = UserManager::findById($db, $userId);
 
 
                         if ($user) {
@@ -110,7 +110,7 @@ if ($existingUser) {
 
         $title = "S'inscrire - V&G";
 
-        $specifics_fonts = "https://fonts.googleapis.com/css?family=Lexend&display=swap";
+
 
         // fichiers CSS spécifiques à cette page
         $specific_styles = [
@@ -120,8 +120,8 @@ if ($existingUser) {
         // Pareil pour le JS
         $specific_scripts = ["../public/assets/javascript/auth.js",];
         $errors = $errors ?? [];
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/Auth/signin.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/Auth/signin.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }

@@ -1,10 +1,5 @@
 {
     "name": "sofie/projet_vite_gourmand_finale",
-    "autoload": {
-        "psr-4": {
-            "Sofie\\ProjetViteGourmandFinale\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "so3131",

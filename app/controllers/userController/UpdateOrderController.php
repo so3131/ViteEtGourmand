@@ -2,7 +2,7 @@
 
 namespace App\Controllers\UserController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
 
 use App\Managers\MenuManager;
 use App\Managers\OrderManager;
@@ -356,8 +356,8 @@ class UpdateOrderController
         // 2. Récupérer les lieux pour le select
         $lieux = LieuManager::getAll($db);
         $specific_scripts = ["assets/javascript/editOrder.js"];
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/user/order/edit.order.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/user/order/edit.order.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }

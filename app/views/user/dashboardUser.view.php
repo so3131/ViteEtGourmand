@@ -25,7 +25,7 @@ if (isset($_SESSION['error'])): ?>
     </div>
 <?php endif; ?>
 
-<?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/dashboard.Profil.view.php'; ?>
+<?php include ROOT_PATH . '/app/Views/user/partialsDashboardUser/dashboard.Profil.view.php'; ?>
 
 <main class="container-fluid py-4 px-lg-5">
  
@@ -33,13 +33,13 @@ if (isset($_SESSION['error'])): ?>
 
   <div class="row g-4 align-items-start">
     <aside class="col-12 col-lg-3">
-<?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/navbar.order.view.php'; ?>
+<?php include ROOT_PATH . '/app/Views/user/partialsDashboardUser/navbar.order.view.php'; ?>
        
     </aside>
 
     <section class="col-12 col-lg-9">
         <div class="tab-content" id="ordersTabContent">
-            <?php include ROOT_PATH . '/app/views/user/partialsDashboardUser/dashboard.command.tracking.view.php'; ?>
+            <?php include ROOT_PATH . '/app/Views/user/partialsDashboardUser/dashboard.command.tracking.view.php'; ?>
         </div>
     
 </section>

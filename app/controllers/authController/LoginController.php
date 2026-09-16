@@ -2,7 +2,8 @@
 
 namespace App\Controllers\AuthController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+
 use App\Controllers\AuthController\Auth;
 use App\Managers\UserManager;
 // Class LoginController pour gérer la connexion des utilisateurs
@@ -65,8 +66,8 @@ class LoginController
                     $email = trim($_POST['email'] ?? '');
                     $password = $_POST['password'] ?? '';
 
-                                     
-                   $user = UserManager::findByEmail($db, $email);
+
+                    $user = UserManager::findByEmail($db, $email);
 
                     // Vérif : l'utilisateur existe-t-il ET le mot de passe est-il correct ?
                     if ($user && password_verify($password, $user['password'])) {
@@ -74,9 +75,9 @@ class LoginController
                         if (isset($user['est_actif']) && (int)$user['est_actif'] === 0) {
                             // Le compte est banni ou suspendu
                             $error = "Votre compte a été suspendu par un administrateur. Veuillez contacter le support.";
-                            require_once ROOT_PATH . '/app/views/layout/header.php';
-                            require_once ROOT_PATH . '/app/views/ban.errormessage.view.php';
-                            require_once ROOT_PATH . '/app/views/layout/footer.php';
+                            require_once ROOT_PATH . '/app/Views/layout/header.php';
+                            require_once ROOT_PATH . '/app/Views/ban.errormessage.view.php';
+                            require_once ROOT_PATH . '/app/Views/layout/footer.php';
                             exit();
                         }
 
@@ -136,8 +137,6 @@ class LoginController
         // PRÉPARATION DE LA VUE
         $title = "Se connecter - Vite&Gourmand";
 
-        $specifics_fonts = "https://fonts.googleapis.com/css?family=Lexend&display=swap";
-
         $specific_styles = [
             "../public/assets/css/loginsignin.css",
         ];
@@ -147,8 +146,8 @@ class LoginController
         ];
 
         // Inclusion des fichiers de template pour l'affichage
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/Auth/login.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/Auth/login.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }

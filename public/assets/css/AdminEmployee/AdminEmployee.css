@@ -1,136 +1,147 @@
 /* importation des variabes CSS */
 @import url("../variables.css");
 :root {
-    --sidebar-width: 260px;
+  --sidebar-width: 260px;
 }
-  html {
-    font-size: 11px; 
+html {
+  font-size: 11px;
 }
-.wrapperstyle{
-    display: flex !important;
-    min-height: 100vh;
+.wrapperstyle {
+  display: flex !important;
+  min-height: 100vh;
 }
 body {
-    background-color: var(--color-bg-light);
+  background-color: var(--color-bg);
 }
 
 /* Sidebar */
 .sidebar {
-    --bs-offcanvas-width: var(--sidebar-width);
-    min-height: 100vh;
-    background: var(--color-sidebar);
+  --bs-offcanvas-width: var(--sidebar-width);
+  min-height: 100vh;
+  background: var(--color-sidebar);
 }
 
 .sidebar-header {
-    padding-top: var(--spacing-lg);  /* 1.5rem d'espace en haut */
+  padding-top: var(--spacing-lg); /* 1.5rem d'espace en haut */
 }
-.sidebar-header h2 { font-size: 1.1rem; margin-bottom: 2rem; 
-    color: var(--color-bg); }
-.sidebar-header span { color: var(--color-accent); }
+.sidebar-header h2 {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  color: var(--color-bg);
+}
+.sidebar-header span {
+  color: var(--color-accent);
+}
 
-.sidebar-menu ul { list-style: none; padding: 0; }
+.sidebar-menu ul {
+  list-style: none;
+  padding: 0;
+}
 .sidebar-menu a {
-    color: var(--color-white); border-color: var(--color-border-dark);
-    text-decoration: none;
-    font-weight: var(--font-weight-medium);
-    padding: var(--padding-btn);
-    display: block;
-    border-radius: var(--border-radius-sm);
-    transition: var(--transition-base);
-    margin-bottom: 5px;
+  color: var(--color-white);
+  border-color: var(--color-border-dark);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  padding: var(--padding-btn);
+  display: block;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-base);
+  margin-bottom: 5px;
 }
 .sidebar-menu a:hover {
-    background: var(--color-accent-hover); color: var(--color-white);
+  background: var(--color-olive);
+  color: var(--color-white);
 }
 
 .sidebar-menu a.active {
-    background: var(--color-accent); color: var(--color-text);
+  background: var(--color-accent)!important;
+  color: var(--color-dark);
 }
 
 .logout-btn {
-    margin-top: auto;        
-    background: var(--color-danger); color: var(--color-white);
-    text-decoration: none;
-    padding: var(--padding-btn); 
-    display: block; 
-    text-align: left;
-    border-radius: var(--border-radius-sm);
-    transition: var(--transition-base);
+  margin-top: auto;
+  background: var(--color-danger);
+  color: var(--color-white);
+  text-decoration: none;
+  padding: var(--padding-btn);
+  display: block;
+  text-align: left;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-base);
 }
 
 .logout-btn:hover {
-    background: var(--color-accent-hover); 
-    color: var(--color-white);
+  background: var(--color-danger-hover);
+  color: var(--color-white);
 }
 
 /* Main Content */
 .main-content {
-    flex: 1;             
-    min-width: 0;         
-    padding: 10px;        
-    background-color: var(--color-bg-light);
-    
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  background-color: var(--color-bg);
 }
 .top-bar {
-       background: var(--color-surface);
-    color: var(--color-text)!important;
-    padding: var(--spacing-md) var(--spacing-lg);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-xs);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: var(--spacing-xl);
+  background: var(--color-white);
+  color: var(--color-dark) !important;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-xs);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
 }
 .row.align-items-end .btn {
-    height: 38px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding-top: var(--spacing-xs) !important;
-    padding-bottom: var(--spacing-xs) !important;
+  height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding-top: var(--spacing-xs) !important;
+  padding-bottom: var(--spacing-xs) !important;
 }
-.card-title.fs-7 { font-size: 0.85rem !important; }
+.card-title.fs-7 {
+  font-size: 0.85rem !important;
+}
 
-.card{
-    background: var(--color-surface); 
-    padding: var(--spacing-md);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-xs);
-    
-
+.card {
+  background: var(--color-white);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-xs);
 }
 .stats-overview {
-    display: flex;       
-    gap: 20px;           
-    flex-wrap: wrap;     
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .stat-card {
-    flex: 1;             
-    display: flex;       
-    align-items: center; 
-    padding: var(--spacing-md);
-    background: var(--color-white);
-    border-radius: var(--border-radius-md);
-    box-shadow: var(--shadow-xs);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: var(--color-white);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-xs);
 }
 /* Bloquer la taille des graphiques Chart.js */
 .chart-container {
-    position: relative !important;
-    height: 260px !important;
-    max-height: 260px !important;
-    width: 100% !important;
+  position: relative !important;
+  height: 260px !important;
+  max-height: 260px !important;
+  width: 100% !important;
 }
 
 .chart-container canvas {
-    max-height: 260px !important;
-    width: 100% !important;
+  max-height: 260px !important;
+  width: 100% !important;
 }
 input[type="number"].no-spin::-webkit-outer-spin-button,
 input[type="number"].no-spin::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* ==========================================================================
@@ -142,13 +153,13 @@ table.dataTable thead th,
 #menusTable thead th,
 #employesTable thead th,
 #platsTable thead th {
-    cursor: pointer !important;
+  cursor: pointer !important;
 }
 #ordersTable tbody tr {
-    display: table-row !important;
-    visibility: visible !important;
-   background-color: var(--color-white) !important;
-    border-bottom: 1px solid var(--color-border) !important;
+  display: table-row !important;
+  visibility: visible !important;
+  background-color: var(--color-white) !important;
+  border-bottom: 1px solid var(--color-border) !important;
 }
 .dt-toolbar {
   display: flex !important;
@@ -202,74 +213,71 @@ table.dataTable {
 }
 /* Force la visibilité des cellules */
 #ordersTable tbody td {
-    display: table-cell !important;
-   color: var(--color-dark) !important; 
-    padding: var(--spacing-sm) !important;
-    vertical-align: middle !important;
+  display: table-cell !important;
+  color: var(--color-dark) !important;
+  padding: var(--spacing-sm) !important;
+  vertical-align: middle !important;
 }
 
 /* S'assure que le header du tableau est visible */
 #ordersTable thead tr {
-    display: table-row !important;
-    background-color: var(--color-bg-light) !important;
+  display: table-row !important;
+  background-color: var(--color-bg) !important;
 }
 /* Règle de priorité haute : cache les modales par défaut */
 .modal {
-    display: none !important;
+  display: none !important;
 }
 
 /* Surcharge Bootstrap pour s'assurer que .show les affiche */
 .modal.show {
-    display: block !important;
-    background-color: var(--shadow-xs);
+  display: block !important;
+  background-color: var(--shadow-xs);
 }
 
 /* Pagination DataTables —  */
 .dataTables_paginate a,
 .dataTables_paginate .paginate_button {
-    min-width: var(--min-touch-target) !important;
-    min-height: var(--min-touch-target) !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: var(--spacing-sm) var(--spacing-md) !important;
-    margin: 0 2px !important;
+  min-width: var(--min-touch-target) !important;
+  min-height: var(--min-touch-target) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+  margin: 0 2px !important;
 }
-
 
 /* Liens sidebar — */
 .sidebar-menu a {
-    min-height: var(--min-touch-target) !important;
-    display: flex !important;
-    align-items: center !important;
+  min-height: var(--min-touch-target) !important;
+  display: flex !important;
+  align-items: center !important;
 }
 
 /* Boutons d'action dans les tableaux */
 table .btn {
-    min-width: var(--min-touch-target) !important;
-    min-height: var(--min-touch-target) !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+  min-width: var(--min-touch-target) !important;
+  min-height: var(--min-touch-target) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 /* Badges warning — texte sombre pour contraste */
 .badge.bg-warning {
-    color: var(--color-dark) !important;
+  color: var(--color-dark) !important;
 }
 
 /* Badges info — texte blanc pour contraste */
 .badge.bg-info {
-    color: var(--color-white) !important;
+  color: var(--color-white) !important;
 }
 
 /* Boutons outline-info */
 .btn-outline-info {
-    color: var(--color-primary) !important;
-    border-color: var(--color-primary) !important;
+  color: var(--color-dark) !important;
+  border-color: var(--color-dark) !important;
 }
 .btn-outline-info:hover {
-    background-color: var(--color-primary) !important;
-    color: var(--color-white) !important;
+  background-color: var(--color-dark) !important;
+  color: var(--color-white) !important;
 }
-
-

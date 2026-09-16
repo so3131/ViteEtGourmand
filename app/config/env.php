@@ -1,7 +1,9 @@
 <?php
 // Chargement des variables d'environnement depuis le fichier .env
-//utiliser la fonction putenv pour définir les variables d'environnement et $_ENV pour les rendre accessibles dans le script.
-$envFile = __DIR__ . '/../../.env'; // Ajuste les `../` selon où se trouve ce fichier par rapport à la racine
+// Utiliser la fonction putenv pour définir les variables d'environnement et $_ENV pour les rendre accessibles dans le script.
+$envFile = ROOT_PATH . '/.env';
+
+
 if (file_exists($envFile)) {
     $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {

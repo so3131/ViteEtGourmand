@@ -58,17 +58,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (form) {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
-      console.log("Formulaire détecté et soumis !");
+     
 
       const formData = new FormData(this);
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
-      const params = new URLSearchParams(formData).toString();
-      console.log(
-        "URL finale envoyée au serveur :",
-        "index.php?page=filter&" + params,
-      );
+    
+    const params = new URLSearchParams(formData).toString();
+     
       fetch("index.php?page=filter&" + params)
         .then((response) => response.json())
         .then((data) => {
@@ -86,13 +81,13 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch((err) => console.error("Erreur de fetch : ", err));
     });
   } else {
-    console.log("Page sans formulaire de filtre, fonctionnement normal.");
+    // Formulaire de filtre absent sur cette page.
   }
 
   // Bouton réinitialiser les filtres
   if (resetBtn) {
     resetBtn.addEventListener("click", function () {
-      console.log("DEBUG: Bouton reset cliqué !");
+      
 
       // Réinitialiser le formulaire
       document.getElementById("filterForm").reset();
@@ -136,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // créer de façon dynamique les cartes de menus à partir des données récupérées de la base de données
   function createMenuCard(menu) {
-    console.log("ID du menu :", menu.menu_id);
+    
     const menuId = menu.menu_id || "#";
     const detailUrl = `index.php?page=details-menu&menu_id=${menu.menu_id}`;
     const photoUrl = getMenuPhoto(menu);
@@ -152,9 +147,7 @@ const photo = platPrincipal?.photo || 'assets/img/plats/default.webp';
 
 
 
-// Vérification
-console.log('Photo reçue :', photo);
-console.log('URL utilisée :', photoUrl);
+
     return `
             <div class="col">
                 <div class="card h-100 shadow-sm">

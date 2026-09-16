@@ -4,8 +4,9 @@ namespace App\Controllers\UserController;
 
 use App\Helpers\MailService;
 use App\Helpers\SecurityManager;
-require_once dirname(__DIR__, 2) . '/config/constants.php';
-require_once ROOT_PATH . '/app/helpers/FormHelper.php';
+
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once ROOT_PATH . '/app/Helpers/FormHelper.php';
 // class ContactController pour gérer l'affichage de la page de contact et l'envoi du formulaire
 class ContactController
 {
@@ -16,7 +17,7 @@ class ContactController
         $success = false;
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    SecurityManager::validatePost('?page=contact');
+            SecurityManager::validatePost('?page=contact');
             // Récupération et nettoyage
             $nom = strip_tags(trim($_POST['nom'] ?? ''));
             $prenom = strip_tags(trim($_POST['prenom'] ?? ''));
@@ -52,13 +53,13 @@ class ContactController
         }
 
         $title = "Nous contacter - Vite & Gourmand";
-        $specifics_fonts = "https://fonts.googleapis.com/css?family=Lexend:400,500,600&display=swap";
+
 
         $specific_styles = [];
         $specific_scripts = [];
 
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/user/contact.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/user/contact.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }

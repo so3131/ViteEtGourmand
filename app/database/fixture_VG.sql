@@ -245,13 +245,7 @@ VALUES
     (6, 'Samedi', '08H00', '19H00'),
     (7, 'Dimanche', '', '');
 
---
--- Déchargement des données de la table `vg_ville`
---
-INSERT INTO
-    `vg_ville` (`id`, `nom_ville`, `distance_bordeaux`)
-VALUES
-    (1, 'Bordeaux', 0.00);
+
 
 --
 -- Déchargement des données de la table `vg_lieu_prestation`

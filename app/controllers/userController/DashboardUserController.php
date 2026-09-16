@@ -2,8 +2,8 @@
 
 namespace App\Controllers\UserController;
 
-require_once dirname(__DIR__, 2) . '/config/constants.php';
-require_once ROOT_PATH . '/app/helpers/DashboardDisplay.php';
+require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once ROOT_PATH . '/app/Helpers/DashboardDisplay.php';
 
 use App\Controllers\AuthController\Auth;
 use App\Managers\OrderManager;
@@ -29,8 +29,8 @@ class DashboardUserController
         $specific_styles = ["assets/css/styleGestion.css"];
         $specific_scripts = ["assets/javascript/DashboardUser.js"];
 
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/user/dashboardUser.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/user/dashboardUser.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }

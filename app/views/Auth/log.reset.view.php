@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /** @var array $errors */
 /** @var string|null $success */
 ?>
 <main class="container">
     <div class="row justify-content-center my-5">
         <div class="col-md-6 col-lg-5 p-4 p-md-5 bg-white shadow-sm rounded-3">
-            
+
             <div class="text-center mb-4">
                 <h2 class="h4 fw-bold text-dark mb-2">Réinitialisation</h2>
                 <p class="text-muted small">Entrez votre adresse mail pour recevoir un lien de réinitialisation.</p>
@@ -27,16 +28,18 @@
                 </div>
             <?php endif; ?>
 
-            <form action="index.php?page=password-forgotten-send" method="POST">
+            <form action="index.php?page=forgot-password" method="POST">
+                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                 <div class="mb-3">
-                    <?php 
+                   
+                    <?php
                     render_standard_field(
-                        'email', 
-                        'Votre adresse mail', 
-                        'email', 
-                        'email@exemple.com', 
-                        $_POST['email'] ?? '', 
-                        'error_email', 
+                        'email',
+                        'Votre adresse mail',
+                        'email',
+                        'email@exemple.com',
+                        $_POST['email'] ?? '',
+                        'error_email',
                         $errors ?? []
                     );
                     ?>

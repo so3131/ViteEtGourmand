@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-require_once dirname(__DIR__) . '/config/constants.php';
+require_once dirname(__DIR__) . '/Config/constants.php';
 // class BanViewController pour gérer l'affichage de la page d'erreur de bannissement
 class BanViewController
 {
@@ -10,12 +10,12 @@ class BanViewController
     public static function errorBanMessage(\PDO $db)
     {
         $title = "Utilisateur désactivé - Vite & Gourmand";
-       
+
         $dossierApp = dirname(__DIR__);
 
-        require_once $dossierApp . '/views/layout/header.php';
-        require_once $dossierApp . '/views/ban.errormessage.view.php';
-        require_once $dossierApp . '/views/layout/footer.php';
+        require_once $dossierApp . '/Views/layout/header.php';
+        require_once $dossierApp . '/Views/ban.errormessage.view.php';
+        require_once $dossierApp . '/Views/layout/footer.php';
         exit();
     }
 }

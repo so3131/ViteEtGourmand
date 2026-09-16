@@ -29,7 +29,7 @@ if ($current_page === '' || $current_page === '/') {
         <?php endforeach; ?>
     <?php endif; ?>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
 
     <link rel="stylesheet" href="../public/assets/css/variables.css">
@@ -98,7 +98,7 @@ if ($current_page === '' || $current_page === '/') {
 <main class="main-content flex-grow-1 w-100">
         <header class="top-bar navbar navbar-expand bg-white border-bottom px-4 py-3">
              <?php
-    $pageTitles = require ROOT_PATH . '/app/config/titles.php';
+    $pageTitles = require ROOT_PATH . '/app/Config/titles.php';
     $pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
 ?>
 
@@ -122,7 +122,7 @@ if ($current_page === '' || $current_page === '/') {
         </header>
 
         <div class="container-fluid p-4">
-            <?php require_once ROOT_PATH . '/app/views/layout/partials/flash-messages.php'; ?>
+            <?php require_once ROOT_PATH . '/app/Views/layout/partials/flash-messages.php'; ?>
             <!-- Vos vues s'insèrent ici -->
         </div>
 

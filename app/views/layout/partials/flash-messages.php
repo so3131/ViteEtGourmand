@@ -1,8 +1,10 @@
 <?php
 $types = [
     'error'           => ['class' => 'text-bg-danger',  'icon' => 'bi-exclamation-circle'],
+    'flash_error'     => ['class' => 'text-bg-danger',  'icon' => 'bi-exclamation-circle'],
     'success'         => ['class' => 'text-bg-success', 'icon' => 'bi-check-circle'],
-    'success_message' => ['class' => 'text-bg-success', 'icon' => 'bi-check-circle'], // alias page RH
+    'flash_success'   => ['class' => 'text-bg-success', 'icon' => 'bi-check-circle'],
+    'success_message' => ['class' => 'text-bg-success', 'icon' => 'bi-check-circle'],
     'info'            => ['class' => 'text-bg-info',    'icon' => 'bi-info-circle'],
     'warning'         => ['class' => 'text-bg-warning', 'icon' => 'bi-exclamation-triangle'],
 ];
@@ -31,3 +33,7 @@ if ($toasts !== ''):
     <?= $toasts ?>
 </div>
 <?php endif; ?>
+
+
+<script src="<?= BASE_URL ?>/public/assets/javascript/flash-messages.js"></script>
+

@@ -1,13 +1,23 @@
 <?php
-//! Production : ne jamais afficher les erreurs
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
+// Ce fichier est le point d'entrée de l'Application. Il reçoit toutes les requêtes, gère la session, et redirige vers le bon contrôleur en fonction de la page demandée.
+require_once dirname(__DIR__) . '/app/Config/constants.php';
+require_once dirname(__DIR__) . '/app/Config/env.php';
+// Définition de l'environnement
+$appEnv = getenv('APP_ENV') ?: $_ENV['APP_ENV'] ?? 'production';
+
+// Affichage des erreurs
+if ($appEnv === 'production') {
+    ini_set('display_errors', '0');
+    ini_set('display_startup_errors', '0');
+} else {
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+}
+
 ini_set('log_errors', '1');
 error_reporting(E_ALL);
 
-// Ce fichier est le point d'entrée de l'application. Il reçoit toutes les requêtes, gère la session, et redirige vers le bon contrôleur en fonction de la page demandée.
-require_once dirname(__DIR__) . '/app/config/env.php';
-require_once dirname(__DIR__) . '/app/config/constants.php';
+
 require_once ROOT_PATH . '/app/Autoloader.php';
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 require_once dirname(__DIR__) . '/app/Helpers/FormHelper.php';
@@ -33,20 +43,20 @@ if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-require_once ROOT_PATH . '/app/config/Database.php';
+require_once ROOT_PATH . '/app/Config/Database.php';
 $db = (new Database())->connect();
 
 // On gère la déconnexion IMMEDIATEMENT avant d'afficher quoi que ce soit ou de charger la sécurité
 $page = $_GET['page'] ?? 'home';
 
 if ($page === 'logout') {
-    require_once ROOT_PATH . '/app/controllers/authController/logoutController.php';
+    require_once ROOT_PATH . '/app/Controllers/AuthController/logoutController.php';
     \App\Controllers\AuthController\LogoutController::logOut($db);
 }
 
 // 3. SÉCURITÉ GLOBALE
 
-$config = require ROOT_PATH . '/app/config/pages.php';
+$config = require ROOT_PATH . '/app/Config/pages.php';
 $pagesPubliques   = $config['publiques'];
 $pagesQuiExistent = $config['existante'];
 $pagesAdmin       = $config['admin'];

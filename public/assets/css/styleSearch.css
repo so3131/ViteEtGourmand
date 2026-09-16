@@ -1,99 +1,67 @@
-.titre-search{
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    text-align: center;
-    
-    background-color: var(--color-bg-light);
-    
+.titre-search {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-align: center;
+
+  background-color: var(--color-bg);
 }
 h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    text-align: center;
-    
-    background-color: var(--color-bg-light);
-    
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-align: center;
+
+  background-color: var(--color-bg);
 }
 .carousel-item img {
-    width: 100%;       
-    height: 400px;     
-    object-fit: cover; 
-    object-position: center; 
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  object-position: center;
 }
 .card {
-    max-width: 100%;
-    margin-left: 0;
-    margin-right: 0;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* Force l'image à ne pas dépasser la carte */
 .card img {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-}
-/* 1. Bouton "Voir le détail" */
-.card .btn-primary {
-    background-color: var(--color-accent) !important;
-    border-color: var(--color-accent-hover) !important;
-    color: var(--color-dark) !important;
-    border-radius: var(--border-radius-md);
-    transition: var(--transition-base);
-}
-/* 1. Bouton "Voir le détail" au survol */
-.card .btn-primary:hover {
-    background-color: var(--color-accent-hover) !important;
-    border-color: var(--color-accent-hover) !important;
-    color: var(--color-dark) !important;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-button);
+  width: 100%;
+  height: auto;
+  object-fit: cover;
 }
 
-/* 2. Bouton "Appliquer les filtres" */
-#filterForm > button[type="submit"] {
-    background-color: var(--color-accent) !important;
-    border-color: var(--color-olive) !important;
-    color: var(--color-dark) !important;
-    font-weight: 500;
-    transition: var(--transition-base);
-}
-
-#filterForm > button[type="submit"]:hover {
-    background-color: var(--color-olive-light) !important;
-    border-color: var(--color-olive-light) !important;
-    color:var(--color-dark) !important;
-}
 #reset-filters {
-    background-color: var(--color-white) !important;
-    border-color: var(--color-accent) !important;
-    color: var(--color-dark) !important;
-    font-weight: 500;
-    transition: var(--transition-base);
+  background-color: var(--color-white) !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-dark) !important;
+  font-weight: 500;
+  transition: var(--transition-base);
 }
 #reset-filters:hover {
-    background-color: var(--color-accent) !important;
-    border-color: var(--color-accent) !important;
-    color: var(--color-white) !important;
+  background-color: var(--color-accent) !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-white) !important;
 }
 .noUi-connect {
-    background-color: var(--color-bg-dark) !important;
+  background-color: var(--color-bg-dark-hero) !important;
 }
 /* ==========================================================================
    CORRECTION GLOBALE DES SELECTS SUR MOBILE
    ========================================================================== */
 @media (max-width: 768px) {
-    /* Empêche le body et le html de perturber le positionnement des fenêtres natives du téléphone */
-    body {
-        overflow-x: hidden;
-        position: relative;
-    }
+  /* Empêche le body et le html de perturber le positionnement des fenêtres natives du téléphone */
+  body {
+    overflow-x: hidden;
+    position: relative;
+  }
 
-    /* Force tous les form-select du site à garder une taille standard lisible par le système mobile */
-    .form-select {
-        font-size: 16px !important; /* Évite les bugs de zoom et de positionnement natif */
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-    }
+  /* Force tous les form-select du site à garder une taille standard lisible par le système mobile */
+  .form-select {
+    font-size: 16px !important; /* Évite les bugs de zoom et de positionnement natif */
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
 }

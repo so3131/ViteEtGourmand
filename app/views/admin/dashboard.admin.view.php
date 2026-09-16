@@ -10,6 +10,7 @@
  * @var int $todayOrders
  * @var array $horairesList
  * @var int $ruptureCount
+ * @var int $pendingReturnOrders
  */
 ?>
 
@@ -70,17 +71,30 @@
                 </div>
             </a>
         </div>
-<div class="col-md-3 mb-3">
-    <a href="index.php?page=menu-management" class="text-decoration-none">
-        <div class="card bg-dark text-white shadow-sm h-100 card-hover p-2">
-            <div class="card-body py-2 px-3">
-                <h2 class="card-title text-uppercase fw-bold fs-7 mb-1">Rupture de stock</h2>
-                <p class="fs-2 fw-bold mb-1"><?= $ruptureCount ?></p>
-                <small class="text-warning">Voir les menus →</small>
-            </div>
+        <div class="col-md-3 mb-3">
+            <a href="index.php?page=menu-management" class="text-decoration-none">
+                <div class="card bg-dark text-white shadow-sm h-100 card-hover p-2">
+                    <div class="card-body py-2 px-3">
+                        <h2 class="card-title text-uppercase fw-bold fs-7 mb-1">Rupture de stock</h2>
+                        <p class="fs-2 fw-bold mb-1"><?= $ruptureCount ?></p>
+                        <small class="text-warning">Voir les menus →</small>
+                    </div>
+                </div>
+            </a>
         </div>
-    </a>
-</div>
+
+        <!-- Carte Total des commandes en attente de retour materiel -->
+        <div class="col-md-3 mb-3">
+            <a href="index.php?page=order-management&client_nom=&status=en_attente_retour_materiel" class="text-decoration-none">
+                <div class="card bg-primary text-white shadow-sm h-100 card-hover">
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase fw-bold">Commandes en attente de retour materiel</h6>
+                        <p class="display-5 fw-bold mb-0"><?= $pendingReturnOrders ?></p>
+                        <small class="text-white-50">Voir tout →</small>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
 <!-- Zone de Travail Principale -->
@@ -124,7 +138,8 @@
         <div class="col-md-4">
             <div class="card shadow-sm p-4 mb-4">
                 <h3 class="mb-3">Modifier un jour</h3>
-                <form action="?page=dashboard-admin" method="POST">
+                <form action="?page=dashboard-admin" method="POST"> <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+
                     <div class="mb-3">
                         <label for="jour" class="form-label">Jour</label>
                         <select name="jour" id="jour" class="form-select" required>

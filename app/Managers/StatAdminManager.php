@@ -16,7 +16,9 @@ class StatAdminManager
                     (SELECT COUNT(*) FROM vg_utilisateur) AS total_utilisateurs,
                     (SELECT COUNT(*) FROM vg_theme) AS total_themes,
                     (SELECT COUNT(*) FROM vg_regime) AS total_regimes,
-                    (SELECT COUNT(*) FROM vg_utilisateur) AS total_users";
+                    (SELECT COUNT(*) FROM vg_utilisateur) AS total_users,
+                    (SELECT COUNT(*) FROM vg_commande WHERE statut = 'en_attente_retour_materiel') AS en_attente_retour_materiel
+        ";
 
         $stmt = $db->query($sql);
         return $stmt->fetch(\PDO::FETCH_ASSOC);

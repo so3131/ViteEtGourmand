@@ -27,7 +27,7 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  background-color: var(--color-bg-light, #f8f9fa);
+  background-color: var(--color-bg, #f8f9fa);
   color: var(--color-dark, #212529);
 }
 
@@ -55,15 +55,30 @@ img {
   padding-left: 0;
   padding-right: 0;
 }
-
+.card .btn-primary,
 .btn-primary,
 .btn-success,
 .btn-valider,
-.btn-enregistrer {
+.btn-enregistrer,
+#filterForm > button[type="submit"] {
   background-color: var(--color-accent) !important;
   border-color: var(--color-olive) !important;
-  color: var(--color-bg-dark) !important;
+  color: var(--color-bg-dark-hero) !important;
   font-weight: var(--font-weight-medium);
+}
+
+.card .btn-primary:hover,
+.btn-primary:hover,
+.btn-success:hover,
+.btn-valider:hover,
+.btn-enregistrer:hover,
+#filterForm > button[type="submit"]:hover,
+.card .btn-primary:hover {
+ background-color: var(--color-olive) !important;
+  border-color: var(--color-olive) !important;
+  color: var(--color-white) !important;
+  box-shadow: var(--shadow-button);
+  transform: translateY(-2px);
 }
 /* ==========================================================================
    2. FORMULAIRES & MESSAGES D'ERREUR
@@ -89,7 +104,8 @@ img {
 
 .form-control:focus {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--color-accent) 25%, transparent);
+  box-shadow: 0 0 0 0.2rem
+    color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
 select {
   max-width: 100%;
@@ -257,8 +273,9 @@ footer .text-danger {
 }
 
 /* ==========================================================================
-   6. TOASTS
+   6. TOASTS ET ALERTES FLASH
    ========================================================================== */
+/* TOASTS */
 #toast-container {
   position: fixed;
   top: var(--spacing-lg);
@@ -314,6 +331,32 @@ footer .text-danger {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+/* ALERTES FLASH */
+#flash-js {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2000;
+  width: auto;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#flash-js .alert {
+  margin-bottom: 0;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border-left: 4px solid;
+}
+
+@media (max-width: 576px) {
+  #flash-js {
+    left: 1rem;
+    right: 1rem;
+    max-width: none;
   }
 }
 /* ==========================================================================

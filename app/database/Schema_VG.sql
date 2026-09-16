@@ -184,7 +184,8 @@ CREATE TABLE
     `email` varchar(255) NOT NULL,
     `token` varchar(255) NOT NULL,
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    `expires_at` datetime NOT NULL
+    `expires_at` datetime NOT NULL,
+    UNIQUE KEY `uk_email` (`email`)
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -254,14 +255,7 @@ CREATE TABLE
 
 -- --------------------------------------------------------
 --
--- Structure de la table `vg_ville`
---
-CREATE TABLE
-  `vg_ville` (
-    `id` int (11) NOT NULL,
-    `nom_ville` varchar(100) NOT NULL,
-    `distance_bordeaux` decimal(5, 2) NOT NULL
-  ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
 
 --
 -- Index pour les tables déchargées
@@ -317,7 +311,9 @@ ADD KEY `plat_id` (`plat_id`);
 --
 -- Index pour la table `vg_password_resets`
 --
-ALTER TABLE `vg_password_resets` ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `vg_password_resets` ADD PRIMARY KEY (`id`),
+ADD UNIQUE KEY `uk_email` (`email`);
 
 --
 -- Index pour la table `vg_regime`
@@ -341,10 +337,6 @@ ALTER TABLE `vg_utilisateur` ADD PRIMARY KEY (`utilisateur_id`),
 ADD UNIQUE KEY `email` (`email`),
 ADD KEY `fk_vg_utilisateur_role` (`role_id`);
 
---
--- Index pour la table `vg_ville`
---
-ALTER TABLE `vg_ville` ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -410,11 +402,6 @@ AUTO_INCREMENT = 10;
 ALTER TABLE `vg_utilisateur` MODIFY `utilisateur_id` int (11) NOT NULL AUTO_INCREMENT,
 AUTO_INCREMENT = 25;
 
---
--- AUTO_INCREMENT pour la table `vg_ville`
---
-ALTER TABLE `vg_ville` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
-AUTO_INCREMENT = 2;
 
 --
 -- Contraintes pour les tables déchargées

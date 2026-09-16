@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-require_once dirname(__DIR__) . '/config/constants.php';
+require_once dirname(__DIR__) . '/Config/constants.php';
 
 // class SuccessController pour gérer l'affichage de la page de succès après l'envoi d'un message de contact
 class SuccessController
@@ -11,10 +11,10 @@ class SuccessController
     public static function successMessage(\PDO $db)
     {
         $title = "Message envoyé - Vite & Gourmand";
-       
-        require_once ROOT_PATH . '/app/views/layout/header.php';
-        require_once ROOT_PATH . '/app/views/contact.success.view.php';
-        require_once ROOT_PATH . '/app/views/layout/footer.php';
+
+        require_once ROOT_PATH . '/app/Views/layout/header.php';
+        require_once ROOT_PATH . '/app/Views/contact.success.view.php';
+        require_once ROOT_PATH . '/app/Views/layout/footer.php';
         exit();
     }
 }
