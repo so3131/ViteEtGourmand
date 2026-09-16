@@ -26,7 +26,7 @@ if ($current_page === '' || $current_page === '/') {
     <meta property="og:title" content="Vite&Gourmand">
     <meta property="og:description"
         content=" Vite & Gourmand est un traiteur spécialisé dans la création de menus pour les événements. Nous proposons une large gamme de plats adaptés à tous les goûts et régimes alimentaires, avec un service de livraison rapide et fiable. Découvrez nos menus sur mesure pour rendre votre événement inoubliable.">
-        
+
     <meta property="og:type" content="website">
     <!-- Stylesheets -->
     <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/css/bootstrap/bootstrap.min.css">
@@ -64,46 +64,48 @@ if ($current_page === '' || $current_page === '/') {
 
             <!-- Liens de navigation -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-               <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center align-lg-items-start text-center text-lg-start">
-    <li class="nav-item">
-        <a class="nav-link <?php echo ($current_page === 'index') ? 'active' : ''; ?>" aria-current="page" href="?page=home">Accueil</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link <?php echo ($current_page === 'search') ? 'active' : ''; ?>" href="?page=search">Accès à tous les menus</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link <?php echo ($current_page === 'contact') ? 'active' : ''; ?>" href="?page=contact">Contact</a>
-    </li>
-    <?php if (isset($_SESSION['user_id'])): ?>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle-no-arrow d-flex align-items-center justify-content-center justify-content-lg-start gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Mon compte
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 text-center text-lg-start" style="min-width: 220px;">
-                <li class="text-center py-3 border-bottom mb-2">
-                    <div class="small fw-bold text-dark">Espace Personnel</div>
-                </li>
-                <?php if (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_ADMIN): ?>
-                    <li><a class="dropdown-item rounded-2 py-2 px-3" href="?page=dashboard-admin">Gestion Admin</a></li>
-                <?php elseif (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_EMPLOYE): ?>
-                    <li><a class="dropdown-item rounded-2 py-2 px-3" href="?page=dashboard-employee">Gestion Employé</a></li>
-                <?php else: ?>
-                    <li><a class="dropdown-item rounded-2 py-2 px-3 <?php echo ($current_page === 'dashboard-user') ? 'active' : ''; ?>" href="?page=dashboard-user">Gérer mon compte</a></li>
-                <?php endif; ?>
-                <li><hr class="dropdown-divider my-2"></li>
-                <li><a class="dropdown-item rounded-2 py-2 px-3 text-danger btn-logout" href="index.php?page=logout">Déconnexion</a></li>
-            </ul>
-        </li>
-    <?php else: ?>
-        <li class="nav-item" id="nav-login-item">
-            <a class="nav-link px-3 custom-login-btn" href="?page=login">Connexion / Inscription</a>
-        </li>
-    <?php endif; ?>
-</ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center align-lg-items-start text-center text-lg-start">
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo ($current_page === 'index') ? 'active' : ''; ?>" aria-current="page" href="?page=home">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo ($current_page === 'search') ? 'active' : ''; ?>" href="?page=search">Accès à tous les menus</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <?php echo ($current_page === 'contact') ? 'active' : ''; ?>" href="?page=contact">Contact</a>
+                    </li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle-no-arrow d-flex align-items-center justify-content-center justify-content-lg-start gap-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Mon compte
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2 mt-2 text-center text-lg-start" style="min-width: 220px;">
+                                <li class="text-center py-3 border-bottom mb-2">
+                                    <div class="small fw-bold text-dark">Espace Personnel</div>
+                                </li>
+                                <?php if (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_ADMIN): ?>
+                                    <li><a class="dropdown-item rounded-2 py-2 px-3" href="?page=dashboard-admin">Gestion Admin</a></li>
+                                <?php elseif (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_EMPLOYE): ?>
+                                    <li><a class="dropdown-item rounded-2 py-2 px-3" href="?page=dashboard-employee">Gestion Employé</a></li>
+                                <?php else: ?>
+                                    <li><a class="dropdown-item rounded-2 py-2 px-3 <?php echo ($current_page === 'dashboard-user') ? 'active' : ''; ?>" href="?page=dashboard-user">Gérer mon compte</a></li>
+                                <?php endif; ?>
+                                <li>
+                                    <hr class="dropdown-divider my-2">
+                                </li>
+                                <li><a class="dropdown-item rounded-2 py-2 px-3 text-danger btn-logout" href="index.php?page=logout">Déconnexion</a></li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item" id="nav-login-item">
+                            <a class="nav-link px-3 custom-login-btn" href="?page=login">Connexion / Inscription</a>
+                        </li>
+                    <?php endif; ?>
+                </ul>
             </div>
         </div>
     </nav>
-  
-<?php require_once ROOT_PATH . '/app/Views/layout/partials/flash-messages.php'; ?>
-</div>
+
+    <?php require_once ROOT_PATH . '/app/Views/layout/partials/flash-messages.php'; ?>
+    </div>
 </header>

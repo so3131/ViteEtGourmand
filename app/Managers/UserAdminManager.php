@@ -24,7 +24,7 @@ class UserAdminManager
             $checkStmt->execute(['id' => $id]);
             $userTarget = $checkStmt->fetch(\PDO::FETCH_ASSOC);
 
-            
+
             if ($userTarget && $userTarget['role_id'] == 1) {
                 throw new \Exception("Action impossible : vous ne pouvez pas bannir un administrateur.");
             }
@@ -42,7 +42,7 @@ class UserAdminManager
     }
 
     //function pour réactiver un utilisateur (unban)
-  //function pour réactiver un utilisateur (unban)
+    //function pour réactiver un utilisateur (unban)
     public static function unBan(\PDO $pdo, int $id)
     {
         $stmtUser = $pdo->prepare("UPDATE vg_utilisateur SET est_actif = 1 WHERE utilisateur_id = :id");

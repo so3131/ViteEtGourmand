@@ -74,7 +74,7 @@ img {
 .btn-enregistrer:hover,
 #filterForm > button[type="submit"]:hover,
 .card .btn-primary:hover {
- background-color: var(--color-olive) !important;
+  background-color: var(--color-olive) !important;
   border-color: var(--color-olive) !important;
   color: var(--color-white) !important;
   box-shadow: var(--shadow-button);

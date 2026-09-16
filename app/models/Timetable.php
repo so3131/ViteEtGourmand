@@ -1,11 +1,11 @@
 <?php
 
 namespace App\Models;
-    // La classe Timetable représente un horaire d'ouverture et de fermeture pour un jour spécifique. Elle contient les propriétés suivantes :
-    // - timetable_id : l'identifiant unique de l'horaire (int) 
-    // - jour : le jour de l'horaire (string)
-    // - heure_ouverture : l'heure d'ouverture de l'horaire (string)
-    // - heure_fermeture : l'heure de fermeture de l'horaire (string) 
+// La classe Timetable représente un horaire d'ouverture et de fermeture pour un jour spécifique. Elle contient les propriétés suivantes :
+// - timetable_id : l'identifiant unique de l'horaire (int) 
+// - jour : le jour de l'horaire (string)
+// - heure_ouverture : l'heure d'ouverture de l'horaire (string)
+// - heure_fermeture : l'heure de fermeture de l'horaire (string) 
 class Timetable
 {
     public int $timetable_id;
@@ -24,7 +24,7 @@ class Timetable
         $this->heure_ouverture = $heure_ouverture;
         $this->heure_fermeture = $heure_fermeture;
     }
-//function pour récupérer tous les horaires depuis la base de données SQL
+    //function pour récupérer tous les horaires depuis la base de données SQL
     public static function ShowTimetable(\PDO $db, array $timetables = [])
     {
         try {

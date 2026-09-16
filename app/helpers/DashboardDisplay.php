@@ -59,7 +59,7 @@ function renderOrderRow(array $order, \PDO $db)
 
             <?php
             // Vérifier si l'utilisateur a déjà donné un avis pour cette commande
-$hasReviewed = ReviewManager::alreadyReviewedOrder($db, (int)$order['commande_id']);
+            $hasReviewed = ReviewManager::alreadyReviewedOrder($db, (int)$order['commande_id']);
 
 
             ?>

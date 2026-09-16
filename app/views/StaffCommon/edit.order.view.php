@@ -71,14 +71,14 @@
                 $longitude = trim((string)($commande['longitude'] ?? ''));
 
                 $adresseAffichee = implode(', ', array_filter([
-                $adresse,
-                $code_postal,
-                $ville
+                    $adresse,
+                    $code_postal,
+                    $ville
                 ]));
                 ?>
                 <input type="text" name="adresse_livraison" id="adresse_livraison" class="form-control"
                     placeholder="Commencez à taper votre adresse..."
-value="<?= htmlspecialchars($adresseAffichee, ENT_QUOTES, 'UTF-8') ?>"
+                    value="<?= htmlspecialchars($adresseAffichee, ENT_QUOTES, 'UTF-8') ?>"
                     autocomplete="off" required>
                 <div class="form-text">Entrez l'adresse pour le calcul automatique des frais de livraison par route.</div>
 
@@ -93,7 +93,7 @@ value="<?= htmlspecialchars($adresseAffichee, ENT_QUOTES, 'UTF-8') ?>"
                 </div>
             </div>
 
-            
+
             <!-- Champs cachés pour stocker l'adresse, la ville, le code postal, la latitude et la longitude -->
             <input type="hidden" name="ville" id="ville" required value="<?= htmlspecialchars($commande['ville'] ?? '') ?>">
             <input type="hidden" name="code_postal" id="code_postal" required value="<?= htmlspecialchars($commande['code_postal'] ?? '') ?>">

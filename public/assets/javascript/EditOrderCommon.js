@@ -35,7 +35,7 @@ document
         );
       }
     } catch (err) {
-            showToast(
+      showToast(
         "Erreur technique lors de la communication avec le serveur.",
         "error",
       );
@@ -105,9 +105,7 @@ if (inputAdresse && divSuggestions) {
       } else {
         divSuggestions.style.display = "none";
       }
-    } catch (err) {
-      
-    }
+    } catch (err) {}
   });
 
   document.addEventListener("click", (e) => {
@@ -159,7 +157,6 @@ async function recalculerPrix() {
       if (fraisDisplay) fraisDisplay.innerText = result.frais_livraison + " €";
     }
   } catch (err) {
-    
     showToast("Erreur technique : " + err.message, "error");
   }
 }

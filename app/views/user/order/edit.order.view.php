@@ -7,9 +7,9 @@
         <h2>Modifier ma commande #<?= htmlspecialchars($commande['numero_commande']) ?></h2>
 
         <form id="updateOrderForm" data-id="<?= htmlspecialchars($commande['id'] ?? $commande['commande_id']) ?>" class="p-4 border rounded shadow-sm">
-<input type="hidden"
-       name="csrf_token"
-       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+            <input type="hidden"
+                name="csrf_token"
+                value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
             <div class="mb-3">
                 <label>Date de prestation :</label>
                 <input type="date"
@@ -26,7 +26,7 @@
 
             <div class="mb-3">
                 <label>Nombre de personnes :</label>
-                <input type="number" name="nombre_personne" class="form-control" value="<?= $commande['nombre_personne'] ?>"min="1" required>
+                <input type="number" name="nombre_personne" class="form-control" value="<?= $commande['nombre_personne'] ?>" min="1" required>
             </div>
 
             <!-- Adresse de livraison / Recherche ou affichage-->
@@ -64,7 +64,7 @@
             <input type="hidden" name="lat" id="lat" required value="<?= htmlspecialchars($commande['latitude'] ?? '') ?>">
             <input type="hidden" name="lon" id="lon" required value="<?= htmlspecialchars($commande['longitude'] ?? '') ?>">
 
-          
+
             <div class="form-check mb-3">
                 <input type="checkbox" name="pret_materiel" value="1" class="form-check-input" id="pret_materiel" <?= $commande['pret_materiel'] ? 'checked' : '' ?>>
                 <label class="form-check-label" for="pret_materiel">Prêt de matériel (Caution 600€)</label>

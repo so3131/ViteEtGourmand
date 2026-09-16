@@ -25,15 +25,15 @@ class LieuManager
         $adresse = trim($adresse);
         $ville = trim($ville);
         // EMPÊCHER l'insertion d'un lieu incomplet
-if (empty($ville) || empty($adresse)) {
-    throw new \Exception("Adresse ou ville manquante : lieu de livraison incomplet.");
-}
-if ($lat === null || $lon === null || $lat === 0.0 || $lon === 0.0) {
-    throw new \Exception("Coordonnées GPS manquantes : lieu de livraison incomplet.");
-}
-if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
-    throw new \Exception("Coordonnées GPS invalides.");
-}
+        if (empty($ville) || empty($adresse)) {
+            throw new \Exception("Adresse ou ville manquante : lieu de livraison incomplet.");
+        }
+        if ($lat === null || $lon === null || $lat === 0.0 || $lon === 0.0) {
+            throw new \Exception("Coordonnées GPS manquantes : lieu de livraison incomplet.");
+        }
+        if ($lat < -90 || $lat > 90 || $lon < -180 || $lon > 180) {
+            throw new \Exception("Coordonnées GPS invalides.");
+        }
 
         // Verifier si la ville est déjà à la fin de l'adresse pour éviter les doublons
         if (!empty($ville) && str_ends_with(mb_strtolower($adresse), mb_strtolower($ville))) {

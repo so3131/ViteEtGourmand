@@ -14,5 +14,3 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 1000); // 1 seconde de délai
   }
 });
-
-

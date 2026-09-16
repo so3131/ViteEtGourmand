@@ -17,7 +17,7 @@ return [
         'error-ban',
         'forgot-password',
         'reset-password',
-        
+
     ],
     // Toutes les pages existantes dans l'application, indépendamment des rôles
     'existante' => [
@@ -50,7 +50,7 @@ return [
         'review',
         'store-review',
         'deactivate-account',
-        
+
 
         'dashboard-employee',
 
@@ -61,10 +61,10 @@ return [
         'rh-admin-delete',
         'rh-admin-toggle',
         'ban-user-admin',
-        
+
         'ban-user',
         'unban-user',
-        
+
 
 
 
@@ -110,7 +110,7 @@ return [
     // Role propre auStaff = Employee + Admin
     'staff' => [
 
-        
+
         'menu-management',
         'order-management',
         'cancel-order-common',

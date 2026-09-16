@@ -63,6 +63,7 @@ $pagesAdmin       = $config['admin'];
 $pagesEmployee    = $config['employee'];
 $pagesUser        = $config['user'];
 $pagesStaff       = $config['staff'];
+
 // fonction avec ces variables
 
 $page = \App\Helpers\SecurityManager::checkAccess(
@@ -152,7 +153,7 @@ $route = match ($page) {
     ],
     'ban-user'           => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'banUser'],
     'unban-user'         => ['class' => '\App\Controllers\AdminController\RHAdminController', 'action' => 'unBanUser'],
-    
+
 
 
 

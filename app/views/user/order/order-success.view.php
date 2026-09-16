@@ -8,7 +8,7 @@
         <p class="lead text-muted">
             Merci pour votre confiance. Votre commande a bien été enregistrée.
         </p>
-        
+
         <div class="alert alert-info mt-4">
             Vous allez recevoir un email de confirmation récapitulant les détails de votre prestation très prochainement.
         </div>

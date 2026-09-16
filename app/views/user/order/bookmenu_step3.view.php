@@ -1,4 +1,5 @@
 <?php
+
 /** @var int $menuID */
 /** @var \App\Models\Menu $menu */
 /** @var int $step */
@@ -56,7 +57,7 @@
                                 <strong>Nombre de personnes :</strong> <span class="badge bg-info text-dark"><?= htmlspecialchars($orderData['menu']['quantite'] ?? 0) ?></span>
                             </div>
                             <div class="col-sm-6">
-                                <strong>Location de matériel :</strong> 
+                                <strong>Location de matériel :</strong>
                                 <span class="badge <?= (isset($orderData['options']['location_materiel']) && $orderData['options']['location_materiel']) ? 'bg-success' : 'bg-secondary' ?>">
                                     <?= (isset($orderData['options']['location_materiel']) && $orderData['options']['location_materiel']) ? 'Oui' : 'Non' ?>
                                 </span>
@@ -108,8 +109,8 @@
                     <!-- Formulaire / Boutons d'action -->
                     <form action="index.php?page=order-menu&step=4" method="POST" class="d-flex justify-content-between align-items-center mt-4">
                         <input type="hidden"
-       name="csrf_token"
-       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                            name="csrf_token"
+                            value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                         <a href="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=2" class="btn btn-outline-secondary px-4">
                             <i class="bi bi-arrow-left me-2"></i>Retour
                         </a>

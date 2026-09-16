@@ -54,7 +54,7 @@ body {
 }
 
 .sidebar-menu a.active {
-  background: var(--color-accent)!important;
+  background: var(--color-accent) !important;
   color: var(--color-dark);
 }
 

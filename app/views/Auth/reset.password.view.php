@@ -1,11 +1,12 @@
-<?php 
+<?php
+
 /** @var array $errors */
 /** @var string|null $success */
 ?>
 <main class="container">
     <div class="row justify-content-center my-5">
         <div class="col-md-6 col-lg-5 p-4 p-md-5 bg-white shadow-sm rounded-3">
-            
+
             <div class="text-center mb-4">
                 <h2 class="h4 fw-bold text-dark mb-2">Nouveau mot de passe</h2>
                 <p class="text-muted small">Veuillez choisir un nouveau mot de passe sécurisé (10 caractères min.).</p>
@@ -32,18 +33,18 @@
                 <!-- Formulaire de réinitialisation -->
                 <form action="index.php?page=reset-password&token=<?= htmlspecialchars($_GET['token'] ?? '') ?>" method="POST">
                     <input type="hidden"
-       name="csrf_token"
-       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                        name="csrf_token"
+                        value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
-                    
+
                     <div class="mb-3">
-                        <?php 
+                        <?php
                         render_standard_field('password', 'Nouveau mot de passe', 'password', '••••••••', '', 'error_password', $errors ?? []);
                         ?>
                     </div>
 
                     <div class="mb-3">
-                        <?php 
+                        <?php
                         render_standard_field('password_confirm', 'Confirmation du mot de passe', 'password', '••••••••', '', 'error_password_confirm', $errors ?? []);
                         ?>
                     </div>

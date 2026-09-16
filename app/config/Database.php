@@ -34,9 +34,9 @@ class Database
                 ]
             );
             return $pdo;
-       } catch (PDOException $e) {
-    error_log("Erreur connexion DB : " . $e->getMessage());
-    die("Une erreur est survenue lors de la connexion à la base de données.");
-}
+        } catch (PDOException $e) {
+            error_log("Erreur connexion DB : " . $e->getMessage());
+            die("Une erreur est survenue lors de la connexion à la base de données.");
+        }
     }
 }

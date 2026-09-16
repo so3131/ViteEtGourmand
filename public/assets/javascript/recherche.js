@@ -17,11 +17,11 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
 
-// Ajouter des attributs ARIA pour l'accessibilité
-  const handles = slider.querySelectorAll('.noUi-handle');
-if (handles[0]) handles[0].setAttribute('aria-label', 'Prix minimum');
-if (handles[1]) handles[1].setAttribute('aria-label', 'Prix maximum');
-// 2. Fonction pour mettre à jour la plage du slider
+    // Ajouter des attributs ARIA pour l'accessibilité
+    const handles = slider.querySelectorAll(".noUi-handle");
+    if (handles[0]) handles[0].setAttribute("aria-label", "Prix minimum");
+    if (handles[1]) handles[1].setAttribute("aria-label", "Prix maximum");
+    // 2. Fonction pour mettre à jour la plage du slider
     function updateSliderRange(max) {
       slider.noUiSlider.updateOptions({
         range: { min: 0, max: max },
@@ -58,12 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
   if (form) {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
-     
 
       const formData = new FormData(this);
-    
-    const params = new URLSearchParams(formData).toString();
-     
+
+      const params = new URLSearchParams(formData).toString();
+
       fetch("index.php?page=filter&" + params)
         .then((response) => response.json())
         .then((data) => {
@@ -87,8 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Bouton réinitialiser les filtres
   if (resetBtn) {
     resetBtn.addEventListener("click", function () {
-      
-
       // Réinitialiser le formulaire
       document.getElementById("filterForm").reset();
 
@@ -127,26 +124,17 @@ document.addEventListener("DOMContentLoaded", function () {
       : "assets/img/plats/default.webp";
   }
 
-
-
   // créer de façon dynamique les cartes de menus à partir des données récupérées de la base de données
   function createMenuCard(menu) {
-    
     const menuId = menu.menu_id || "#";
     const detailUrl = `index.php?page=details-menu&menu_id=${menu.menu_id}`;
     const photoUrl = getMenuPhoto(menu);
     const plats = menu.plats_structures || {};
 
-const platPrincipal =
-    plats.Plat ||
-    plats['Entrée'] ||
-    plats.Dessert ||
-    null;
+    const platPrincipal =
+      plats.Plat || plats["Entrée"] || plats.Dessert || null;
 
-const photo = platPrincipal?.photo || 'assets/img/plats/default.webp';
-
-
-
+    const photo = platPrincipal?.photo || "assets/img/plats/default.webp";
 
     return `
             <div class="col">

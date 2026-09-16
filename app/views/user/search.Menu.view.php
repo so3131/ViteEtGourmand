@@ -3,9 +3,9 @@ require_once dirname(__DIR__, 2) . '/Config/constants.php';
 ?>
 
 <main class="container-fluid py-4">
-    
+
     <header class="mb-4 titre-search">
-        <h1 >Nos Menus</h1>
+        <h1>Nos Menus</h1>
         <p class="text-muted">Découvrez nos créations et filtrez selon vos besoins.</p>
     </header>
 

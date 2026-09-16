@@ -29,7 +29,7 @@
                                 class="d-block w-100 rounded"
                                 style="height: 300px; object-fit: cover;"
                                 alt="<?= htmlspecialchars($plat['titre_plat'] ?? 'Plat sans nom') ?>">
-                            
+
                             <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
                                 <h5><?= htmlspecialchars($plat['titre_plat']) ?></h5>
                                 <p class="m-0"><?= htmlspecialchars($plat['description_plat']) ?></p>
@@ -87,7 +87,7 @@
                 <hr>
                 <p>Minimum : <strong><?= $menu['nombre_personne_minimum'] ?> pers.</strong></p>
                 <p>Quantité restante : <strong><?= $menu['quantite_restante'] ?></strong></p>
-                
+
                 <?php if (!empty($menu['delai_commande']) && $menu['delai_commande'] > 0): ?>
                     <p>Délais de commande : <strong><?= htmlspecialchars($menu['delai_commande']) ?> jours</strong></p>
                 <?php else: ?>
@@ -108,13 +108,13 @@
                     </button>
                 <?php elseif ($canOrder): ?>
                     <!-- Utilisateur connecté et peut commander -->
-                    <a href="index.php?page=order-menu&menu_id=<?= $menu['menu_id'] ?>&step=0" 
+                    <a href="index.php?page=order-menu&menu_id=<?= $menu['menu_id'] ?>&step=0"
                         class="btn btn-primary btn-lg w-100">
                         Commander ce menu
                     </a>
                 <?php else: ?>
                     <!-- Utilisateur non connecté -->
-                    <a href="index.php?page=login&redirect=<?= urlencode('index.php?page=order-menu&menu_id=' . $menu['menu_id'] . '&step=0') ?>" 
+                    <a href="index.php?page=login&redirect=<?= urlencode('index.php?page=order-menu&menu_id=' . $menu['menu_id'] . '&step=0') ?>"
                         class="btn btn-primary btn-lg w-100">
                         Nous rejoindre pour commander
                     </a>

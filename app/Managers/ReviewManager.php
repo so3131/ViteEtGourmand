@@ -86,7 +86,7 @@ class ReviewManager
         $stmt->execute([
             'statut'           => $status,
             'validated_by'     => $userId,
-            'validated_by_name'=> $userName,
+            'validated_by_name' => $userName,
             'id'               => $avisId,
         ]);
         return $stmt->rowCount() > 0;
@@ -112,11 +112,11 @@ class ReviewManager
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
     public static function getCompletedOrderForUser(\PDO $db, int $commandeId, int $userId): ?array
-{
-    $stmt = $db->prepare("SELECT * FROM vg_commande 
+    {
+        $stmt = $db->prepare("SELECT * FROM vg_commande 
                           WHERE commande_id = ? AND utilisateur_id = ? AND statut = 'terminee'");
-    $stmt->execute([$commandeId, $userId]);
-    $order = $stmt->fetch(\PDO::FETCH_ASSOC);
-    return $order ?: null;
-}
+        $stmt->execute([$commandeId, $userId]);
+        $order = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $order ?: null;
+    }
 }

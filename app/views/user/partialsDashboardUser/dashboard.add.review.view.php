@@ -1,6 +1,9 @@
+<?php
+/** @var array $commande */
+?>
 <div class="card shadow-sm p-4">
     <h4 class="mb-3">Laisser un avis sur une commande</h4>
-    
+
     <form action="index.php?page=dashboard-user" method="POST">
         <input type="hidden" name="action" value="store_review">
         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">

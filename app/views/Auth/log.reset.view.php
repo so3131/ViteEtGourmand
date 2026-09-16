@@ -29,9 +29,9 @@
             <?php endif; ?>
 
             <form action="index.php?page=forgot-password" method="POST">
-                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                 <div class="mb-3">
-                   
+
                     <?php
                     render_standard_field(
                         'email',

@@ -1,5 +1,5 @@
 <!-- Step 1 : Récupération de la quantité et calcul du prix total du menu. -->
- <?php
+<?php
 /** @var int $menuID */
 /** @var \App\Models\Menu $menu */
 /** @var int $step */
@@ -7,7 +7,7 @@
 ?>
 
 <div class="container mt-4">
-<h1 class="mb-4">Choisir le nombre de <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?></h1>
+    <h1 class="mb-4">Choisir le nombre de <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?></h1>
 
     <?php $step = $step ?? 1; ?>
     <div class="d-flex justify-content-between mb-4 bg-light p-3 rounded">
@@ -19,19 +19,19 @@
 
     <div id="step-1" class="card p-4 shadow-sm">
         <form action="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=1" method="POST">
-           <input type="hidden"
-       name="csrf_token"
-       value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+            <input type="hidden"
+                name="csrf_token"
+                value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
             <div class="mb-3">
                 <label for="quantite_restante" class="form-label">
-                   Nous pouvons actuellement vous preparer <?= htmlspecialchars($menuInfo['quantite_restante'] ?? 0) ?> <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?>
+                    Nous pouvons actuellement vous preparer <?= htmlspecialchars($menuInfo['quantite_restante'] ?? 0) ?> <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?>
                 </label>
                 <br>
                 <label for="nombre_personne" class="form-label">
-                   Nombre de personnes (Minimum requis : 
-    <?= htmlspecialchars($menu->getMinimumRequis() ?? 0) ?> 
-    personnes) :
+                    Nombre de personnes (Minimum requis :
+                    <?= htmlspecialchars($menu->getMinimumRequis() ?? 0) ?>
+                    personnes) :
                 </label>
                 <input type="number" name="nombre_personne" id="nombre_personne" class="form-control"
                     min="<?= $menu ? $menu->getMinimumRequis() : 1 ?>"

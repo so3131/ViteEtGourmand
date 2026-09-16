@@ -26,7 +26,7 @@ return [
     'cancel-order-employee' => 'Annuler une commande',
     'edit-order-employee'  => 'Modifier une commande',
     'edit-menu-employee'   => 'Modifier un menu',
-    
+
 
 
 

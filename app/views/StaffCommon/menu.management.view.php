@@ -34,7 +34,7 @@
 
                     <?php foreach ($menus as $menu): ?>
                         <tr>
-                            <td><strong><?php echo htmlspecialchars($menu['titre']?? ''); ?></strong></td>
+                            <td><strong><?php echo htmlspecialchars($menu['titre'] ?? ''); ?></strong></td>
                             <td><?php echo number_format($menu['prix_par_personne'], 2); ?> €</td>
                             <td>
                                 <small class="text-muted">
@@ -154,8 +154,8 @@
                             $hasMenus = ($plat['nb_menus'] ?? 0) > 0;
                             ?>
                             <tr>
-                                <td><strong><?= htmlspecialchars($plat['titre_plat']?? '') ?></strong></td>
-                                <td><?= htmlspecialchars($plat['categorie']?? '') ?></td>
+                                <td><strong><?= htmlspecialchars($plat['titre_plat'] ?? '') ?></strong></td>
+                                <td><?= htmlspecialchars($plat['categorie'] ?? '') ?></td>
                                 <td><small class="text-muted"><?= htmlspecialchars($plat['description_plat'] ?? '') ?></small></td>
                                 <td>
                                     <!-- Indicateur Menus liés -->
@@ -352,7 +352,7 @@
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox" name="plats[]" value="<?= $plat['plat_id'] ?>" id="modalPlat<?= $plat['plat_id'] ?>">
                                                                 <label class="form-check-label" for="modalPlat<?= $plat['plat_id'] ?>">
-                                                                    <?= htmlspecialchars($plat['titre_plat']?? '') ?>
+                                                                    <?= htmlspecialchars($plat['titre_plat'] ?? '') ?>
                                                                 </label>
                                                             </div>
                                                         </div>

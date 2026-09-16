@@ -10,7 +10,7 @@
         </div>
 
         <form action="index.php?page=update-menu-process&id=<?= $menu['menu_id'] ?>" method="POST">
-        <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
+            <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
 
             <!-- Infos Principales -->
             <div class="row">
@@ -21,11 +21,11 @@
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Prix/Pers (€)</label>
                     <input type="number"
-                    step="0.01" name="prix" class="form-control no-spin" value="<?= htmlspecialchars($menu['prix_par_personne'] ?? '') ?>"min="0" required>
+                        step="0.01" name="prix" class="form-control no-spin" value="<?= htmlspecialchars($menu['prix_par_personne'] ?? '') ?>" min="0" required>
                 </div>
                 <div class="col-md-3 mb-3">
                     <label class="form-label">Qté Restante</label>
-                    <input type="number" name="quantite" class="form-control" value="<?= htmlspecialchars($menu['quantite_restante'] ?? '') ?>"min="0" required>
+                    <input type="number" name="quantite" class="form-control" value="<?= htmlspecialchars($menu['quantite_restante'] ?? '') ?>" min="0" required>
                 </div>
             </div>
 
@@ -33,20 +33,20 @@
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Nb Personnes Minimum</label>
                     <input type="number" name="nombre_personne_minimum" class="form-control" value="<?= htmlspecialchars($menu['nombre_personne_minimum'] ?? '') ?>"
-                    min="1">
+                        min="1">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Délai de commande (jours)</label>
-                    <input type="number" name="delai_commande" class="form-control" value="<?= htmlspecialchars($menu['delai_commande'] ?? '') ?>"min="0">
+                    <input type="number" name="delai_commande" class="form-control" value="<?= htmlspecialchars($menu['delai_commande'] ?? '') ?>" min="0">
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Thème</label>
                     <select name="theme_id" class="form-select">
                         <option value="">-- Aucun thème --</option>
-                        <?php 
+                        <?php
                         $all_themes = $all_themes ?? [];
                         $current_theme_id = $menu['theme_id'] ?? null;
-                        foreach ($all_themes as $theme): 
+                        foreach ($all_themes as $theme):
                         ?>
                             <option value="<?= $theme['theme_id'] ?>" <?= ($current_theme_id == $theme['theme_id']) ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($theme['libelle']) ?>
@@ -61,10 +61,10 @@
                     <label class="form-label">Régime</label>
                     <select name="regime_id" class="form-select">
                         <option value="">-- Aucun régime --</option>
-                        <?php 
+                        <?php
                         $all_regimes = $all_regimes ?? [];
                         $current_regime_id = $menu['regime_id'] ?? null;
-                        foreach ($all_regimes as $regime): 
+                        foreach ($all_regimes as $regime):
                         ?>
                             <option value="<?= $regime['regime_id'] ?>" <?= ($current_regime_id == $regime['regime_id']) ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($regime['libelle']) ?>
@@ -84,13 +84,13 @@
                 <textarea name="conditions_stockage" class="form-control" rows="2"><?= htmlspecialchars($menu['conditions_stockage'] ?? '') ?></textarea>
             </div>
 
-   <!-- Sélection des plats -->
+            <!-- Sélection des plats -->
             <div class="mb-4">
                 <label class="form-label fw-bold mb-3">Composer le menu (Plats disponibles par catégorie)</label>
-                
-                <?php 
-                $all_plats = $all_plats ?? []; 
-                $selected_plats_ids = $selected_plats_ids ?? []; 
+
+                <?php
+                $all_plats = $all_plats ?? [];
+                $selected_plats_ids = $selected_plats_ids ?? [];
 
                 // 1. On regroupe les plats par leur catégorie exacte en DB
                 $platsParCategorie = [];

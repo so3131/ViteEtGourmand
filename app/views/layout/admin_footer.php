@@ -14,7 +14,7 @@
 <!-- 4. autres scripts spécifiques -->
 <?php if (isset($specific_scripts)): ?>
     <?php foreach ($specific_scripts as $js): ?>
-        <?php 
+        <?php
         // On évite de recharger ce qu'on a déjà mis en dur ci-dessus
         if (!str_contains($js, 'jquery') && !str_contains($js, 'bootstrap') && !str_contains($js, 'datatables')): ?>
             <script src="<?= $js ?>" defer></script>
@@ -27,7 +27,8 @@
     console.log("jQuery version:", typeof jQuery !== 'undefined' ? jQuery.fn.jquery : "Non chargé");
 </script>
 </section>
-        </main>
-    </div>
+</main>
+</div>
 </body>
+
 </html>

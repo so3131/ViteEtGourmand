@@ -64,7 +64,7 @@ class UserManager
         $token = bin2hex(random_bytes(32));
         $tokenHash = hash('sha256', $token);
         $expiresAt = date('Y-m-d H:i:s', strtotime('+30 minutes'));
-        
+
         $sql = "INSERT INTO vg_password_resets (email, token, expires_at)
                 VALUES (:email, :token, :expires_at)
                 ON DUPLICATE KEY UPDATE
@@ -121,7 +121,7 @@ class UserManager
         $stmt = $db->prepare("UPDATE vg_utilisateur SET est_actif = 0 WHERE utilisateur_id = ?");
         return $stmt->execute([$userId]);
     }
-        // Vérifie un token de réinitialisation encore valide ; retourne l'email associé ou null
+    // Vérifie un token de réinitialisation encore valide ; retourne l'email associé ou null
     public static function findPasswordResetToken(\PDO $db, string $tokenHash): ?array
     {
         $stmt = $db->prepare("
@@ -134,5 +134,4 @@ class UserManager
         $row = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $row ?: null;
     }
-      
 }

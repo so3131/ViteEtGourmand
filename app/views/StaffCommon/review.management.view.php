@@ -58,7 +58,7 @@ $reviews = $reviews ?? [];
                     </span>
                 <?php else: ?>
                     <!-- Bouton Valider -->
-                     <form action="index.php?page=update-review-status" method="POST" class="me-1">
+                    <form action="index.php?page=update-review-status" method="POST" class="me-1">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                         <input type="hidden" name="review_id" value="<?= (int)$review['avis_id'] ?>">
                         <input type="hidden" name="status" value="approved">
@@ -68,7 +68,7 @@ $reviews = $reviews ?? [];
                     </form>
 
                     <!-- Bouton Refuser -->
-                                        <form action="index.php?page=update-review-status" method="POST">
+                    <form action="index.php?page=update-review-status" method="POST">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                         <input type="hidden" name="review_id" value="<?= (int)$review['avis_id'] ?>">
                         <input type="hidden" name="status" value="rejected">

@@ -21,19 +21,18 @@ foreach ($types as $type => $config):
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
             </div>
         </div>
-        <?php
+    <?php
         $toasts .= ob_get_clean();
         unset($_SESSION[$type]);
     endif;
 endforeach;
 
 if ($toasts !== ''):
-?>
-<div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 2000;">
-    <?= $toasts ?>
-</div>
+    ?>
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 2000;">
+        <?= $toasts ?>
+    </div>
 <?php endif; ?>
 
 
 <script src="<?= BASE_URL ?>/public/assets/javascript/flash-messages.js"></script>
-

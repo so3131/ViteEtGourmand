@@ -81,25 +81,25 @@ class SecurityManager
      * @param array $data Les données JSON à valider.
      * @return void
      */
-public static function validateJson(array $data): void
-{
-    $csrfToken = $data['csrf_token'] ?? '';
-    $sessionToken = $_SESSION['csrf_token'] ?? '';
+    public static function validateJson(array $data): void
+    {
+        $csrfToken = $data['csrf_token'] ?? '';
+        $sessionToken = $_SESSION['csrf_token'] ?? '';
 
-    if (
-        empty($sessionToken) ||
-        empty($csrfToken) ||
-        !hash_equals($sessionToken, $csrfToken)
-    ) {
-        http_response_code(403);
-        header('Content-Type: application/json; charset=utf-8');
+        if (
+            empty($sessionToken) ||
+            empty($csrfToken) ||
+            !hash_equals($sessionToken, $csrfToken)
+        ) {
+            http_response_code(403);
+            header('Content-Type: application/json; charset=utf-8');
 
-        echo json_encode([
-            'success' => false,
-            'message' => 'Requête invalide ou session expirée.'
-        ]);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Requête invalide ou session expirée.'
+            ]);
 
-        exit();
+            exit();
+        }
     }
-}
 }

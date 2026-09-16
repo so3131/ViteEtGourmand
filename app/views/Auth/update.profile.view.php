@@ -71,8 +71,8 @@
                         <h5 class="text-danger fw-bold mb-1">Plus besoin de nos service ?</h5>
                         <p class="text-muted small mb-0">La désactivation de votre compte est définitive et entraîne la perte d'accès à vos données.</p>
                     </div>
-                    <form action="index.php?page=deactivate-account" method="POST" class="mt-3 mt-md-0" 
-                          onsubmit="return confirm('Votre compte sera désactivé définitivement. Vous ne pourrez plus vous connecter. Continuer ?');">
+                    <form action="index.php?page=deactivate-account" method="POST" class="mt-3 mt-md-0"
+                        onsubmit="return confirm('Votre compte sera désactivé définitivement. Vous ne pourrez plus vous connecter. Continuer ?');">
                         <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                         <button type="submit" class="btn btn-outline-danger text-nowrap">Désactiver mon compte</button>
                     </form>

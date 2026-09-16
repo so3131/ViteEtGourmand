@@ -9,12 +9,12 @@ document.querySelectorAll(".btn-erase-order").forEach((btn) => {
     );
 
     if (confirmed) {
-    fetch("index.php?page=erase-order&commande_id=" + commandeId, {
-    method: "POST",
-    body: new URLSearchParams({
-        csrf_token: document.querySelector('input[name="csrf_token"]').value
-    })
-})
+      fetch("index.php?page=erase-order&commande_id=" + commandeId, {
+        method: "POST",
+        body: new URLSearchParams({
+          csrf_token: document.querySelector('input[name="csrf_token"]').value,
+        }),
+      })
         .then((r) => r.json())
         .then((data) => {
           showToast(data.message, data.success ? "success" : "error");

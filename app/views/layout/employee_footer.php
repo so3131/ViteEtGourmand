@@ -14,7 +14,7 @@
 <!-- 4. autres scripts spécifiques -->
 <?php if (isset($specific_scripts)): ?>
     <?php foreach ($specific_scripts as $js): ?>
-        <?php 
+        <?php
         // On évite de recharger ce qu'on a déjà mis en dur ci-dessus
         if (!str_contains($js, 'jquery') && !str_contains($js, 'bootstrap') && !str_contains($js, 'datatables')): ?>
             <script src="<?= $js ?>" defer></script>
@@ -28,4 +28,5 @@
 </script>
 
 </body>
+
 </html>

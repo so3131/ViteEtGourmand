@@ -17,17 +17,16 @@ $(document).ready(function () {
   };
 
   if ($("#ordersTable").length) {
-   $("#ordersTable").DataTable({
-  paging: true,
-  searching: false,
-  ordering: true,
-  info: true,
-  lengthChange: true,
-  dom: '<"dt-toolbar d-flex justify-content-between align-items-center mb-3"lf>rtip',
-  language: frLanguage,
-  columnDefs: [{ targets: "_all", defaultContent: "" }],
-});
-
+    $("#ordersTable").DataTable({
+      paging: true,
+      searching: false,
+      ordering: true,
+      info: true,
+      lengthChange: true,
+      dom: '<"dt-toolbar d-flex justify-content-between align-items-center mb-3"lf>rtip',
+      language: frLanguage,
+      columnDefs: [{ targets: "_all", defaultContent: "" }],
+    });
   }
 
   if ($("#menusTable").length) {
@@ -64,7 +63,7 @@ $(document).ready(function () {
     });
   }
 
-  // Nettoyage ARIA 
+  // Nettoyage ARIA
   setTimeout(function () {
     document
       .querySelectorAll(".dataTables_paginate a, .dataTables_paginate span")

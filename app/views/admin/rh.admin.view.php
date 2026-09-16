@@ -19,7 +19,7 @@
                         <?php render_form_input('email', 'Email (Username)', 'email', 'Entrez l\'email...', ''); ?>
                     </div>
                     <div class="col-md-5">
-                        <?php render_form_input('password', 'Mot de passe temporaire', 'password', 'Mot de passe...', '','new-password'); ?>
+                        <?php render_form_input('password', 'Mot de passe temporaire', 'password', 'Mot de passe...', '', 'new-password'); ?>
                     </div>
                     <div class="col-md-2 mb-3">
                         <button type="submit" class="btn btn-primary btn-sm w-100 py-2">Créer</button>
@@ -139,7 +139,7 @@
         </div>
 
         <!-- Tableau des utilisateurs condensé -->
-        <div class="card shadow-sm p-3"id="search-section">
+        <div class="card shadow-sm p-3" id="search-section">
             <div class="table-responsive">
                 <table class="table table-sm table-admin align-middle mb-0">
                     <thead>
