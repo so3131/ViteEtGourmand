@@ -299,6 +299,11 @@ ALTER TABLE `vg_lieu_prestation` ADD PRIMARY KEY (`id`);
 ALTER TABLE `vg_menu` ADD PRIMARY KEY (`menu_id`),
 ADD KEY `fk_menu_theme` (`theme_id`),
 ADD KEY `fk_menu_regime` (`regime_id`);
+--
+-- Index pour la table `vg_menu`
+--
+
+ALTER TABLE `vg_menu` MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Index pour la table `vg_menu_plat`

@@ -1,4 +1,4 @@
-# Commit 31 : Config production
+# Commit 32 : Config production
 
 À cette étape :
- warning DataTables employesTable : retrait de la ligne colspan manuelle
+ AUTO_INCREMENT manquant sur vg_menu.menu_id
