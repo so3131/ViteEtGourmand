@@ -2,7 +2,7 @@
 
 namespace App\Controllers\AdminController;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 
 use App\Controllers\AuthController\Auth;
 use App\Managers\MongoStatsManager;

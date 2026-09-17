@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-require_once dirname(__DIR__) . '/Config/constants.php';
+require_once dirname(__DIR__) . '/Config/Constants.php';
 
 // class SuccessController pour gérer l'affichage de la page de succès après l'envoi d'un message de contact
 class SuccessController

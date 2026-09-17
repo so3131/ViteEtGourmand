@@ -2,12 +2,12 @@
 
 namespace App\Controllers\UserController;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 
 use App\Managers\MenuManager;
 use App\Managers\OrderManager;
 use App\models\Menu;
-use App\Config\constants;
+use App\Config\Constants;
 use App\Helpers\SecurityManager;
 use App\Managers\LieuManager;
 

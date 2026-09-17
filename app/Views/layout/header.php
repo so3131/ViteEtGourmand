@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 
 // Récupère la page actuelle pour la classe active du menu
 $request_uri = $_SERVER['REQUEST_URI'];

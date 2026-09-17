@@ -6,7 +6,7 @@ use App\Helpers\MailService;
 use App\Helpers\SecurityManager;
 use App\Managers\UserManager;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 require_once ROOT_PATH . '/app/Helpers/FormHelper.php';
 
 // Class ResetPasswordController pour gérer la réinitialisation du mot de passe ( suite logique de ForgotPasswordController )

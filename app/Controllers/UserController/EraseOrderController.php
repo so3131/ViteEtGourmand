@@ -4,7 +4,7 @@ namespace App\Controllers\UserController;
 
 
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 
 use App\Helpers\SecurityManager;
 use App\Controllers\AuthController\Auth;

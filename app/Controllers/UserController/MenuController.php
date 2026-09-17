@@ -2,7 +2,7 @@
 
 namespace App\Controllers\UserController;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 
 use App\Managers\MenuManager;
 // class MenuController pour gérer l'affichage et la recherche des menus

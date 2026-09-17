@@ -5,7 +5,7 @@ namespace App\Controllers\UserController;
 use App\Helpers\MailService;
 use App\Helpers\SecurityManager;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 require_once ROOT_PATH . '/app/Helpers/FormHelper.php';
 // class ContactController pour gérer l'affichage de la page de contact et l'envoi du formulaire
 class ContactController

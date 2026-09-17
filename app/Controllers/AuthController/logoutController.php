@@ -2,7 +2,7 @@
 
 namespace App\Controllers\AuthController;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 
 // Class LogoutController pour gérer la déconnexion des utilisateurs
 class LogoutController

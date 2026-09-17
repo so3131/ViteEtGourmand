@@ -5,7 +5,7 @@ namespace App\Controllers\AuthController;
 use App\Helpers\MailService;
 use App\Helpers\SecurityManager;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 require_once ROOT_PATH . '/app/Helpers/FormHelper.php';
 
 use App\Controllers\AuthController\Auth;

@@ -2,7 +2,7 @@
 
 namespace App\Controllers\UserController;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 // class MentionLegalesController pour gérer l'affichage des mentions légales
 class MentionLegalesController
 {

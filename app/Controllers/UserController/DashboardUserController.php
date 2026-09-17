@@ -2,7 +2,7 @@
 
 namespace App\Controllers\UserController;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 require_once ROOT_PATH . '/app/Helpers/DashboardDisplay.php';
 
 use App\Controllers\AuthController\Auth;

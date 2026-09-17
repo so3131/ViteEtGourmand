@@ -5,7 +5,7 @@ namespace App\Controllers\UserController;
 use App\Controllers\AuthController\Auth;
 use App\Managers\ReviewManager;
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
+require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 // class ReviewController pour gérer la soumission et le stockage des avis
 class ReviewController
 {

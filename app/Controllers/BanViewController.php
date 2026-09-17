@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-require_once dirname(__DIR__) . '/Config/constants.php';
+require_once dirname(__DIR__) . '/Config/Constants.php';
 // class BanViewController pour gérer l'affichage de la page d'erreur de bannissement
 class BanViewController
 {
