@@ -1,3 +1,4 @@
-# Commit 20 : correctifs casse 2
+# Commit 20 : Config production
+
 À cette étape :
-Fix definitif casse require auth
+Config production : BASE_URL, PHP 8.2, Procfile Heroku
