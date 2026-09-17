@@ -1,3 +1,3 @@
-# Commit 20 : correctifs
+# Commit 20 : correctifs casse 2
 À cette étape :
-Fix affichage adresse récapitulatif commande et divers correctifs
+Fix definitif casse require auth

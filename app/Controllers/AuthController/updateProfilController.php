@@ -69,7 +69,7 @@ class UpdateProfilController
         $specific_scripts = ["../public/assets/javascript/auth.js",];
 
         require_once ROOT_PATH . '/app/Views/layout/header.php';
-        require_once ROOT_PATH . '/app/Views/auth/update.profile.view.php';
+        require_once ROOT_PATH . '/app/Views/Auth/update.profile.view.php';
         require_once ROOT_PATH . '/app/Views/layout/footer.php';
     }
 }
