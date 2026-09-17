@@ -1,4 +1,4 @@
-# Commit 20 : Config production
+# Commit 28 : Config production
 
 À cette étape :
-Retrait CREATE DATABASE/USE des scripts SQL pour import JawsDB
+mise a jour mongodb/mongodb vers 2.4.2 suite faille detectée
