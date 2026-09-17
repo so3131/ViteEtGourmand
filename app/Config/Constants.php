@@ -2,7 +2,7 @@
 // Constantes de configuration pour l'application
 // Définis le chemin racine de l'application
 define('ROOT_PATH', dirname(__DIR__, 2));
-define('BASE_URL', '');
+define('BASE_URL', '/Projet_Vite_Gourmand_Finale');
 // Définis les rôles d'utilisateur
 define('ROLE_ADMIN', 1);
 define('ROLE_EMPLOYE', 2);
