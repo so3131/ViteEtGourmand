@@ -35,4 +35,4 @@ if ($toasts !== ''):
 <?php endif; ?>
 
 
-<script src="<?= BASE_URL ?>/public/assets/javascript/flash-messages.js"></script>
+<script src="<?= BASE_URL ?>/assets/javascript/flash-messages.js"></script>
