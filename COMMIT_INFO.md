@@ -1,4 +1,4 @@
-# Commit 34 : Fix production
+# Commit 35 : Fix production
 
 À cette étape :
-casse app/Helpers dans OrderMenuController"
+Helpers dans OrderMenuController"

@@ -3,7 +3,7 @@
 namespace App\Controllers\AuthController;
 
 require_once dirname(__DIR__, 2) . '/Config/Constants.php';
-
+require_once ROOT_PATH . '/app/Helpers/Function.php';
 use App\Controllers\AuthController\Auth;
 use App\Managers\UserManager;
 // Class LoginController pour gérer la connexion des utilisateurs
