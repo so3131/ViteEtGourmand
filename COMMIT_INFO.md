@@ -1,4 +1,4 @@
-# Commit 32 : Config production
+# Commit 34 : Fix production
 
 À cette étape :
- AUTO_INCREMENT manquant sur vg_menu.menu_id
+casse app/Helpers dans OrderMenuController"
