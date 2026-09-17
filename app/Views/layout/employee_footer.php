@@ -1,6 +1,6 @@
 <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
-<script src="<?= BASE_URL ?>/public/assets/javascript/notifications.js"></script>
+<script src="<?= BASE_URL ?>/assets/javascript/notifications.js"></script>
 <!-- 1. jQuery-->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 

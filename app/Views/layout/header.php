@@ -29,8 +29,8 @@ if ($current_page === '' || $current_page === '/') {
 
     <meta property="og:type" content="website">
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/css/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="<?= BASE_URL ?>/public/assets/css/trame.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/trame.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
