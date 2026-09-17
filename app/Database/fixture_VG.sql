@@ -1,5 +1,3 @@
-USE `test_transit_ecf`;
-
 --
 -- Déchargement des données de la table `vg_allergene`
 --

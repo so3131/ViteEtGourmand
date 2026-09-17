@@ -23,13 +23,9 @@ SET
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Structure de la table : `test_transit_ecf`
+-- Structure de la base sql 
 --
-CREATE DATABASE IF NOT EXISTS `test_transit_ecf` DEFAULT CHARACTER
-SET
-  utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE `test_transit_ecf`;
 
 -- --------------------------------------------------------
 --
