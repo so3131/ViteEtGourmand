@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (alertElement) {
     // Au bout de 4 secondes (4000 ms)
     setTimeout(function () {
-      // 1. Masquer l'alerte
+      // Masquer l'alerte
       alertElement.style.transition = "opacity 0.5s ease";
       alertElement.style.opacity = "0";
 
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         alertElement.remove();
       }, 500);
 
-      // 2. Nettoyer l'URL (retire "success=1")
+      // Nettoyer l'URL (retire "success=1")
       const url = new URL(window.location.href);
       url.searchParams.delete("success");
       window.history.replaceState({}, document.title, url.toString());

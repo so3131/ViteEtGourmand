@@ -1,4 +1,4 @@
-// Toggle password visibility
+// gerer l'affichage du mot de passe dans le formulaire d'authentification
 document.addEventListener("DOMContentLoaded", function () {
   const toggleButton = document.querySelector(".toggle-password-btn");
 

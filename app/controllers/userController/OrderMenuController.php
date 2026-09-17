@@ -3,8 +3,8 @@
 namespace App\Controllers\UserController;
 
 
-require_once dirname(__DIR__, 2) . '/Config/constants.php';
-require_once ROOT_PATH . '/app/Helpers/Function.php';
+require_once dirname(__DIR__, 2) . '/config/constants.php';
+require_once ROOT_PATH . '/app/helpers/Function.php';
 
 use App\Models\Menu;
 use App\Managers\MenuManager;

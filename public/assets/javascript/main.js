@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Si l'URL contient un paramètre 'error' ou 'success'
   if (url.searchParams.has("error") || url.searchParams.has("success")) {
     setTimeout(() => {
-      // On NETTOIE UNIQUEMENT les messages, sans toucher au reste de l'URL
+      // NETTOIE UNIQUEMENT les messages, sans toucher au reste de l'URL
       url.searchParams.delete("error");
       url.searchParams.delete("success");
 

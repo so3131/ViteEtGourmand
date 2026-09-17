@@ -39,7 +39,7 @@
                                 <strong>Heure :</strong> <?= htmlspecialchars($orderData['prestation']['heure_livraison'] ?? 'Non défini') ?>
                             </div>
                             <div class="col-12">
-                                <strong>Lieu :</strong> <?= htmlspecialchars($orderData['prestation']['ville'] ?? 'Non défini') ?>
+                                <strong>Lieu :</strong> <?= htmlspecialchars($_SESSION['current_order']['prestation']['adresse_livraison'] ?? '') ?>
                             </div>
                         </div>
                     </div>
@@ -111,6 +111,7 @@
                         <input type="hidden"
                             name="csrf_token"
                             value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
+                            <a href="index.php?page=search" class="btn btn-secondary me-2">Annuler la commande</a>
                         <a href="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=2" class="btn btn-outline-secondary px-4">
                             <i class="bi bi-arrow-left me-2"></i>Retour
                         </a>

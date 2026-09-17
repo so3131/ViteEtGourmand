@@ -11,7 +11,7 @@ body {
   overflow-x: hidden; /* Sécurité ultime pour couper net tout dépassement horizontal */
 }
 
-/* Section pleine largeur propre et sans scroll horizontal */
+/* Section pleine largeur et sans scroll horizontal */
 section.full-width-section {
   width: 100%;
   position: relative;
@@ -52,7 +52,7 @@ section.bg-light {
 
 .team-img:hover {
   transform: scale(1.05);
-  border-color: var(--color-accent); /* Devient doré au survol */
+  border-color: var(--color-accent);
 }
 
 .titre-1 {

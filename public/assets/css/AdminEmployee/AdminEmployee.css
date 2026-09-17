@@ -198,10 +198,10 @@ table.dataTable thead th,
 /* S'assure que le wrapper ne coupe pas les bords */
 .dataTables_wrapper {
   width: 100% !important;
-  overflow-x: auto !important; /* Rétablit un scroll propre uniquement si l'écran est trop petit, sans masquer l'input */
+  overflow-x: auto !important; 
   overflow-y: visible !important;
 }
-/* 4. Si un conteneur responsive est généré par DataTables, le contraindre */
+/* Si un conteneur responsive est généré par DataTables, le contraindre */
 .dataTables_scrollBody {
   width: 100% !important;
 }
@@ -224,7 +224,7 @@ table.dataTable {
   display: table-row !important;
   background-color: var(--color-bg) !important;
 }
-/* Règle de priorité haute : cache les modales par défaut */
+/* Règle de priorité  : cache les modales par défaut */
 .modal {
   display: none !important;
 }

@@ -1,3 +1,3 @@
 # Commit 20 : correctifs
 À cette étape :
-correctifs
+Fix affichage adresse récapitulatif commande et divers correctifs

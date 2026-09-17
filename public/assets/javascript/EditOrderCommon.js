@@ -14,7 +14,7 @@ document
     const commandeId = form.dataset.id;
 
     try {
-      // Adaptation de la route avec tes paramètres d'action
+      // Adaptation de la route avec les paramètres d'action
       const response = await fetch(
         `index.php?page=update-order-common&commande_id=${commandeId}`,
         {

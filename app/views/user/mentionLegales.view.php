@@ -2,18 +2,22 @@
     <div class="row">
         <div class="col-lg-8 mx-auto">
 
-            <h1 class="mb-5 text-center">Mentions Légales & CGV</h1>
+            <h1 class="mb-5 text-center">Mentions Légales, RGPD & CGV</h1>
 
-            <section class="mb-5" id="mentions-legales">
-                <h2 class="mb-3 border-bottom">1. Mentions Légales</h2>
-                <p><strong>Éditeur du Site :</strong> SAS Fastdev, capital de 10 000€.</p>
-                <p><strong>Siège social :</strong> 5 Allée Fictive, 31000 Toulouse.</p>
-                <p><strong>Contact :</strong> 05 05 05 05 05 | <a href="mailto:sofiene31@hotmail.com">sofiene31@hotmail.com</a></p>
-                <p><strong>Immatriculation :</strong> RCS Fictive n° 0101010101010101.</p>
-                <p><strong>Hébergeur :</strong> Société Fictive, 20 Allée fictive, 31000 Toulouse (05 06 06 06 06).</p>
-            </section>
+           <section class="mb-5" id="mentions-legales">
+    <h2 class="mb-3 border-bottom">1. Mentions Légales</h2>
+    <p><strong>Éditeur du Site :</strong> SAS Fastdev, capital de 10 000€.</p>
+    <p><strong>Siège social :</strong> 5 Allée Fictive, 31000 Toulouse.</p>
+    <p><strong>Contact :</strong> 05 05 05 05 05 | <a href="mailto:sofiene31@hotmail.com">sofiene31@hotmail.com</a></p>
+    <p><strong>Immatriculation :</strong> RCS Fictive n° 0101010101010101.</p>
+    <p><strong>Hébergeur :</strong> Heroku (Salesforce, Inc.), 415 Mission Street, Suite 300, San Francisco, CA 94105, USA (<a href="https://www.heroku.com" target="_blank">www.heroku.com</a>).</p>
+</section>
 
             <section id="cgv">
+                <!-- Avertissement cadre pédagogique -->
+    <div class="alert alert-warning py-2 mb-4 small" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-1"></i> <strong>Avertissement :</strong> Ces conditions générales de vente sont rédigées dans le cadre d'un projet de formation (ECF) et possèdent une valeur purement fictive. Aucune transaction réelle n'est effectuée sur ce site.
+    </div>
                 <h2 class="mb-3 border-bottom">2. Conditions Générales de Vente (CGV)</h2>
 
                 <h3>Article 1 - Commandes et Minimum</h3>

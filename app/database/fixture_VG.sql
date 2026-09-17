@@ -245,8 +245,6 @@ VALUES
     (6, 'Samedi', '08H00', '19H00'),
     (7, 'Dimanche', '', '');
 
-
-
 --
 -- Déchargement des données de la table `vg_lieu_prestation`
 --

@@ -1,3 +1,4 @@
+// function pour ajouter un nouveau plat via AJAX
 function addNewPlat(categorie) {
   const titre = document.getElementById("titrePlat" + categorie).value.trim();
   const description = document
@@ -85,7 +86,7 @@ function addNewPlat(categorie) {
     });
 }
 
-// éviter les failles XSS lors de l'affichage du titre
+// fonction pour l'affichage du titre
 function escapeHtml(text) {
   const map = {
     "&": "&amp;",

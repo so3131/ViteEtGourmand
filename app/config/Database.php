@@ -4,7 +4,7 @@ class Database
 {
     public function connect()
     {
-        // 1. Vérifier si une URL distante est fournie (ex: JAWSDB)
+        //  Vérifier si une URL distante est fournie 
         $url = getenv('JAWSDB_URL') ?: $_ENV['JAWSDB_URL'] ?? null;
 
         if ($url) {
@@ -15,7 +15,7 @@ class Database
             $password = urldecode($parsed['pass'] ?? '');
             $dbname = ltrim($parsed['path'] ?? '', '/');
         } else {
-            // 2. Fallback local depuis le .env
+            // Fallback local depuis le .env
             $host = $_ENV['DB_HOST'] ?? 'localhost';
             $dbname = $_ENV['DB_NAME'] ?? 'test_transit_ecf';
             $username = $_ENV['DB_USER'] ?? 'vg_creator';

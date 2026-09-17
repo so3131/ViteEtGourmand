@@ -48,6 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
         },
       ],
     },
-    options: chartOptions, // Indispensable ici pour que le doughnut respecte les 280px du conteneur
+    options: chartOptions,
   });
 });

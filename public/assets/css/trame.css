@@ -251,7 +251,7 @@ footer .text-danger {
   font-weight: 600;
 }
 
-/* Sécurité absolue anti-débordement sur mobile */
+/* Sécurité anti-débordement sur mobile */
 
 .form-control,
 .form-select {

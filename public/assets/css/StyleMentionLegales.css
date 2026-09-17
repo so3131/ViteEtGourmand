@@ -1,0 +1,96 @@
+/* ==========================================================================
+   STYLE SPÉCIFIQUE - MENTIONS LÉGALES, CGV & RGPD (Vite & Gourmand)
+   ========================================================================== */
+
+body {
+  font-family: var(--font-family-public-body);
+  background-color: var(--color-bg);
+  color: var(--color-dark);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+}
+
+/* Bascule typographique automatique via la classe admin-theme */
+body.admin-theme {
+  --font-family-public-body: var(--font-family-gestion);
+  --font-family-public-heading: var(--font-family-gestion);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-family-public-heading);
+  color: var(--color-dark);
+}
+
+/* Titre principal de la page */
+main h1 {
+  font-size: var(--font-size-h1-accueil);
+  font-weight: var(--font-weight-bold);
+  text-align: var(--text-align-center);
+  margin-bottom: var(--spacing-3xl);
+}
+
+/* Encadrement des sections en mode "cartes" épurées */
+main section {
+  background-color: var(--color-white);
+  border-radius: var(--border-radius-card);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--spacing-xl);
+  transition: var(--transition-base);
+}
+
+main section:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Titres de niveau 2 (Mentions, CGV, RGPD) */
+main section h2 {
+  font-size: var(--font-size-h2-accueil);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-olive);
+  padding-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  border-bottom: 2px solid var(--color-border) !important;
+}
+
+/* Sous-titres (Articles des CGV) */
+main section h3 {
+  font-size: 1.15rem;
+  font-weight: var(--font-weight-semibold);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Paragraphes et listes */
+main p {
+  color: var(--color-dark);
+  margin-bottom: var(--spacing-md);
+}
+
+main ul {
+  padding-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+main ul li {
+  color: var(--color-dark);
+  margin-bottom: var(--spacing-xs);
+}
+
+main ul li strong {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Liens hypertextes (aux couleurs de la charte) */
+main a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: var(--transition-fast);
+}
+
+main a:hover {
+  color: var(--color-olive);
+  text-decoration: underline;
+}

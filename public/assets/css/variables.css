@@ -68,7 +68,7 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 15px 30px rgba(0, 0, 0, 0.1);
   --shadow-button: 0 4px 15px rgba(218, 165, 32, 0.3); /* Harmonisé en doré */
-  --shadow-button-hover: 0 6px 20px rgba(218, 165, 32, 0.4); /* Harmonisé en doré */
+  --shadow-button-hover: 0 6px 20px rgba(218, 165, 32, 0.4); 
 
   /* ===== RAYONS DE BORDURE (BORDER RADIUS) ===== */
   --border-radius-sm: 0.5rem;
@@ -98,7 +98,7 @@ h3,
   font-family: var(--font-family-public-heading);
 }
 
-/* Bascule automatique pour l'espace admin/staff */
+/* Bascule pour l'espace admin/staff */
 body.admin-theme {
   --font-family-public-body: var(--font-family-gestion);
   --font-family-public-heading: var(--font-family-gestion);

@@ -4,16 +4,20 @@ use App\Models\Timetable; ?>
 <footer class="container-fluid mt-5 p-4 bg-light text-black">
     <div class="container">
         <div class="row row-30">
-            <div class="col-md-3">
-                <a class="navbar-brand d-inline-block py-1" href="?page=home">
-                    <img src="assets/img/others/Logo.svg" alt="Logo de la societé Vite & Gourmand" width="140" height="37">
-                </a>
-                <p class="mt-3 small">
-                    Vite & Gourmand : Traiteur gastronomique et livraison.<br>
-                    La qualité d'un restaurant, le confort de votre table.
-                </p>
-                <p class="rights small">© <span class="copyright-year">2026</span> Vite&Gourmand.</p>
-            </div>
+           <div class="col-md-3">
+    <a class="navbar-brand d-inline-block py-1" href="?page=home">
+        <img src="assets/img/others/Logo.svg" alt="Logo de la societé Vite & Gourmand" width="140" height="37">
+    </a>
+    <p class="mt-3 small">
+        Vite & Gourmand : Traiteur gastronomique et livraison.<br>
+        La qualité d'un restaurant, le confort de votre table.
+    </p>
+    <!-- Avertissement projet fictif pour le déploiement public -->
+    <p class="small text-warning fw-semibold mb-2">
+        <i class="bi bi-info-circle"></i> Projet de formation (ECF) - Site fictif.
+    </p>
+    <p class="rights small">© <span class="copyright-year">2026</span> Vite&Gourmand.</p>
+</div>
 
             <div class="col-md-3">
                 <h3>Horaires</h3>

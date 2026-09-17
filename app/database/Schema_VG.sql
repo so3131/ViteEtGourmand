@@ -255,8 +255,6 @@ CREATE TABLE
 
 -- --------------------------------------------------------
 --
-
-
 --
 -- Index pour les tables déchargées
 --
@@ -311,7 +309,6 @@ ADD KEY `plat_id` (`plat_id`);
 --
 -- Index pour la table `vg_password_resets`
 --
-
 ALTER TABLE `vg_password_resets` ADD PRIMARY KEY (`id`),
 ADD UNIQUE KEY `uk_email` (`email`);
 
@@ -336,7 +333,6 @@ ALTER TABLE `vg_theme` ADD PRIMARY KEY (`theme_id`);
 ALTER TABLE `vg_utilisateur` ADD PRIMARY KEY (`utilisateur_id`),
 ADD UNIQUE KEY `email` (`email`),
 ADD KEY `fk_vg_utilisateur_role` (`role_id`);
-
 
 --
 -- AUTO_INCREMENT pour les tables déchargées
@@ -401,7 +397,6 @@ AUTO_INCREMENT = 10;
 --
 ALTER TABLE `vg_utilisateur` MODIFY `utilisateur_id` int (11) NOT NULL AUTO_INCREMENT,
 AUTO_INCREMENT = 25;
-
 
 --
 -- Contraintes pour les tables déchargées

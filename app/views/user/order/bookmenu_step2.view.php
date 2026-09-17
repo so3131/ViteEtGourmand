@@ -46,6 +46,7 @@
                  </div>
 
                  <div class="d-flex justify-content-between mt-4">
+                    <a href="index.php?page=search" class="btn btn-secondary me-2">Annuler la commande</a>
                      <a href="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=1" class="btn btn-outline-secondary">Retour</a>
                      <button type="submit" class="btn btn-primary">Passer à l'étape suivante</button>
                  </div>

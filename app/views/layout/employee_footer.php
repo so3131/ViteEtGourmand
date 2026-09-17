@@ -21,12 +21,6 @@
         <?php endif; ?>
     <?php endforeach; ?>
 <?php endif; ?>
-
-<script>
-    console.log("Bootstrap version:", typeof bootstrap !== 'undefined' ? "Chargé" : "Non chargé");
-    console.log("jQuery version:", typeof jQuery !== 'undefined' ? jQuery.fn.jquery : "Non chargé");
-</script>
-
 </body>
 
 </html>
