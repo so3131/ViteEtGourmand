@@ -1,4 +1,4 @@
-# Commit 33 : Config production
+# Commit 34 : Fix production
 
 À cette étape :
-chemin upload photo manquant /public/ dans createPlatAjax
+casse app/Helpers dans OrderMenuController"

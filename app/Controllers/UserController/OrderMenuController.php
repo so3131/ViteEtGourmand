@@ -4,7 +4,7 @@ namespace App\Controllers\UserController;
 
 
 require_once dirname(__DIR__, 2) . '/Config/Constants.php';
-require_once ROOT_PATH . '/app/helpers/Function.php';
+require_once ROOT_PATH . '/app/Helpers/Function.php';
 
 use App\Models\Menu;
 use App\Managers\MenuManager;
