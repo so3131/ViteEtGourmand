@@ -93,10 +93,6 @@
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="5" class="text-center text-muted small py-3">Aucun employé enregistré.</td>
-                            </tr>
                         <?php endif; ?>
                     </tbody>
                 </table>

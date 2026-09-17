@@ -1,5 +1,4 @@
-# Commit 30 : Config production
+# Commit 31 : Config production
 
 À cette étape :
-chemin publics hs en prod
- mbstring manquant en prod : declaration ext-mbstring dans composer.json
+warning DataTables employesTable : retrait de la ligne colspan manuelle
