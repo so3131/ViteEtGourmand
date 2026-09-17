@@ -324,7 +324,7 @@ class MenuManagementController
 
                 $safeExtension = $allowedMimeTypes[$mime];
                 $newFileName = bin2hex(random_bytes(16)) . '.' . $safeExtension;
-                $uploadDir = ROOT_PATH . 'assets/img/plats/';
+                $uploadDir = ROOT_PATH . '/public/assets/img/plats/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
