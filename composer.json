@@ -9,7 +9,10 @@
     "require": {
         "mongodb/mongodb": "^2.4",
         "getbrevo/brevo-php": "^5.0",
-        "guzzlehttp/guzzle": "^8.1"
+        "guzzlehttp/guzzle": "^8.1",
+        "ext-mbstring": "*",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*"
     },
     "config": {
         "allow-plugins": {

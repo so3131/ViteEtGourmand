@@ -1,4 +1,5 @@
-# Commit 29 : Config production
+# Commit 30 : Config production
 
 À cette étape :
-chemins assets CSS/JS pour environnement Heroku
+chemin publics hs en prod
+ mbstring manquant en prod : declaration ext-mbstring dans composer.json

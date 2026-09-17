@@ -114,11 +114,11 @@ class SigninController
 
         // fichiers CSS spécifiques à cette page
         $specific_styles = [
-            "../public/assets/css/loginsignin.css",
+            "../assets/css/loginsignin.css",
         ];
 
         // Pareil pour le JS
-        $specific_scripts = ["../public/assets/javascript/auth.js",];
+        $specific_scripts = ["../assets/javascript/auth.js",];
         $errors = $errors ?? [];
         require_once ROOT_PATH . '/app/Views/layout/header.php';
         require_once ROOT_PATH . '/app/Views/Auth/signin.view.php';
