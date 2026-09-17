@@ -98,7 +98,7 @@ if ($current_page === '' || $current_page === '/') {
         <main class="main-content flex-grow-1 w-100">
             <header class="top-bar navbar navbar-expand bg-white border-bottom px-4 py-3">
                 <?php
-                $pageTitles = require ROOT_PATH . '/app/Config/titles.php';
+                $pageTitles = require ROOT_PATH . '/app/Config/Titles.php';
                 $pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
                 ?>
 

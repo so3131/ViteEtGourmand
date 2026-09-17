@@ -13,7 +13,7 @@ class SuccessController
         $title = "Message envoyé - Vite & Gourmand";
 
         require_once ROOT_PATH . '/app/Views/layout/header.php';
-        require_once ROOT_PATH . '/app/Views/contact.success.view.php';
+        require_once ROOT_PATH . '/app/Views/user/contact.success.view.php';
         require_once ROOT_PATH . '/app/Views/layout/footer.php';
         exit();
     }

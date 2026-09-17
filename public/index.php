@@ -50,7 +50,7 @@ $db = (new Database())->connect();
 $page = $_GET['page'] ?? 'home';
 
 if ($page === 'logout') {
-    require_once ROOT_PATH . '/app/Controllers/AuthController/logoutController.php';
+    require_once ROOT_PATH . '/app/Controllers/AuthController/LogoutController.php';
     \App\Controllers\AuthController\LogoutController::logOut($db);
 }
 
@@ -89,7 +89,7 @@ $route = match ($page) {
     'contact'           => ['class' => '\App\Controllers\UserController\ContactController', 'action' => 'contactUs'],
     'contact-success'   => ['class' => '\App\Controllers\SuccessController', 'action' => 'successMessage'],
     'mention'           => ['class' => '\App\Controllers\UserController\MentionLegalesController', 'action' => 'mentionsLegales'],
-    'error-ban'         => ['class' => '\App\Controllers\banViewController', 'action' => 'errorBanMessage'],
+    'error-ban' => ['class' => '\App\Controllers\BanViewController', 'action' => 'errorBanMessage'],
     // Authentification
     'forgot-password'   => ['class' => '\App\Controllers\AuthController\ForgotPasswordController', 'action' => 'forgotPassword'],
     'reset-password'    => ['class' => '\App\Controllers\AuthController\ResetPasswordController', 'action' => 'resetPassword'],

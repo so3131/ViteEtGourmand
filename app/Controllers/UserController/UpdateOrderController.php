@@ -6,7 +6,7 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 
 use App\Managers\MenuManager;
 use App\Managers\OrderManager;
-use App\models\Menu;
+use App\Models\Menu;
 use App\Config\Constants;
 use App\Helpers\SecurityManager;
 use App\Managers\LieuManager;
