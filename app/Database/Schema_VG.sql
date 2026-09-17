@@ -305,8 +305,8 @@ ADD KEY `plat_id` (`plat_id`);
 --
 -- Index pour la table `vg_password_resets`
 --
-ALTER TABLE `vg_password_resets` ADD PRIMARY KEY (`id`),
-ADD UNIQUE KEY `uk_email` (`email`);
+ALTER TABLE `vg_password_resets` ADD PRIMARY KEY (`id`);
+
 
 --
 -- Index pour la table `vg_regime`
