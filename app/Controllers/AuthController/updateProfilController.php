@@ -66,7 +66,7 @@ class UpdateProfilController
 
         $title = "Modifier profil - Vite&Gourmand";
         $specific_styles = [];
-        $specific_scripts = ["../assets/javascript/auth.js",];
+        $specific_scripts = ["assets/javascript/auth.js",];
 
         require_once ROOT_PATH . '/app/Views/layout/header.php';
         require_once ROOT_PATH . '/app/Views/Auth/update.profile.view.php';

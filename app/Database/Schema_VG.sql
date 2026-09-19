@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : lun. 31 août 2026 à 18:36
+-- Généré le : sam. 19 sep. 2026 à 12:09
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 SET
@@ -23,14 +23,8 @@ SET
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Structure de la table : `test_transit_ecf`
+-- Base de données : `test_transit_ecf`
 --
-CREATE DATABASE IF NOT EXISTS `test_transit_ecf` DEFAULT CHARACTER
-SET
-  utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE `test_transit_ecf`;
-
 -- --------------------------------------------------------
 --
 -- Structure de la table `vg_allergene`
@@ -53,9 +47,11 @@ CREATE TABLE
 
 -- --------------------------------------------------------
 --
+-- Structure de la table `vg_avis`
+--
 CREATE TABLE
   `vg_avis` (
-    `avis_id` int (11) NOT NULL AUTO_INCREMENT,
+    `avis_id` int (11) NOT NULL,
     `note` int (11) NOT NULL,
     `description` varchar(255) NOT NULL,
     `statut` varchar(20) NOT NULL DEFAULT 'pending',
@@ -64,11 +60,7 @@ CREATE TABLE
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
     `validated_by` int (11) DEFAULT NULL,
     `validated_by_name` varchar(100) DEFAULT NULL,
-    `validated_at` datetime DEFAULT NULL,
-    PRIMARY KEY (`avis_id`),
-    UNIQUE KEY `un_seule_avis_par_commande` (`commande_id`),
-    KEY `fk_avis_utilisateur` (`utilisateur_id`),
-    KEY `fk_avis_commande` (`commande_id`)
+    `validated_at` datetime DEFAULT NULL
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -155,7 +147,7 @@ CREATE TABLE
     `titre` varchar(50) NOT NULL,
     `nombre_personne_minimum` int (11) DEFAULT 15,
     `prix_par_personne` double NOT NULL,
-    `description_menu` varchar(50) NOT NULL,
+    `description_menu` varchar(100) NOT NULL,
     `quantite_restante` int (11) NOT NULL,
     `theme_id` int (11) DEFAULT NULL,
     `regime_id` int (11) DEFAULT NULL,
@@ -181,11 +173,10 @@ CREATE TABLE
 CREATE TABLE
   `vg_password_resets` (
     `id` int (11) NOT NULL,
-    `email` varchar(255) NOT NULL,
+    `email` varchar(50) NOT NULL,
     `token` varchar(255) NOT NULL,
     `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-    `expires_at` datetime NOT NULL,
-    UNIQUE KEY `uk_email` (`email`)
+    `expires_at` datetime NOT NULL
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -194,13 +185,12 @@ CREATE TABLE
 --
 CREATE TABLE
   `vg_plat` (
-    `plat_id` int (11) NOT NULL AUTO_INCREMENT,
+    `plat_id` int (11) NOT NULL,
     `titre_plat` varchar(50) NOT NULL,
     `description_plat` varchar(255) DEFAULT NULL,
     `photo` varchar(255) DEFAULT NULL,
     `categorie` varchar(50) DEFAULT NULL,
-    `is_active` tinyint (1) NOT NULL DEFAULT 1,
-    PRIMARY KEY (`plat_id`)
+    `is_active` tinyint (1) DEFAULT 1
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -253,8 +243,6 @@ CREATE TABLE
     `created_at` timestamp NOT NULL DEFAULT current_timestamp()
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
---
 --
 -- Index pour les tables déchargées
 --
@@ -268,6 +256,14 @@ ALTER TABLE `vg_allergene` ADD PRIMARY KEY (`allergene_id`);
 --
 ALTER TABLE `vg_allergene_plat` ADD PRIMARY KEY (`plat_id`, `allergene_id`),
 ADD KEY `allergene_id` (`allergene_id`);
+
+--
+-- Index pour la table `vg_avis`
+--
+ALTER TABLE `vg_avis` ADD PRIMARY KEY (`avis_id`),
+ADD UNIQUE KEY `une_seule_avis_par_commande` (`commande_id`),
+ADD KEY `fk_avis_utilisateur` (`utilisateur_id`),
+ADD KEY `fk_avis_commande` (`commande_id`);
 
 --
 -- Index pour la table `vg_commande`
@@ -299,11 +295,6 @@ ALTER TABLE `vg_lieu_prestation` ADD PRIMARY KEY (`id`);
 ALTER TABLE `vg_menu` ADD PRIMARY KEY (`menu_id`),
 ADD KEY `fk_menu_theme` (`theme_id`),
 ADD KEY `fk_menu_regime` (`regime_id`);
---
--- Index pour la table `vg_menu`
---
-
-ALTER TABLE `vg_menu` MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Index pour la table `vg_menu_plat`
@@ -314,7 +305,13 @@ ADD KEY `plat_id` (`plat_id`);
 --
 -- Index pour la table `vg_password_resets`
 --
-ALTER TABLE `vg_password_resets` ADD PRIMARY KEY (`id`);
+ALTER TABLE `vg_password_resets` ADD PRIMARY KEY (`id`),
+ADD UNIQUE KEY `uk_email` (`email`);
+
+--
+-- Index pour la table `vg_plat`
+--
+ALTER TABLE `vg_plat` ADD PRIMARY KEY (`plat_id`);
 
 --
 -- Index pour la table `vg_regime`
@@ -348,17 +345,22 @@ ALTER TABLE `vg_allergene` MODIFY `allergene_id` int (11) NOT NULL AUTO_INCREMEN
 AUTO_INCREMENT = 15;
 
 --
+-- AUTO_INCREMENT pour la table `vg_avis`
+--
+ALTER TABLE `vg_avis` MODIFY `avis_id` int (11) NOT NULL AUTO_INCREMENT,
+AUTO_INCREMENT = 6;
+
 --
 -- AUTO_INCREMENT pour la table `vg_commande`
 --
 ALTER TABLE `vg_commande` MODIFY `commande_id` int (11) NOT NULL AUTO_INCREMENT,
-AUTO_INCREMENT = 35;
+AUTO_INCREMENT = 49;
 
 --
 -- AUTO_INCREMENT pour la table `vg_commande_statut_historique`
 --
 ALTER TABLE `vg_commande_statut_historique` MODIFY `historique_id` int (11) NOT NULL AUTO_INCREMENT,
-AUTO_INCREMENT = 4;
+AUTO_INCREMENT = 24;
 
 --
 -- AUTO_INCREMENT pour la table `vg_horaire`
@@ -370,13 +372,25 @@ AUTO_INCREMENT = 8;
 -- AUTO_INCREMENT pour la table `vg_lieu_prestation`
 --
 ALTER TABLE `vg_lieu_prestation` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
-AUTO_INCREMENT = 54;
+AUTO_INCREMENT = 66;
+
+--
+-- AUTO_INCREMENT pour la table `vg_menu`
+--
+ALTER TABLE `vg_menu` MODIFY `menu_id` int (11) NOT NULL AUTO_INCREMENT,
+AUTO_INCREMENT = 9;
 
 --
 -- AUTO_INCREMENT pour la table `vg_password_resets`
 --
 ALTER TABLE `vg_password_resets` MODIFY `id` int (11) NOT NULL AUTO_INCREMENT,
-AUTO_INCREMENT = 7;
+AUTO_INCREMENT = 16;
+
+--
+-- AUTO_INCREMENT pour la table `vg_plat`
+--
+ALTER TABLE `vg_plat` MODIFY `plat_id` int (11) NOT NULL AUTO_INCREMENT,
+AUTO_INCREMENT = 49;
 
 --
 -- AUTO_INCREMENT pour la table `vg_regime`
@@ -400,7 +414,7 @@ AUTO_INCREMENT = 10;
 -- AUTO_INCREMENT pour la table `vg_utilisateur`
 --
 ALTER TABLE `vg_utilisateur` MODIFY `utilisateur_id` int (11) NOT NULL AUTO_INCREMENT,
-AUTO_INCREMENT = 25;
+AUTO_INCREMENT = 4;
 
 --
 -- Contraintes pour les tables déchargées
@@ -412,17 +426,17 @@ ALTER TABLE `vg_allergene_plat` ADD CONSTRAINT `allergene_plat_ibfk_1` FOREIGN K
 ADD CONSTRAINT `allergene_plat_ibfk_2` FOREIGN KEY (`allergene_id`) REFERENCES `vg_allergene` (`allergene_id`) ON DELETE CASCADE;
 
 --
+-- Contraintes pour la table `vg_avis`
+--
+ALTER TABLE `vg_avis` ADD CONSTRAINT `fk_avis_commande` FOREIGN KEY (`commande_id`) REFERENCES `vg_commande` (`commande_id`) ON DELETE CASCADE,
+ADD CONSTRAINT `fk_avis_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `vg_utilisateur` (`utilisateur_id`) ON DELETE CASCADE;
+
+--
 -- Contraintes pour la table `vg_commande`
 --
 ALTER TABLE `vg_commande` ADD CONSTRAINT `fk_commande_lieu_prestation` FOREIGN KEY (`lieu_prestation_id`) REFERENCES `vg_lieu_prestation` (`id`) ON UPDATE CASCADE,
 ADD CONSTRAINT `fk_commande_menu` FOREIGN KEY (`menu_id`) REFERENCES `vg_menu` (`menu_id`) ON DELETE CASCADE,
 ADD CONSTRAINT `fk_commande_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `vg_utilisateur` (`utilisateur_id`) ON DELETE CASCADE;
-
---
--- Contraintes pour la table `vg_avis`
---
-ALTER TABLE `vg_avis` ADD CONSTRAINT `fk_avis_utilisateur` FOREIGN KEY (`utilisateur_id`) REFERENCES `vg_utilisateur` (`utilisateur_id`) ON DELETE CASCADE,
-ADD CONSTRAINT `fk_avis_commande` FOREIGN KEY (`commande_id`) REFERENCES `vg_commande` (`commande_id`) ON DELETE CASCADE;
 
 --
 -- Contraintes pour la table `vg_commande_statut_historique`

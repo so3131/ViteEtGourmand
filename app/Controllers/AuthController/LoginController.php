@@ -139,11 +139,11 @@ class LoginController
         $title = "Se connecter - Vite&Gourmand";
 
         $specific_styles = [
-            "../assets/css/loginsignin.css",
+            "assets/css/loginsignin.css",
         ];
 
         $specific_scripts = [
-            "../assets/javascript/auth.js",
+            "assets/javascript/auth.js",
         ];
 
         // Inclusion des fichiers de template pour l'affichage

@@ -40,7 +40,7 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
                     <div class="mb-3">
                         <h3 class="h6 fw-bold">Nombre de personnes</h3>
                         <label class="form-label">Choisissez un minimum d'invités</label>
-                        <input type="number" class="form-control" name="nombre_personne_minimum" min="15" max="150" placeholder="Min 15 Personnes">
+                        <input type="number" class="form-control" name="nombre_personne_minimum" min="2" max="150" placeholder="Min 2 Personnes">
                     </div>
 
                     <div class="accordion accordion-flush" id="filterAccordion">
@@ -50,10 +50,15 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
                             </h3>
                             <div id="theme" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
                                 <div class="accordion-body">
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="4" id="t4"><label class="form-check-label" for="t4">Noël</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="5" id="t5"><label class="form-check-label" for="t5">Pâques</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="1" id="t1"><label class="form-check-label" for="t1">Gastronomique</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="checkbox" name="theme_id[]" value="2" id="t2"><label class="form-check-label" for="t2">Traditionnel</label></div>
+                                    <?php foreach ($themes ?? [] as $theme): ?>
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="theme_id[]"
+               value="<?= $theme['theme_id'] ?>" id="t<?= $theme['theme_id'] ?>">
+        <label class="form-check-label" for="t<?= $theme['theme_id'] ?>">
+            <?= htmlspecialchars($theme['libelle']) ?>
+        </label>
+    </div>
+<?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
@@ -64,9 +69,15 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
                             </h3>
                             <div id="regime" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
                                 <div class="accordion-body">
-                                    <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="1" id="r1"><label class="form-check-label" for="r1">Végétarien</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="2" id="r2"><label class="form-check-label" for="r2">Vegan</label></div>
-                                    <div class="form-check"><input class="form-check-input" type="radio" name="regime_id" value="3" id="r3"><label class="form-check-label" for="r3">Classique</label></div>
+                                    <?php foreach ($regimes ?? [] as $regime): ?>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="regime_id"
+               value="<?= $regime['regime_id'] ?>" id="r<?= $regime['regime_id'] ?>">
+        <label class="form-check-label" for="r<?= $regime['regime_id'] ?>">
+            <?= htmlspecialchars($regime['libelle']) ?>
+        </label>
+    </div>
+<?php endforeach; ?>
                                 </div>
                             </div>
                         </div>

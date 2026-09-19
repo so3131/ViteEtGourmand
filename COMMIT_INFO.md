@@ -1,4 +1,5 @@
-# Commit 35 : Fix production
+# Commit 36 : Fix pour production
 
 À cette étape :
-Helpers dans LoginController"
+Fix chemins ../assets/, photoPath createPlatAjax, filtre themes/regimes dynamique
+Catalogue enrichi + comptes demo renumerotes + jeu de donnees transactionnelles
