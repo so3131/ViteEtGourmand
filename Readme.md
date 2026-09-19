@@ -11,7 +11,14 @@ Ce document décrit la démarche pour installer et exécuter l'application en lo
 ## Liens du projet
 - 🚀 Application déployée : [https://vite-gourmand-student-a8b437ed0314.herokuapp.com/](https://vite-gourmand-student-a8b437ed0314.herokuapp.com/)
 - 📋 Gestion de projet (Trello) : [https://trello.com/b/qGLPe8mZ](https://trello.com/b/qGLPe8mZ)
-- 📄 Documentation technique / Doc gestion de projet / Manuel utilisateur : voir dossier `docs/`
+
+## Documentation
+
+- 📘 [Documentation technique](docs/Documentations/Documentation_Technique.pdf)
+- 📋 [Documentation gestion de projet](docs/Documentations/Documentation_Gestion_de_projet.pdf)
+- 👤 [Manuel d'utilisation](docs/Documentations/Manuel_d'utilisation.pdf)
+- 🎨 [Charte graphique, wireframes et mockups](docs/Chartes%20et%20mockups/Charte_Graphique.pdf)
+- 📊 [Diagrammes et dictionnaire de données](docs/Diagrammes%20et%20Dictionnaire%20de%20donn%C3%A9es/) (MCD, cas d'utilisation, séquence)
 
 ## Prérequis
 
@@ -109,16 +116,15 @@ Les principales pages sont accessibles via les liens du menu, ou directement en 
 | `?page=signin` | Création de compte |
 | `?page=mention` | Mentions légales et CGV |
 
-## Compte de test par défaut
+### Comptes de test par défaut
 
-| Rôle | Identifiant |
-|---|---|
-| Administrateur | `admin@vite-gourmand.fr` |
+| Rôle | Identifiant | Mot de passe |
+|---|---|---|
+| Administrateur | admin@vite-gourmand.fr | Vgadmin2026! |
+| Employé | employe@vite-gourmand.fr | Vgemploye2026! |
+| Client | client@vite-gourmand.fr | Vgclient2026! |
 
-C'est le seul compte présent dans `fixture_VG.sql`. Pour tester les autres rôles :
-- **Employé** : à créer depuis l'espace admin (Gestion RH), une fois connecté en tant qu'administrateur
-- **Client** : à créer soi-même via la page d'inscription (`?page=signin`)
-( A corriger )
+Ces trois comptes sont présents nativement dans `fixture_VG.sql` et fonctionnent aussi bien en local qu'en production. Le compte client dispose déjà de commandes de test couvrant tous les statuts possibles, ainsi que d'un avis en attente de modération.
 
 ## Structure du projet
 
@@ -137,6 +143,11 @@ app/
 public/
 ├── index.php     Point d'entrée et routeur
 └── assets/       CSS, JavaScript, images
+
+docs/
+├── Documentations/                          Doc technique, gestion de projet, manuel utilisateur
+├── Chartes et mockups/                      Charte graphique + wireframes/mockups
+└── Diagrammes et Dictionnaire de données/   MCD, diagrammes UML, dictionnaire de données
 
 vendor/           Dépendances Composer
 Procfile          Configuration de déploiement Heroku
