@@ -55,10 +55,9 @@ class Order
 
     public static function calculerDistanceRoute(float $lat1, float $lon1, float $lat2, float $lon2): float
     {
-
         $apiKey = getenv('OPENROUTESERVICE_API_KEY') ?: '';
 
-        $url = "https://api.openrouteservice.org/v2/directions/driving-car?api_key={$apiKey}&start={$lon1},{$lat1}&end={$lon2},{$lat2}";
+        $url = "https://api.heigit.org/openrouteservice/v2/directions/driving-car?api_key={$apiKey}&start={$lon1},{$lat1}&end={$lon2},{$lat2}";
 
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);

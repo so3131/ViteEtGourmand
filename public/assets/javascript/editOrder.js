@@ -61,7 +61,7 @@ if (inputAdresse) {
 
     try {
       const res = await fetch(
-        `https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=5`,
+        `https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(query)}&limit=5`,
       );
       const data = res.json ? await res.json() : {};
 

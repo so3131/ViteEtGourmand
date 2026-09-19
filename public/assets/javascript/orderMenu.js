@@ -82,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
       clearTimeout(timeoutId);
       const inputCp = document.getElementById("code_postal");
 
-
       // vide immédiatement les valeurs pour éviter de garder l'ancienne adresse
       if (inputVille) inputVille.value = "";
       if (inputLat) inputLat.value = "";
@@ -101,10 +100,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       timeoutId = setTimeout(() => {
-        
-fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&limit=5&type=housenumber`)
-
-
+        fetch(
+          `https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(query)}&limit=5&type=housenumber`,
+        )
           .then((response) => response.json())
           .then((data) => {
             if (!divSuggestions) return;
@@ -119,9 +117,11 @@ fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&l
                 item.addEventListener("click", function (e) {
                   e.preventDefault();
                   if (feature.properties.type !== "housenumber") {
-    afficherFlashJS("Veuillez choisir une adresse avec numéro de rue (ex : 12 rue des Lilas).");
-    return;
-}
+                    afficherFlashJS(
+                      "Veuillez choisir une adresse avec numéro de rue (ex : 12 rue des Lilas).",
+                    );
+                    return;
+                  }
                   inputAdresse.value = feature.properties.label;
                   inputVille.value = feature.properties.city || "";
 
@@ -166,21 +166,29 @@ fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&l
       divSuggestions.style.display = "none";
     }
   });
-  const formLivraison = document.getElementById('form-livraison');
-if (formLivraison) {
-    formLivraison.addEventListener('submit', (e) => {
-        const ville = document.getElementById('ville');
-        const lat   = document.getElementById('lat');
-        const lon   = document.getElementById('lon');
-        if (!ville || !ville.value || !lat || !lon || !lat.value || !lon.value) {
-            e.preventDefault();
-            afficherFlashJS('Veuillez sélectionner une adresse complète dans les suggestions.');
-        }
+  const formLivraison = document.getElementById("form-livraison");
+  if (formLivraison) {
+    formLivraison.addEventListener("submit", (e) => {
+      const ville = document.getElementById("ville");
+      const cp = document.getElementById("code_postal");
+      const lat = document.getElementById("lat");
+      const lon = document.getElementById("lon");
+
+      if (
+        !ville ||
+        !ville.value ||
+        !cp ||
+        !cp.value ||
+        !lat ||
+        !lon ||
+        !lat.value ||
+        !lon.value
+      ) {
+        e.preventDefault();
+        afficherFlashJS(
+          "Veuillez sélectionner une adresse complète dans les suggestions.",
+        );
+      }
     });
-    const cp = document.getElementById('code_postal');
-if (!ville || !ville.value || !cp || !cp.value || !lat || !lon || !lat.value || !lon.value) {
-    e.preventDefault();
-    afficherFlashJS('Veuillez sélectionner une adresse complète dans les suggestions.');
-}
-}
+  }
 });
