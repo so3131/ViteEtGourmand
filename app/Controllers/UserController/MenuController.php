@@ -33,6 +33,8 @@ class MenuController
 
         $specific_styles = ["assets/css/styleSearch.css", "assets/css/trame.css"];
         $specific_scripts = ["assets/javascript/recherche.js"];
+        $themes = MenuManager::getAllThemes($db);
+        $regimes = MenuManager::getAllRegimes($db);
 
         require_once ROOT_PATH . '/app/Views/layout/header.php';
         require_once ROOT_PATH . '/app/Views/user/search.Menu.view.php';
@@ -78,9 +80,11 @@ class MenuController
             header('Location: index.php?page=search');
             exit();
         }
-
+        
         $plats = MenuManager::getPlatsByMenuId($db, $menuID);
         $allergenes = MenuManager::getAllergenesByMenuId($db, $menuID);
+        $themes = MenuManager::getAllThemes($db);
+$regimes = MenuManager::getAllRegimes($db);
         $title = "Détail du menu - Vite Gourmand";
 
 

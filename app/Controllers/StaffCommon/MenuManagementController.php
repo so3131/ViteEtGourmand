@@ -150,7 +150,7 @@ class MenuManagementController
                 exit();
             }
 
-            $photoPath = '/public/assets/img/plats/' . $newFileName;
+            $photoPath = 'assets/img/plats/' . $newFileName;
         }
 
         try {

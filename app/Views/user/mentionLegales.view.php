@@ -4,21 +4,33 @@
 
             <h1 class="mb-5 text-center">Mentions Légales, RGPD & CGV</h1>
 
-           <section class="mb-5" id="mentions-legales">
-    <h2 class="mb-3 border-bottom">1. Mentions Légales</h2>
-    <p><strong>Éditeur du Site :</strong> SAS Fastdev, capital de 10 000€.</p>
-    <p><strong>Siège social :</strong> 5 Allée Fictive, 31000 Toulouse.</p>
-    <p><strong>Contact :</strong> 05 05 05 05 05 | <a href="mailto:sofiene31@hotmail.com">sofiene31@hotmail.com</a></p>
-    <p><strong>Immatriculation :</strong> RCS Fictive n° 0101010101010101.</p>
-    <p><strong>Hébergeur :</strong> Heroku (Salesforce, Inc.), 415 Mission Street, Suite 300, San Francisco, CA 94105, USA (<a href="https://www.heroku.com" target="_blank">www.heroku.com</a>).</p>
+            <section class="mb-5" id="mentions-legales">
+                <h2 class="mb-3 border-bottom">1. Mentions Légales</h2>
+                <p><strong>Éditeur du Site :</strong> SAS Fastdev, capital de 10 000€.</p>
+                <p><strong>Siège social :</strong> 5 Allée Fictive, 31000 Toulouse.</p>
+                <p><strong>Contact :</strong> 05 05 05 05 05 | <a href="mailto:sofiene31@hotmail.com">sofiene31@hotmail.com</a></p>
+                <p><strong>Immatriculation :</strong> RCS Fictive n° 0101010101010101.</p>
+                <p><strong>Hébergeur :</strong> Heroku (Salesforce, Inc.), 415 Mission Street, Suite 300, San Francisco, CA 94105, USA (<a href="https://www.heroku.com" target="_blank">www.heroku.com</a>).</p>
+                
+            </section>
+            <section class="credits-photos">
+    <h2>2. Crédits photographiques</h2>
+    
+    <p>
+        Les photographies présentes sur ce site sont soit générées par intelligence artificielle (Google Gemini), soit issues de banques d'images libres de droits (Unsplash, Pexels), utilisées conformément à leurs licences respectives (usage libre, attribution non obligatoire).
+    </p>
+    
+    <p>
+        Les photos illustrant l'équipe "Vite & Gourmand" sont des visuels d'illustration (stock/IA) et ne représentent pas de véritables membres du personnel — ce site étant un projet de démonstration réalisé dans le cadre d'un examen (Titre Professionnel DWWM).
+    </p>
 </section>
 
             <section id="cgv">
                 <!-- Avertissement cadre pédagogique -->
-    <div class="alert alert-warning py-2 mb-4 small" role="alert">
-        <i class="bi bi-exclamation-triangle-fill me-1"></i> <strong>Avertissement :</strong> Ces conditions générales de vente sont rédigées dans le cadre d'un projet de formation (ECF) et possèdent une valeur purement fictive. Aucune transaction réelle n'est effectuée sur ce site.
-    </div>
-                <h2 class="mb-3 border-bottom">2. Conditions Générales de Vente (CGV)</h2>
+                <div class="alert alert-warning py-2 mb-4 small" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> <strong>Avertissement :</strong> Ces conditions générales de vente sont rédigées dans le cadre d'un projet de formation (ECF) et possèdent une valeur purement fictive. Aucune transaction réelle n'est effectuée sur ce site.
+                </div>
+                <h2 class="mb-3 border-bottom">3. Conditions Générales de Vente (CGV)</h2>
 
                 <h3>Article 1 - Commandes et Minimum</h3>
                 <p>Chaque menu est soumis à un nombre minimum de convives indiqué lors de la sélection. La commande ne pourra être validée si ce seuil n'est pas atteint.</p>
@@ -45,7 +57,7 @@
                 <p>Les présentes conditions sont soumises au droit français. En cas de litige, les tribunaux compétents seront ceux du siège social de Vite & Gourmand.</p>
             </section>
             <section class="mb-5" id="rgpd">
-                <h2 class="mb-3 border-bottom">3. Protection des Données Personnelles (RGPD)</h2>
+                <h2 class="mb-3 border-bottom">4. Protection des Données Personnelles (RGPD)</h2>
                 <p>Les informations recueillies lors de la création de votre compte et de vos commandes sur le site <strong>Vite & Gourmand</strong> font l'objet d'un traitement informatique destiné à la gestion de la relation client, au traitement des commandes et à l'envoi de notifications de suivi.</p>
                 <p><strong>Données collectées :</strong> Nom, prénom, adresse e-mail, numéro de téléphone, adresse de livraison et historique des commandes.</p>
                 <p><strong>Conservation :</strong> Vos données sont conservées le temps nécessaire à la gestion commerciale et légale de vos commandes, puis archivées conformément aux durées légales en vigueur.</p>

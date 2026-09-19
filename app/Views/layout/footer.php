@@ -104,7 +104,7 @@ use App\Models\Timetable; ?>
             <script src="<?= $js ?>"></script>
         <?php endforeach; ?>
     <?php endif; ?>
-    <script src="<?= BASE_URL ?>assets/javascript/js-bootstrap/jquery-3.7.1.min.js"></script>
+    <script src="<?= BASE_URL ?>/assets/javascript/js-bootstrap/jquery-3.7.1.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
 

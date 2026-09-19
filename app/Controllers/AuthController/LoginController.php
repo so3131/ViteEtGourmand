@@ -4,6 +4,7 @@ namespace App\Controllers\AuthController;
 
 require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 require_once ROOT_PATH . '/app/Helpers/Function.php';
+
 use App\Controllers\AuthController\Auth;
 use App\Managers\UserManager;
 // Class LoginController pour gérer la connexion des utilisateurs
@@ -138,11 +139,11 @@ class LoginController
         $title = "Se connecter - Vite&Gourmand";
 
         $specific_styles = [
-            "../assets/css/loginsignin.css",
+            "assets/css/loginsignin.css",
         ];
 
         $specific_scripts = [
-            "../assets/javascript/auth.js",
+            "assets/javascript/auth.js",
         ];
 
         // Inclusion des fichiers de template pour l'affichage
