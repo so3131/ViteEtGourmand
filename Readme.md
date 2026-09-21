@@ -157,8 +157,8 @@ Procfile          Configuration de déploiement Heroku
 
 L'application est déployée sur **Heroku** (add-on JawsDB pour la base MySQL). Le détail complet de la procédure — Config, add-ons, import de la base, vérifications post-déploiement — est documenté dans la **documentation technique** du projet.
 
-## Branches Git
+# Branches Git
 
 - `main` : branche de production, déployée sur Heroku.
 - `dev` : branche de développement courant.
-- Chaque fonctionnalité est développée dans une branche dédiée, testée, puis fusionnée dans `dev`. Après validation complète, `dev` est fusionnée dans `main`.
+- Le développement s'effectue directement sur `dev`, testé au fur et à mesure. Après validation complète, `dev` est fusionnée dans `main`.
