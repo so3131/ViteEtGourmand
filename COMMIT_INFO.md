@@ -1,4 +1,4 @@
-# Commit 43 : Fix livrables
+# Commit 44 : Fix js
 
 À cette étape :
-Correction livrable pas a jour
+Fix XSS : echappement HTML dans createMenuCard (recherche.js)

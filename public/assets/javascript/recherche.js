@@ -125,28 +125,22 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // créer de façon dynamique les cartes de menus à partir des données récupérées de la base de données
-  function createMenuCard(menu) {
+ function createMenuCard(menu) {
     const menuId = menu.menu_id || "#";
     const detailUrl = `index.php?page=details-menu&menu_id=${menu.menu_id}`;
     const photoUrl = getMenuPhoto(menu);
-    const plats = menu.plats_structures || {};
-
-    const platPrincipal =
-      plats.Plat || plats["Entrée"] || plats.Dessert || null;
-
-    const photo = platPrincipal?.photo || "assets/img/plats/default.webp";
 
     return `
             <div class="col">
                 <div class="card h-100 shadow-sm">
-                    <img src="${photoUrl}"
-             class="card-img-top" alt="${menu.titre}"style="height: 300px; object-fit: cover;">
+                    <img src="${escapeHtml(photoUrl)}"
+             class="card-img-top" alt="${escapeHtml(menu.titre)}" style="height: 300px; object-fit: cover;">
                     <div class="card-body">
-                        <h5 class="card-title">${menu.titre}</h5>
+                        <h5 class="card-title">${escapeHtml(menu.titre)}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">
-                            ${menu.vg_theme?.libelle || "Thème inconnu"} - ${menu.regime || "Classique"}
+                            ${escapeHtml(menu.vg_theme?.libelle || "Thème inconnu")} - ${escapeHtml(menu.regime || "Classique")}
                         </h6>
-                        <p class="card-text text-muted small">${menu.description_menu || ""}</p>
+                        <p class="card-text text-muted small">${escapeHtml(menu.description_menu || "")}</p>
                         <ul class="list-unstyled small">
                             <li><strong>Minimum :</strong> ${menu.nombre_personne_minimum} personnes</li>
                             <li><strong>Prix :</strong> ${parseFloat(menu.prix_par_personne).toFixed(2)} € / pers.</li>
