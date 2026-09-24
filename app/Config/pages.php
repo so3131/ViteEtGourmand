@@ -60,7 +60,7 @@ return [
         'rh-admin-create',
         'rh-admin-delete',
         'rh-admin-toggle',
-        'ban-user-admin',
+        
 
         'ban-user',
         'unban-user',
@@ -98,7 +98,6 @@ return [
         'rh-admin-create',
         'rh-admin-delete',
         'rh-admin-toggle',
-        'ban-user-admin',
         'ban-user',
         'unban-user',
     ],

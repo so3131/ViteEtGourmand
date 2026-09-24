@@ -15,7 +15,7 @@ require_once ROOT_PATH . '/app/Helpers/FormHelper.php';
 
 <main class="container">
     <div class="row justify-content-center my-4">
-        <div class="col-6 bg-white p-4 shadow-sm rounded">
+        <div class="col-12 col-md-8 col-lg-6 bg-white p-4 shadow-sm rounded">
             <form class="g-3" method="POST" action="index.php?page=signin">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                 <h2 class="text-center mb-4">Inscription</h2>

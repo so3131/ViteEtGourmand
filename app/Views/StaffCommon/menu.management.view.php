@@ -17,7 +17,7 @@
 
 
         <!-- Tableau des Menus -->
-        <div class="table-responsive">
+        <div>
             <table class="table table-hover align-middle table-sm" id="menusTable">
                 <thead class="table-light">
                     <tr>
@@ -136,7 +136,7 @@
                 </button>
             </div>
 
-            <div class="table-responsive">
+            <div>
                 <table class="table table-hover align-middle table-sm" id="platsTable">
                     <thead class="table-light">
                         <tr>
@@ -324,7 +324,7 @@
                                                     <div class="row g-1" style="max-height: 100px; overflow-y: auto;">
                                                         <?php $all_allergenes = $all_allergenes ?? []; ?>
                                                         <?php foreach ($all_allergenes as $allergene): ?>
-                                                            <div class="col-6">
+                                                            <div class="col-6 col-sm-4">
                                                                 <div class="form-check form-check-inline small">
                                                                     <input class="form-check-input new-allergene-<?= $categorie ?>" type="checkbox" value="<?= $allergene['allergene_id'] ?>" id="newAllergene<?= $categorie ?>_<?= $allergene['allergene_id'] ?>">
                                                                     <label class="form-check-label" for="newAllergene<?= $categorie ?>_<?= $allergene['allergene_id'] ?>">

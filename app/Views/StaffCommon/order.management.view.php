@@ -36,7 +36,7 @@
         </div>
     </form>
 
-    <div class="table-responsive">
+    <div>
         <table class="table table-hover align-middle text-nowrap table-sm" id="ordersTable">
             <thead class="table-light">
                 <tr>

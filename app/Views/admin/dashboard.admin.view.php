@@ -40,7 +40,7 @@
                     <div class="card-body py-2 px-3">
                         <h2 class="card-title text-uppercase fw-bold fs-7 mb-1">Commandes terminées</h2>
                         <p class="fs-2 fw-bold mb-1"><?= $finishedOrders ?></p>
-                        <small class="text-black">Voir la liste →</small>
+                        <small class="text-black fw-semibold">Voir la liste →</small>
                     </div>
                 </div>
             </a>
@@ -53,7 +53,7 @@
                     <div class="card-body py-2 px-3">
                         <h2 class="card-title text-uppercase fw-bold fs-7 mb-1">Chiffre d'affaires du jour</h2>
                         <p class="fs-2 fw-bold mb-1"><?= number_format($todaySales, 2, ',', ' ') ?> €</p>
-                        <small class="text-dark">Voir les détails →</small>
+                        <small class="text-dark fw-semibold">Voir les détails →</small>
                     </div>
                 </div>
             </a>
@@ -71,13 +71,14 @@
                 </div>
             </a>
         </div>
+        <!-- 5. Rupture de stock -->
         <div class="col-md-3 mb-3">
             <a href="index.php?page=menu-management" class="text-decoration-none">
                 <div class="card bg-dark text-white shadow-sm h-100 card-hover p-2">
                     <div class="card-body py-2 px-3">
                         <h2 class="card-title text-uppercase fw-bold fs-7 mb-1">Rupture de stock</h2>
                         <p class="fs-2 fw-bold mb-1"><?= $ruptureCount ?></p>
-                        <small class="text-warning">Voir les menus →</small>
+                        <small class="text-warning fw-semibold">Voir les menus →</small>
                     </div>
                 </div>
             </a>
@@ -87,8 +88,8 @@
         <div class="col-md-3 mb-3">
             <a href="index.php?page=order-management&client_nom=&status=en_attente_retour_materiel" class="text-decoration-none">
                 <div class="card bg-primary text-white shadow-sm h-100 card-hover">
-                    <div class="card-body">
-                        <h6 class="card-title text-uppercase fw-bold">Commandes en attente de retour materiel</h6>
+                    <div class="card-body py-2 px-3">
+                        <h2 class="card-title text-uppercase fw-bold fs-7 mb-1">En attente de retour materiel</h2>
                         <p class="display-5 fw-bold mb-0"><?= $pendingReturnOrders ?></p>
                         <small class="text-white-50">Voir tout →</small>
                     </div>
@@ -105,7 +106,7 @@
         <div class="col-md-8">
             <div class="card shadow-sm p-4 mb-4">
                 <h3 class="mb-3">Horaires actuels de la semaine</h3>
-                <div class="table-responsive">
+                <div>
                     <table class="table table-striped align-middle">
                         <thead>
                             <tr>

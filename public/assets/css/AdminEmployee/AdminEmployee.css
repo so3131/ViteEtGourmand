@@ -3,9 +3,9 @@
 :root {
   --sidebar-width: 260px;
 }
-html {
+/* html {
   font-size: 11px;
-}
+} */
 .wrapperstyle {
   display: flex !important;
   min-height: 100vh;
@@ -20,7 +20,13 @@ body {
   min-height: 100vh;
   background: var(--color-sidebar);
 }
-
+@media (min-width: 992px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+  }
+}
 .sidebar-header {
   padding-top: var(--spacing-lg); /* 1.5rem d'espace en haut */
 }
@@ -92,6 +98,15 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-xl);
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+}
+
+@media (min-width: 992px) {
+  .top-bar {
+    position: static;
+  }
 }
 .row.align-items-end .btn {
   height: 38px !important;
@@ -104,10 +119,51 @@ body {
 .card-title.fs-7 {
   font-size: 0.85rem !important;
 }
+/* Mobile First : base = empilé verticalement, chaque élément pleine largeur */
+.search-ban-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
 
+.search-ban-form .search-input-group,
+.search-ban-form .search-select,
+.search-ban-form button {
+  width: 100%;
+}
+
+/* Desktop : à partir de 768px, revient à la disposition en ligne (comme avant) */
+@media (min-width: 768px) {
+  .search-ban-form {
+    flex-direction: row;
+    flex-wrap: nowrap !important;
+    align-items: center;
+  }
+
+  .search-ban-form .search-input-group {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .search-ban-form .search-input-group input {
+    width: 100%;
+  }
+
+  .search-ban-form .search-select {
+    flex: 0 0 180px;
+    width: 180px !important;
+  }
+
+  .search-ban-form button {
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
+  }
+}
 .card {
   background: var(--color-white);
-  padding: var(--spacing-md);
+  /* padding: var(--spacing-md); */
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-xs);
 }
@@ -126,12 +182,13 @@ body {
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-xs);
 }
-/* Bloquer la taille des graphiques Chart.js */
 .chart-container {
-  position: relative !important;
-  height: 260px !important;
-  max-height: 260px !important;
-  width: 100% !important;
+  height: 200px !important;
+}
+@media (min-width: 768px) {
+  .chart-container {
+    height: 260px !important;
+  }
 }
 
 .chart-container canvas {
@@ -152,24 +209,26 @@ table.dataTable thead th,
 #ordersTable thead th,
 #menusTable thead th,
 #employesTable thead th,
-#platsTable thead th {
+#platsTable thead th,
+#moderationTable thead th  {
   cursor: pointer !important;
 }
-#ordersTable tbody tr {
-  display: table-row !important;
-  visibility: visible !important;
-  background-color: var(--color-white) !important;
-  border-bottom: 1px solid var(--color-border) !important;
-}
+
 .dt-toolbar {
   display: flex !important;
+  flex-wrap: wrap !important;
   justify-content: space-between !important;
   align-items: center !important;
-  flex-wrap: nowrap !important; /* Empêche les éléments de passer à la ligne de force */
   width: 100% !important;
   margin-bottom: 1rem !important;
   gap: 1rem;
-  overflow: visible !important; /* Laisse respirer les éléments enfants */
+  overflow: visible !important;
+}
+
+@media (min-width: 576px) {
+  .dt-toolbar {
+    flex-wrap: nowrap !important;
+  }
 }
 .dt-toolbar .dataTables_length,
 .dt-toolbar .dataTables_filter {
@@ -178,10 +237,14 @@ table.dataTable thead th,
 }
 .dataTables_wrapper .dataTables_filter input {
   display: inline-block !important;
-  width: 180px !important; /* Donne une largeur fixe et propre à l'input */
   max-width: 100% !important;
   margin-left: 0.5rem !important;
   box-sizing: border-box !important;
+}
+@media (min-width: 576px) {
+  .dataTables_wrapper .dataTables_filter input {
+    width: 180px !important;
+  }
 }
 .dataTables_wrapper .dataTables_filter {
   float: none !important;
@@ -198,7 +261,7 @@ table.dataTable thead th,
 /* S'assure que le wrapper ne coupe pas les bords */
 .dataTables_wrapper {
   width: 100% !important;
-  overflow-x: auto !important; 
+  overflow-x: hidden !important; 
   overflow-y: visible !important;
 }
 /* Si un conteneur responsive est généré par DataTables, le contraindre */
@@ -211,9 +274,15 @@ table.dataTable {
   max-width: 100% !important;
   margin-bottom: 1rem !important;
 }
+#ordersTable tbody tr {
+  /* display: table-row !important; */
+  visibility: visible !important;
+  background-color: var(--color-white) !important;
+  border-bottom: 1px solid var(--color-border) !important;
+}
 /* Force la visibilité des cellules */
 #ordersTable tbody td {
-  display: table-cell !important;
+  /* display: table-cell !important; */
   color: var(--color-dark) !important;
   padding: var(--spacing-sm) !important;
   vertical-align: middle !important;
@@ -221,7 +290,7 @@ table.dataTable {
 
 /* S'assure que le header du tableau est visible */
 #ordersTable thead tr {
-  display: table-row !important;
+  /* display: table-row !important; */
   background-color: var(--color-bg) !important;
 }
 /* Règle de priorité  : cache les modales par défaut */

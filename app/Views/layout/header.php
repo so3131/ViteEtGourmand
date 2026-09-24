@@ -48,7 +48,8 @@ if ($current_page === '' || $current_page === '/') {
     <?php endif; ?>
 
 </head>
-
+<body>
+<div class="vg-page-wrapper">
 <header class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-frosted">
         <div class="container-fluid">
@@ -107,5 +108,4 @@ if ($current_page === '' || $current_page === '/') {
     </nav>
 
     <?php require_once ROOT_PATH . '/app/Views/layout/partials/flash-messages.php'; ?>
-    </div>
 </header>

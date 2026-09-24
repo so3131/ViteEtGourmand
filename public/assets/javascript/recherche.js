@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // gestion de filtres
 // ecoute le submit des filtres et bloque le rechargement de la page
-// On attend que tout le HTML soit chargé dans le DOM
+// attend la réponse du serveur et affiche les résultats dans le DOM
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("filterForm");
   const resetBtn = document.getElementById("reset-filters");

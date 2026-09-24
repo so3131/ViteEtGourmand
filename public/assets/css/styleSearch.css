@@ -49,20 +49,4 @@ h1 {
 .noUi-connect {
   background-color: var(--color-bg-dark-hero) !important;
 }
-/* ==========================================================================
-   CORRECTION GLOBALE DES SELECTS SUR MOBILE
-   ========================================================================== */
-@media (max-width: 768px) {
-  /* Empêche le body et le html de perturber le positionnement des fenêtres */
-  body {
-    overflow-x: hidden;
-    position: relative;
-  }
 
-  /* Force tous les form-select du site à garder une taille standard lisible par les mobile */
-  .form-select {
-    font-size: 16px !important;
-    max-width: 100% !important;
-    box-sizing: border-box !important;
-  }
-}
