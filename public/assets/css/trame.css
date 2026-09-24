@@ -14,11 +14,14 @@ html {
 *::after {
   box-sizing: border-box;
 }
+.vg-page-wrapper {
+  max-width: 100%;
+}
 
 body,
 html {
-  overflow-x: hidden; /* Empêche tout défilement horizontal intempestif */
-  max-width: 100%;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 body {
   font-family: var(--font-family-public-body, "Inter"), sans-serif;
@@ -29,6 +32,7 @@ body {
   padding: 0;
   background-color: var(--color-bg, #f8f9fa);
   color: var(--color-dark, #212529);
+  position: relative;
 }
 
 h1,
@@ -99,6 +103,8 @@ img {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-sm);
   padding: var(--spacing-sm);
+  font-size: 16px;
+  box-sizing: border-box;
   transition: border-color var(--transition-fast);
 }
 
@@ -258,17 +264,17 @@ footer .text-danger {
   width: 100% !important;
   max-width: 100% !important;
 }
+/* Mobile / position normale, pas collée */
+.vg-filter-sticky {
+  position: relative;
+  top: 0;
+}
 
-@media (max-width: 768px) {
-  /* Empêche le conteneur sticky de bloquer le rendu de la liste mobile */
-  aside .card {
-    position: relative !important;
-    top: 0 !important;
-  }
-
-  /* Force le select à utiliser une taille neutre acceptée par le système */
-  #price-max-select {
-    font-size: 16px !important;
+/* Desktop : devient sticky à partir de 769px */
+@media (min-width: 769px) {
+  .vg-filter-sticky {
+    position: sticky;
+    top: 20px;
   }
 }
 

@@ -12,7 +12,7 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
     <div class="row">
 
         <aside class="col-md-3">
-            <div class="card p-3 shadow-sm sticky-top" style="top: 20px;">
+            <div class="card p-3 shadow-sm vg-filter-sticky">
                 <h2 class="mb-3">Filtres</h2>
                 <form id="filterForm">
                     <div class="filter-group border-bottom pb-3 mb-3">

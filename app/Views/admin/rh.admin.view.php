@@ -31,7 +31,7 @@
         <!-- Bloc Liste de l'équipe actuelle -->
         <div class="card shadow-sm p-3">
             <h6 class="fw-bold mb-3"><i class="fa-solid fa-users"></i> Équipe actuelle</h6>
-            <div class="table-responsive">
+            <div>
                 <table class="table table-sm table-admin align-middle mb-0" id="employesTable">
                     <thead>
                         <tr>
@@ -136,8 +136,8 @@
 
         <!-- Tableau des utilisateurs condensé -->
         <div class="card shadow-sm p-3" id="search-section">
-            <div class="table-responsive">
-                <table class="table table-sm table-admin align-middle mb-0">
+            <div>
+                <table class="table table-sm table-admin align-middle mb-0" id="moderationTable">
                     <thead>
                         <tr>
                             <th>Utilisateur</th>

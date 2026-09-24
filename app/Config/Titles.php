@@ -12,8 +12,6 @@ return [
     'edit-order-admin'  => 'Modifier une commande',
     'edit-menu-admin'   => 'Modifier un menu',
     'update-menu-process' => 'Mettre à jour le menu',
-    'ban-user-admin'    => 'Gestion des utilisateurs bannis',
-    'unban-user-admin'  => 'Gestion des utilisateurs débannis',
 
 
     // Espace Employé / Utilisateur 

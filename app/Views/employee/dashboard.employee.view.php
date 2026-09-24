@@ -89,7 +89,7 @@
         <div class="col-md-8">
             <div class="card shadow-sm p-4 mb-4">
                 <h3 class="mb-3">Horaires actuels de la semaine</h3>
-                <div class="table-responsive">
+                <div>
                     <table class="table table-striped align-middle">
                         <thead>
                             <tr>

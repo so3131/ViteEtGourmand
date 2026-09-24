@@ -126,3 +126,6 @@ use App\Models\Timetable; ?>
 
 
 </footer>
+</div>
+</body>
+</html>
