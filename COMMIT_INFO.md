@@ -1,6 +1,7 @@
-# Commit 45 : Fix css+datatable
+# Commit 46 : Dockerisation
 
 À cette étape :
-Mobile First : trame.css, styleSearch.css, AdminEmployee.css, header.php/footer.php (wrapper), signin.view.php, tableaux DataTables + priorités responsive
-Suppression de ban.admin.view.php et des routes ban-user-admin/unban-user-admin
-Correctif formulaire de recherche rh-admin
+- `Dockerfile` (php:8.2-apache, racine `/public`, extensions pdo/mbstring/mongodb)
+- `docker-compose.yml` (services `app`:8080 + `db` mariadb:10.6:3307, volumes persistants)
+- `.dockerignore`, `.env.docker`, `.gitignore` mis à jour
+- `Constants.php`/`Database.php`/`env.php` : gestion propre des variables selon l'environnement (local/Docker/prod)

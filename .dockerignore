@@ -1,0 +1,6 @@
+# liste d'exclusions — dit à Docker "ne copie jamais ces fichiers dans l'image" Utilisé par le processus de build Docker, avant COPY . .
+.env
+.git
+.gitignore
+vendor/
+node_modules/

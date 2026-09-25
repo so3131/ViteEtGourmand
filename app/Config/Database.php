@@ -15,12 +15,12 @@ class Database
             $password = urldecode($parsed['pass'] ?? '');
             $dbname = ltrim($parsed['path'] ?? '', '/');
         } else {
-            // Fallback local depuis le .env
-            $host = $_ENV['DB_HOST'] ?? 'localhost';
-            $dbname = $_ENV['DB_NAME'] ?? 'test_transit_ecf';
-            $username = $_ENV['DB_USER'] ?? 'vg_creator';
-            $password = $_ENV['DB_PASS'] ?? 'test_transit_ecf';
-            $port = $_ENV['DB_PORT'] ?? '3306';
+            // Fallback local depuis le .env (getenv() en priorité pour Docker, $_ENV en repli pour env.php custom)
+            $host = getenv('DB_HOST') ?: ($_ENV['DB_HOST'] ?? null);
+            $dbname = getenv('DB_NAME') ?: ($_ENV['DB_NAME'] ?? null);
+            $username = getenv('DB_USER') ?: ($_ENV['DB_USER'] ?? null);
+            $password = getenv('DB_PASS') ?: ($_ENV['DB_PASS'] ?? null);
+            $port = getenv('DB_PORT') ?: ($_ENV['DB_PORT'] ?? '3306');
         }
 
         try {
