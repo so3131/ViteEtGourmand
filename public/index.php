@@ -1,12 +1,9 @@
 <?php
 // Ce fichier est le point d'entrée de l'Application. Il reçoit toutes les requêtes, gère la session, et redirige vers le bon contrôleur en fonction de la page demandée.
 require_once dirname(__DIR__) . '/app/Config/Constants.php';
-require_once dirname(__DIR__) . '/app/Config/env.php';
-// Définition de l'environnement
-$appEnv = getenv('APP_ENV') ?: $_ENV['APP_ENV'] ?? 'production';
 
 // Affichage des erreurs
-if ($appEnv === 'production') {
+if (APP_ENV === 'production') {
     ini_set('display_errors', '0');
     ini_set('display_startup_errors', '0');
 } else {
