@@ -17,6 +17,7 @@ return [
         'error-ban',
         'forgot-password',
         'reset-password',
+        'serve-plat-image'
 
     ],
     // Toutes les pages existantes dans l'application, indépendamment des rôles
@@ -27,6 +28,7 @@ return [
         'logout',
         'search',
         'details-menu',
+        'serve-plat-image',
         'order-menu',
         'order-success',
         'ajax-frais-livraison',

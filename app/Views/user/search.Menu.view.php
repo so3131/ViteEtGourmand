@@ -51,14 +51,14 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
                             <div id="theme" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
                                 <div class="accordion-body">
                                     <?php foreach ($themes ?? [] as $theme): ?>
-    <div class="form-check">
-        <input class="form-check-input" type="checkbox" name="theme_id[]"
-               value="<?= $theme['theme_id'] ?>" id="t<?= $theme['theme_id'] ?>">
-        <label class="form-check-label" for="t<?= $theme['theme_id'] ?>">
-            <?= htmlspecialchars($theme['libelle']) ?>
-        </label>
-    </div>
-<?php endforeach; ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="theme_id[]"
+                                                value="<?= $theme['theme_id'] ?>" id="t<?= $theme['theme_id'] ?>">
+                                            <label class="form-check-label" for="t<?= $theme['theme_id'] ?>">
+                                                <?= htmlspecialchars($theme['libelle']) ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
@@ -70,14 +70,14 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
                             <div id="regime" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
                                 <div class="accordion-body">
                                     <?php foreach ($regimes ?? [] as $regime): ?>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="regime_id"
-               value="<?= $regime['regime_id'] ?>" id="r<?= $regime['regime_id'] ?>">
-        <label class="form-check-label" for="r<?= $regime['regime_id'] ?>">
-            <?= htmlspecialchars($regime['libelle']) ?>
-        </label>
-    </div>
-<?php endforeach; ?>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="regime_id"
+                                                value="<?= $regime['regime_id'] ?>" id="r<?= $regime['regime_id'] ?>">
+                                            <label class="form-check-label" for="r<?= $regime['regime_id'] ?>">
+                                                <?= htmlspecialchars($regime['libelle']) ?>
+                                            </label>
+                                        </div>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,9 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
                                 <?php
                                 $plats = $menu['plats_structures'] ?? [];
                                 $platPrincipal = $plats['Plat'] ?? $plats['Entrée'] ?? $plats['Dessert'] ?? null;
-                                $photoUrl = !empty($platPrincipal['photo']) ? $platPrincipal['photo'] : 'assets/img/plats/default.webp';
+                                $photoUrl = !empty($platPrincipal['photo'])
+                                    ? '?page=serve-plat-image&file=' . urlencode($platPrincipal['photo'])
+                                    : 'assets/img/plats/default.webp';
                                 ?>
 
                                 <img src="<?= htmlspecialchars($photoUrl, ENT_QUOTES, 'UTF-8') ?>"

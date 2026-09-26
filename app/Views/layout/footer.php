@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\Timetable; ?>
+use App\Managers\HoraireManager; ?>
+
 <footer class="container-fluid mt-5 p-4 bg-light text-black">
     <div class="container">
         <div class="row row-30">
@@ -24,7 +25,7 @@ use App\Models\Timetable; ?>
                 <ul class="list-unstyled small">
                     <?php
                     if (isset($db)) {
-                        $timetables = \App\Managers\HoraireManager::getAllTimetables($db);
+                                 $timetables = \App\Managers\HoraireManager::getAllTimetables($db);
                         foreach ($timetables as $timetable): ?>
                             <li><?= htmlspecialchars($timetable->jour) ?> :
                                 <?php
