@@ -68,7 +68,6 @@ class OrderMenuController
         $tousLesLieux = LieuManager::getAll($db);
         $delaiCommande = (int)($menuInfo['delai_commande'] ?? 0);
         $dateMinimale = ($delaiCommande > 0) ? (new \DateTime('today'))->modify('+' . $delaiCommande . ' days')->format('Y-m-d') : null;
-        $timetables = \App\Models\Timetable::ShowTimetable($db);
 
         //Lancement des différents steps du tunnel de commande
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -441,7 +440,7 @@ class OrderMenuController
             'tousLesLieux' => $tousLesLieux,
             'dateMinimale' => $dateMinimale,
             'delaiCommande' => $delaiCommande,
-            'timetables' => $timetables
+            
         ];
 
         $step = $data['step'];
@@ -455,7 +454,7 @@ class OrderMenuController
         $tousLesLieux = $data['tousLesLieux'];
         $dateMinimale = $data['dateMinimale'];
         $delaiCommande = $data['delaiCommande'];
-        $timetables = $data['timetables'];
+        
 
         /** @var int $step */
         /** @var int $menuID */
@@ -468,7 +467,7 @@ class OrderMenuController
         /** @var array $tousLesLieux */
         /** @var string|null $dateMinimale */
         /** @var int $delaiCommande */
-        /** @var array $timetables */
+       
 
         $specific_scripts = ["assets/javascript/orderMenu.js"];
         $vue = ROOT_PATH . '/app/Views/user/order/bookmenu_step' . $step . '.view.php';

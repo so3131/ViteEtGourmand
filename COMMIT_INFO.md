@@ -1,3 +1,3 @@
-# Commit 47 : 
+# Commit 48 : 
 À cette étape :
-Ajout session.use_strict_mode (protection fixation de session)
+Refactor Timetable : migration ShowTimetable vers HoraireManager (convention MVC), suppression code mort dans OrderMenuController
