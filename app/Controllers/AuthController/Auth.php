@@ -12,6 +12,7 @@ class Auth
     //function pour vérifier si l'utilisateur a le rôle requis pour accéder à une page
     public static function check(array $requiredRoles)
     {
+        // sécurité supplementaire pour vérifier si la session est démarrée avant de vérifier le rôle de l'utilisateur
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -45,6 +46,7 @@ class Auth
     // function pour vérifier si l'utilisateur est connecté et rediriger vers la page de login si ce n'est pas le cas
     public static function checkLogin(): void
     {
+        // sécurité supplementaire pour vérifier si la session est démarrée avant de vérifier le rôle de l'utilisateur
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }

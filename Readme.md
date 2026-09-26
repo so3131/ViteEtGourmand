@@ -126,6 +126,24 @@ Les principales pages sont accessibles via les liens du menu, ou directement en 
 
 Ces trois comptes sont présents nativement dans `fixture_VG.sql` et fonctionnent aussi bien en local qu'en production. Le compte client dispose déjà de commandes de test couvrant tous les statuts possibles, ainsi que d'un avis en attente de modération.
 
+## Installation via Docker (alternative)
+
+En complément de l'installation locale via XAMPP, une configuration Docker complète est fournie (PHP 8.2 + Apache + MariaDB), permettant de lancer l'application dans un environnement conteneurisé et reproductible.
+
+**Prérequis :** [Docker Desktop](https://www.docker.com/products/docker-desktop) installé et démarré.
+
+**Fichiers fournis :** `Dockerfile`, `docker-compose.yml`, `.env.docker.example` (à copier en `.env.docker` avec vos propres identifiants).
+
+**Lancement :**
+
+```bash
+docker compose --env-file .env.docker up --build
+```
+
+L'application est alors accessible sur `http://localhost:8080/index.php?page=home`.
+
+Les données MariaDB sont conservées dans un volume Docker persistant entre les redémarrages. Pour repartir d'une base vide : `docker compose down -v`, puis réimporter `Schema_VG.sql`/`fixture_VG.sql`.
+
 ## Structure du projet
 
 ```text
@@ -151,11 +169,15 @@ docs/
 
 vendor/           Dépendances Composer
 Procfile          Configuration de déploiement Heroku
+Dockerfile        Image applicative (PHP 8.2/Apache) pour l'environnement conteneurisé
+docker-compose.yml Orchestration des services app (PHP/Apache) et db (MariaDB) en local
 ```
 
 ## Déploiement en production
 
 L'application est déployée sur **Heroku** (add-on JawsDB pour la base MySQL). Le détail complet de la procédure — Config, add-ons, import de la base, vérifications post-déploiement — est documenté dans la **documentation technique** du projet.
+
+Docker constitue un environnement de développement local complémentaire et n'intervient pas dans cette procédure de déploiement en production.
 
 # Branches Git
 

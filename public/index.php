@@ -24,15 +24,16 @@ require_once dirname(__DIR__) . '/app/Helpers/FormHelper.php';
 
 // Configuration sécurisée des cookies de session
 session_set_cookie_params([
-    'lifetime' => 0,                 // (Cookie de session)
+    'lifetime' => 0,  // (Cookie de session)
     'path'     => '/',
     'domain'   => '',
     'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',  // true uniquement en HTTPS (prod)
     'httponly' => true, // (anti-XSS)
-    'samesite' => 'Lax'              // (Anti-CSRF)
+    'samesite' => 'Lax' // (Anti-CSRF)
 ]);
 
 if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.use_strict_mode', 1);
     session_start();
 }
 
