@@ -138,7 +138,7 @@ class MenuManagementController
             $safeExtension = $allowedMimeTypes[$mime];
             $newFileName = bin2hex(random_bytes(16)) . '.' . $safeExtension;
 
-            $uploadDir = ROOT_PATH . '/public/assets/img/plats/';
+            $uploadDir = ROOT_PATH . '/storage/uploads/plats/';
 
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0755, true);
@@ -150,7 +150,7 @@ class MenuManagementController
                 exit();
             }
 
-            $photoPath = 'assets/img/plats/' . $newFileName;
+            $photoPath = $newFileName;
         }
 
         try {
@@ -324,7 +324,7 @@ class MenuManagementController
 
                 $safeExtension = $allowedMimeTypes[$mime];
                 $newFileName = bin2hex(random_bytes(16)) . '.' . $safeExtension;
-                $uploadDir = ROOT_PATH . '/public/assets/img/plats/';
+                $uploadDir = ROOT_PATH . '/storage/uploads/plats/';
 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
@@ -338,7 +338,7 @@ class MenuManagementController
                     exit();
                 }
 
-                $photoPath = 'assets/img/plats/' . $newFileName;
+                $photoPath = $newFileName;
             }
             try {
                 $plat_id = PlatManager::create($db, $titre_plat, $description, $categorie, $photoPath, $allergenes);

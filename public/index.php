@@ -91,6 +91,11 @@ $route = match ($page) {
     // Authentification
     'forgot-password'   => ['class' => '\App\Controllers\AuthController\ForgotPasswordController', 'action' => 'forgotPassword'],
     'reset-password'    => ['class' => '\App\Controllers\AuthController\ResetPasswordController', 'action' => 'resetPassword'],
+    'serve-plat-image' => [
+    'class' => '\App\Controllers\MediaController',
+    'action' => 'servePlatImage',
+    'params' => ['file']
+],
 
 
     // Utilisateur 

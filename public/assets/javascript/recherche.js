@@ -114,18 +114,15 @@ document.addEventListener("DOMContentLoaded", function () {
   }
   // Fonction pour obtenir la photo principale d'un menu
   function getMenuPhoto(menu) {
-    const plats = menu.plats_structures || {};
-
-    const platPrincipal =
-      plats.Plat || plats["Entrée"] || plats.Dessert || null;
-
-    return platPrincipal && platPrincipal.photo
-      ? platPrincipal.photo
-      : "assets/img/plats/default.webp";
-  }
+  const plats = menu.plats_structures || {};
+  const platPrincipal = plats.Plat || plats["Entrée"] || plats.Dessert || null;
+  return platPrincipal && platPrincipal.photo
+    ? "?page=serve-plat-image&file=" + encodeURIComponent(platPrincipal.photo)
+    : "assets/img/plats/default.webp";
+}
 
   // créer de façon dynamique les cartes de menus à partir des données récupérées de la base de données
- function createMenuCard(menu) {
+  function createMenuCard(menu) {
     const menuId = menu.menu_id || "#";
     const detailUrl = `index.php?page=details-menu&menu_id=${menu.menu_id}`;
     const photoUrl = getMenuPhoto(menu);

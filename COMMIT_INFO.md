@@ -1,3 +1,3 @@
-# Commit 48 : 
+# Commit 49 : 
 À cette étape :
-Refactor Timetable : migration ShowTimetable vers HoraireManager (convention MVC), suppression code mort dans OrderMenuController
+Migration stockage uploads

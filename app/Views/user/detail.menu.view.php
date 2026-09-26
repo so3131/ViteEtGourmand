@@ -25,7 +25,7 @@
                 <div class="carousel-inner rounded shadow-sm">
                     <?php foreach ($plats as $index => $plat): ?>
                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                            <img src="<?= !empty($plat['photo']) ? htmlspecialchars($plat['photo']) : 'assets/img/plats/default.webp' ?>"
+                            <img src="<?= !empty($plat['photo']) ? '?page=serve-plat-image&file=' . urlencode($plat['photo']) : 'assets/img/plats/default.webp' ?>"
                                 class="d-block w-100 rounded"
                                 style="height: 300px; object-fit: cover;"
                                 alt="<?= htmlspecialchars($plat['titre_plat'] ?? 'Plat sans nom') ?>">
