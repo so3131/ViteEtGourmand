@@ -24,8 +24,7 @@ use App\Models\Timetable; ?>
                 <ul class="list-unstyled small">
                     <?php
                     if (isset($db)) {
-                        require_once ROOT_PATH . '/app/Models/Timetable.php';
-                        $timetables = Timetable::ShowTimetable($db);
+                        $timetables = \App\Managers\HoraireManager::getAllTimetables($db);
                         foreach ($timetables as $timetable): ?>
                             <li><?= htmlspecialchars($timetable->jour) ?> :
                                 <?php
