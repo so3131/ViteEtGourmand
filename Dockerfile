@@ -1,5 +1,5 @@
-# Part de PHP 8.2 + Apache ( VERIFIER SI ON PASSE EN 8.4 VOIR SI COMPATIBLE)
-FROM php:8.2-apache
+# Part de PHP 8.4 + Apache
+FROM php:8.4-apache
 # Configure la racine web sur public/ (équivalent Docker du Procfile Heroku)
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
