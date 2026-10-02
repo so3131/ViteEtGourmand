@@ -1,5 +1,6 @@
-![PHP](https://img.shields.io/badge/PHP-8.2%2B-777BB4?logo=php)
+![PHP](https://img.shields.io/badge/PHP-8.2%20%7C%208.4-777BB4?logo=php)
 ![Heroku](https://img.shields.io/badge/Deployed-Heroku-430098?logo=heroku)
+![Docker](https://img.shields.io/badge/Docker-ready-2496ED?logo=docker&logoColor=white)
 
 # Guide d'installation et de déploiement local - Vite & Gourmand
 
@@ -23,10 +24,10 @@ Ce document décrit la démarche pour installer et exécuter l'application en lo
 ## Prérequis
 
 - **OS :** Windows avec [XAMPP](https://www.apachefriends.org/) (Apache & MariaDB)
-- **PHP :** 8.2 ou supérieur
+- **PHP :** 8.2 (XAMPP local) ou 8.4 (Docker/production)
 - **Composer**
 - **Base NoSQL :** un cluster [MongoDB Atlas](https://www.mongodb.com/atlas) (le projet n'utilise pas de MongoDB local)
-- **Extensions PHP requises :** `pdo_mysql`, `mongodb`, `mbstring`
+- **Extensions PHP requises :** `pdo_mysql`, `mongodb`, `mbstring`, `curl`, `fileinfo`
 - **Clé d'API** [OpenRouteService](https://account.heigit.org/manage/key?first_visit=true) (calcul d'itinéraire/frais de livraison)
 - **Compte** [Brevo](https://www.brevo.com/) (envoi des emails transactionnels)
 
@@ -128,7 +129,7 @@ Ces trois comptes sont présents nativement dans `fixture_VG.sql` et fonctionnen
 
 ## Installation via Docker (alternative)
 
-En complément de l'installation locale via XAMPP, une configuration Docker complète est fournie (PHP 8.2 + Apache + MariaDB), permettant de lancer l'application dans un environnement conteneurisé et reproductible.
+En complément de l'installation locale via XAMPP, une configuration Docker complète est fournie (PHP 8.4 + Apache + MariaDB), permettant de lancer l'application dans un environnement conteneurisé et reproductible.
 
 **Prérequis :** [Docker Desktop](https://www.docker.com/products/docker-desktop) installé et démarré.
 
@@ -155,7 +156,7 @@ app/
 ├── Managers/     Accès aux données (requêtes SQL préparées) et orchestration
 │                 (transactions, appels aux Models pour les calculs métier)
 ├── Models/       Logique métier pure (calculs, règles) — en principe sans accès
-│                 direct à la base (exception connue : Timetable.php)
+│                 direct à la base
 └── Views/        Vues HTML/PHP
 
 public/
@@ -169,7 +170,7 @@ docs/
 
 vendor/           Dépendances Composer
 Procfile          Configuration de déploiement Heroku
-Dockerfile        Image applicative (PHP 8.2/Apache) pour l'environnement conteneurisé
+Dockerfile        Image applicative (PHP 8.4/Apache) pour l'environnement conteneurisé
 docker-compose.yml Orchestration des services app (PHP/Apache) et db (MariaDB) en local
 ```
 
