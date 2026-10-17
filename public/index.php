@@ -22,12 +22,16 @@ require_once dirname(__DIR__) . '/app/Helpers/FormHelper.php';
 
 \App\Autoloader::register();
 
+// Détection du HTTPS : direct, ou derrière un routeur/proxy qui transmet le protocole
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+
 // Configuration sécurisée des cookies de session
 session_set_cookie_params([
     'lifetime' => 0,  // (Cookie de session)
     'path'     => '/',
     'domain'   => '',
-    'secure'   => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',  // true uniquement en HTTPS (prod)
+    'secure'   => $isHttps,  // true uniquement en HTTPS (prod)
     'httponly' => true, // (anti-XSS)
     'samesite' => 'Lax' // (Anti-CSRF)
 ]);

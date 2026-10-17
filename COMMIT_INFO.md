@@ -1,4 +1,4 @@
-# Commit 53 : MAJ doc
+# Commit 54 : MAJ COOKIE
 
 À cette étape :
-FIX , Transmettre l'id de la commande a MongoDB (commande_id_sql)
+Cookie de session Secure derriere le routeur Heroku et redirection HTTP vers HTTPS
