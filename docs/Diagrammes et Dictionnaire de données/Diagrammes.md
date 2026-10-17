@@ -22,15 +22,17 @@ participant Email as Brevo (email)
     Ctrl-->>Vue: Récapitulatif
 
     Client->>Vue: Valide la commande
-    Vue->>Manager: createOrderFromData()
+    Vue->>Ctrl: POST étape 5
+    Ctrl->>Manager: createOrderFromData()
 
     Manager->>DB: BEGIN TRANSACTION
-    Manager->>DB: UPDATE menu & INSERT commande
+    Manager->>DB: INSERT commande & historique, UPDATE stock
     Manager->>DB: COMMIT (CMD-AAAAMMJJ-XXXX)
 
     DB-->>Manager: Succès & ID
-    Manager->>Email: Envoi email de confirmation
-    Manager-->>Vue: Redirection order-success
+    Manager-->>Ctrl: Succès
+    Ctrl->>Email: Envoi email de confirmation
+    Ctrl-->>Vue: Redirection order-success
     Vue-->>Client: Page de confirmation
 ```
 

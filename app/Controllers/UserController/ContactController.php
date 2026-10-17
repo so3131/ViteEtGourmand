@@ -38,7 +38,7 @@ class ContactController
                     'message' => $message
                 ];
 
-                // Envoi du mail via ton service Brevo
+                // Envoi du mail via le service Brevo
 
                 $mailSent = MailService::sendContactEmail($contactDetails);
 

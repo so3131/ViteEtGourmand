@@ -313,7 +313,8 @@ class OrderMenuController
 
                     // Paiement simulé et enregistrement de la commande
                     try {
-                        if (OrderManager::createOrderFromData($db, $user, $menuData, $prestation, $totalCommande)) {
+                       $nouvelleCommandeId = OrderManager::createOrderFromData($db, $user, $menuData, $prestation, $totalCommande);
+if ($nouvelleCommandeId) {
 
                             // === Ajout de la commande dans MongoDB pour les statistiques ===
 
@@ -332,7 +333,7 @@ class OrderMenuController
                                 //Insertion dans MongoDB
                                 $mongoManager = new MongoStatsManager();
                                 $mongoManager->insertOrderHistory([
-                                    'id' => null,
+                                    'id' => $nouvelleCommandeId,
                                     'client_nom' => $user->nom . ' ' . $user->prenom,
                                     'client_email' => $user->email,
                                     'items' => [

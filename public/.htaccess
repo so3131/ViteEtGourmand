@@ -1,10 +1,17 @@
+# Redirection HTTP vers HTTPS derriere le routeur Heroku (sans effet en local)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP:X-Forwarded-Proto} =http
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
 <IfModule mod_expires.c>
     ExpiresActive On
-    # Images : 1 an (peu risqué, cette partie une fois déployée change rarement)
+    # Images : 1 an (une fois déployée change rarement)
     ExpiresByType image/webp  "access plus 1 year"
     ExpiresByType image/png  "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 year"
-    # CSS / JS : 1 mois (prudent, en cas de modification du code)
+    # CSS / JS : 1 mois (en cas de modification du code)
     ExpiresByType text/css               "access plus 1 month"
     ExpiresByType application/javascript "access plus 1 month"
 </IfModule>
@@ -14,7 +21,7 @@
     <FilesMatch "\.(css|js)$">
         Header set Cache-Control "public, max-age=2592000"
     </FilesMatch>
-    # Images : cache long + immutable (sûr car on ne modifie pas une image déployée)
+    # Images : cache long + immutable (on ne modifie pas une image déployée)
     <FilesMatch "\.(webp|png|jpg|jpeg)$">
         Header set Cache-Control "public, max-age=31536000, immutable"
     </FilesMatch>

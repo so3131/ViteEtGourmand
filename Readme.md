@@ -97,7 +97,7 @@ APP_URL=http://localhost/Projet_Vite_Gourmand_Finale/public
 
 ### 6. Emails
 
-L'application utilise exclusivement l'API **Brevo** pour l'envoi d'emails transactionnels (confirmation de commande, réinitialisation de mot de passe, création de compte staff) — y compris en local. Aucune configuration SMTP locale n'est nécessaire ; il suffit de renseigner `BREVO_API_KEY`. Sans cette clé, `MailService::sendEmail()` échoue silencieusement et journalise l'erreur via `error_log()` sans bloquer le reste de l'application.
+L'application utilise exclusivement l'API **Brevo** pour l'envoi d'emails transactionnels (e-mail de bienvenue à l'inscription, confirmation de commande, notifications liées au suivi, à la modification et à l'annulation d'une commande, réinitialisation de mot de passe et création de compte du personnel) — y compris en local. Aucune configuration SMTP locale n'est nécessaire ; il suffit de renseigner `BREVO_API_KEY`. Sans cette clé, `MailService::sendEmail()` échoue silencieusement et journalise l'erreur via `error_log()` sans bloquer le reste de l'application.
 
 ## Lancer l'application
 
@@ -133,7 +133,28 @@ En complément de l'installation locale via XAMPP, une configuration Docker comp
 
 **Prérequis :** [Docker Desktop](https://www.docker.com/products/docker-desktop) installé et démarré.
 
-**Fichiers fournis :** `Dockerfile`, `docker-compose.yml`, `.env.docker.example` (à copier en `.env.docker` avec vos propres identifiants).
+**Fichiers fournis :** `Dockerfile`, `docker-compose.yml`.
+
+**Configuration :** créer à la racine du projet un fichier `.env.docker` (non versionné, déjà exclu du dépôt) avec le contenu ci-dessous, en remplaçant chaque valeur par vos propres identifiants. Utilisez de préférence des clés dédiées aux tests (compte Brevo et compte OpenRouteService de test) pour ne pas consommer les quotas gratuits de vos clés principales.
+
+```env
+# Variables lues par « docker compose --env-file .env.docker ».
+# DB_HOST n'y figure pas : docker-compose.yml le fixe à « db ».
+
+# Base de données (service MariaDB du docker-compose)
+DB_ROOT_PASS=mot_de_passe_root_a_definir
+DB_NAME=test_transit_ecf
+DB_USER=vg_creator
+DB_PASS=votre_mot_de_passe
+
+# Base de données NoSQL (MongoDB Atlas)
+MONGODB_URI=mongodb+srv://<utilisateur>:<mot_de_passe>@<cluster>.mongodb.net/vite_gourmand?appName=ProjetViteGourmand
+
+# API externes et services
+BREVO_API_KEY=votre_cle_brevo
+MAIL_FROM_EMAIL=votre_email_expediteur
+OPENROUTESERVICE_API_KEY=votre_cle_openroute
+```
 
 **Lancement :**
 

@@ -1,4 +1,4 @@
-# Commit 52 : MAJ doc
+# Commit 54 : MAJ COOKIE
 
 À cette étape :
-MAJ documentation technique et diagramme
+Cookie de session Secure derriere le routeur Heroku et redirection HTTP vers HTTPS
