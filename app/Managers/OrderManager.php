@@ -67,7 +67,7 @@ class OrderManager
             }
 
             $db->commit();
-            return true;
+            return $commandeId;
         } catch (\Exception $e) {
             $db->rollBack();
 

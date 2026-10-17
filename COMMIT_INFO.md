@@ -1,4 +1,4 @@
-# Commit 52 : MAJ doc
+# Commit 53 : MAJ doc
 
 À cette étape :
-MAJ documentation technique et diagramme
+FIX , Transmettre l'id de la commande a MongoDB (commande_id_sql)
