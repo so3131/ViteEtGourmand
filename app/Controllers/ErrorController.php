@@ -9,6 +9,8 @@ class ErrorController
     //function pour afficher la page d'erreur 404
     public static function notFound(\PDO $db)
     {
+            http_response_code(404);
+
         $title = "Page introuvable - Vite & Gourmand";
 
 

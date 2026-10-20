@@ -78,6 +78,11 @@ $page = \App\Helpers\SecurityManager::checkAccess(
     $pagesUser,
     $pagesStaff
 );
+
+// Une page inexistante ou interdite renvoie un vrai statut 404
+if ($page === '404') {
+    http_response_code(404);
+}
 $route = match ($page) {
     // Général
     'home' => ['class' => '\App\Controllers\UserController\HomeController', 'action' => 'home'],

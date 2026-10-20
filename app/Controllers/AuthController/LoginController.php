@@ -10,7 +10,7 @@ use App\Managers\UserManager;
 // Class LoginController pour gérer la connexion des utilisateurs
 class LoginController
 {
-    //function pour vérifier si la connexion est bloquée (anti-bruteforce) et private pour eviter attaque par deni de service
+    //function pour vérifier si la connexion est bloquée (anti-bruteforce)private : usage interne à la classe
     private static function isLoginLocked(): bool
     {
         $attempts = $_SESSION['login_attempts'] ?? 0;

@@ -1,4 +1,4 @@
-# Commit 54 : MAJ COOKIE
+# Commit 56 : HTTP 404
 
 À cette étape :
-Cookie de session Secure derriere le routeur Heroku et redirection HTTP vers HTTPS
+Statut HTTP 404 pour les pages inexistantes ou interdites
