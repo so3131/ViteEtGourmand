@@ -191,7 +191,7 @@
                                         $btnClass = $hasMenus ? 'btn-outline-secondary' : 'btn-outline-danger';
                                         $iconClass = $hasMenus ? 'fa-ban' : 'fa-trash';
                                         ?>
-                                        <form action="index.php?page=delete-plat&plat_id=<?= $plat['plat_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm('<?= $confirmMsg ?>');">
+                                        <form action="index.php?page=delete-plat&plat_id=<?= $plat['plat_id'] ?>" method="POST" class="d-inline" onsubmit="return confirm(<?= htmlspecialchars(json_encode($confirmMsg), ENT_QUOTES) ?>);">
                                             <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                             <button type="submit" class="btn btn-sm <?= $btnClass ?>" title="<?= $actionText ?>">
                                                 <i class="fa-solid <?= $iconClass ?>"></i> <?= $actionText ?>
