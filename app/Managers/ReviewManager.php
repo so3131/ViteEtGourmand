@@ -2,7 +2,7 @@
 
 namespace App\Managers;
 
-// class ReviewManager pour gérer les avis dans la base SQL (conforme MCD ECF)
+// class ReviewManager pour gérer les avis dans la base SQL
 class ReviewManager
 {
     // Insère un nouvel avis (appelé après vérification commande terminée + propriétaire)

@@ -39,7 +39,7 @@ class StatsAdminController
         //Récupération du nom du menu sélectionné 
         $nomMenuSelectionne = null;
         if (!empty($menuId)) {
-            $menusList = MenuManager::get($db, null, [], true); // Si tu veux garder ça juste pour le <select> et le libellé
+            $menusList = MenuManager::get($db, null, [], true); 
             foreach ($menusList as $m) {
                 if ($m['menu_id'] == $menuId) {
                     $nomMenuSelectionne = $m['titre'];

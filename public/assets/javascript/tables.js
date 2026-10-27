@@ -47,8 +47,8 @@ $(document).ready(function () {
     $("#menusTable").DataTable({
       responsive: true,
       columnDefs: [
-        { responsivePriority: 1, targets: 0 }, // Menu —
-        { responsivePriority: 2, targets: 1 }, // Prix/Pers —
+        { responsivePriority: 1, targets: 0 }, // Menu 
+        { responsivePriority: 2, targets: 1 }, // Prix/Pers 
         { targets: -1, className: "desktop" }, // Actions
         { targets: 2, className: "desktop" }, // Plats inclus
       ],
@@ -84,7 +84,7 @@ $(document).ready(function () {
     $("#platsTable").DataTable({
       responsive: true,
       columnDefs: [
-        { responsivePriority: 1, targets: 0 }, // Nom du plat — identifie la ligne
+        { responsivePriority: 1, targets: 0 }, // Nom du plat
         { responsivePriority: 2, targets: 4 }, // Actions
         { responsivePriority: 10002, targets: 1, className: "desktop" }, // Catégorie
         { responsivePriority: 10001, targets: 2, className: "desktop" }, // Description
@@ -103,8 +103,8 @@ $(document).ready(function () {
   $("#moderationTable").DataTable({
     responsive: true,
     columnDefs: [
-      { targets: 0, className: "all" },   // Utilisateur — toujours visible
-      { targets: 2, className: "all" },   // Rôle — toujours visible
+      { targets: 0, className: "all" },   // Utilisateur : toujours visible
+      { targets: 2, className: "all" },   // Rôle : toujours visible
       { targets: 1, className: "none" },  // Email 
       { targets: -1, className: "none" }, // Actions (Désactiver/Réactiver/Protégé) toujours dans le "+"
     ],

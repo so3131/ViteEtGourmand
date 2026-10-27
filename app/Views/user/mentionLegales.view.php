@@ -21,7 +21,7 @@
     </p>
     
     <p>
-        Les photos illustrant l'équipe "Vite & Gourmand" sont des visuels d'illustration (stock/IA) et ne représentent pas de véritables membres du personnel — ce site étant un projet de démonstration réalisé dans le cadre d'un examen (Titre Professionnel DWWM).
+        Les photos illustrant l'équipe "Vite & Gourmand" sont des visuels d'illustration (stock/IA) et ne représentent pas de véritables membres du personnel. Ce site est un projet de démonstration réalisé dans le cadre d’un examen (Titre Professionnel DWWM).
     </p>
 </section>
 

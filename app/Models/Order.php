@@ -71,7 +71,7 @@ class Order
     $response = curl_exec($ch);
 
     if ($response === false) {
-        error_log('OpenRouteService : échec cURL (' . curl_error($ch) . ') — repli sur Haversine.');
+        error_log('OpenRouteService : échec cURL (' . curl_error($ch) . ') - repli sur Haversine.');
     } elseif ($response) {
         $data = json_decode($response, true);
 
@@ -80,7 +80,7 @@ class Order
             return round($distanceMetres / 1000, 2);
         }
 
-        error_log('OpenRouteService : réponse inattendue — repli sur Haversine. Réponse brute : ' . substr($response, 0, 300));
+        error_log('OpenRouteService : réponse inattendue - repli sur Haversine. Réponse brute : ' . substr($response, 0, 300));
     }
 
     // Fallback à vol d'oiseau
