@@ -256,7 +256,7 @@ VALUES
         1,
         'Salade de saison',
         'Fraîche avec vinaigrette maison',
-        'assets/img/plats/salade-saison.webp',
+        'salade-saison.webp',
         'Entree',
         1
     ),
@@ -264,7 +264,7 @@ VALUES
         2,
         'Velouté de potiron',
         'Onctueux avec éclats de châtaigne',
-        'assets/img/plats/veloute-potiron.webp',
+        'veloute-potiron.webp',
         'Entree',
         1
     ),
@@ -272,7 +272,7 @@ VALUES
         3,
         'Saumon fumé',
         'Saumon d\'Ecosse, crème citronnée',
-        'assets/img/plats/saumon-fume.webp',
+        'saumon-fume.webp',
         'Entree',
         1
     ),
@@ -280,7 +280,7 @@ VALUES
         4,
         'Tartare de tomates',
         'Basilic frais et huile d\'olive',
-        'assets/img/plats/tartare-tomate.webp',
+        'tartare-tomate.webp',
         'Entree',
         1
     ),
@@ -288,7 +288,7 @@ VALUES
         5,
         'Terrine de campagne',
         'Façon grand-mère, cornichons',
-        'assets/img/plats/terrine-campagne.webp',
+        'terrine-campagne.webp',
         'Entree',
         1
     ),
@@ -296,7 +296,7 @@ VALUES
         6,
         'Filet de bœuf',
         'Sauce échalotes, purée maison',
-        'assets/img/plats/filet-boeuf.webp',
+        'filet-boeuf.webp',
         'Plat',
         1
     ),
@@ -304,7 +304,7 @@ VALUES
         7,
         'Gambas sautées',
         'Ail, persil, riz basmati',
-        'assets/img/plats/gambas.webp',
+        'gambas.webp',
         'Plat',
         1
     ),
@@ -312,7 +312,7 @@ VALUES
         8,
         'Risotto aux champignons',
         'Crémeux, copeaux de parmesan',
-        'assets/img/plats/risotto-champignon.webp',
+        'risotto-champignon.webp',
         'Plat',
         1
     ),
@@ -320,7 +320,7 @@ VALUES
         9,
         'Suprême de poulet',
         'Crème forestière, légumes croquants et pommes grenailles',
-        'assets/img/plats/supreme-volaille.webp',
+        'supreme-volaille.webp',
         'Plat',
         1
     ),
@@ -328,7 +328,7 @@ VALUES
         10,
         'Cabillaud rôti',
         'Beurre blanc, fondue de poireaux',
-        'assets/img/plats/cabillaud-poireaux.webp',
+        'cabillaud-poireaux.webp',
         'Plat',
         1
     ),
@@ -336,7 +336,7 @@ VALUES
         11,
         'Mousse au chocolat',
         'Chocolat noir intense',
-        'assets/img/plats/mousse-chocolat.webp',
+        'mousse-chocolat.webp',
         'Dessert',
         1
     ),
@@ -344,7 +344,7 @@ VALUES
         12,
         'Crème brûlée',
         'Vanille bourbon, cassonade caramélisée',
-        'assets/img/plats/creme-brulee.webp',
+        'creme-brulee.webp',
         'Dessert',
         1
     ),
@@ -352,7 +352,7 @@ VALUES
         13,
         'Fondant aux noix',
         'Cœur coulant, noix de Grenoble',
-        'assets/img/plats/fondant-noix.webp',
+        'fondant-noix.webp',
         'Dessert',
         1
     ),
@@ -360,7 +360,7 @@ VALUES
         14,
         'Tarte aux pommes',
         'Pâte sablée pur beurre',
-        'assets/img/plats/tarte-pommes.webp',
+        'tarte-pommes.webp',
         'Dessert',
         1
     ),
@@ -368,7 +368,7 @@ VALUES
         15,
         'Salade de fruits',
         'Menthe fraîche, sirop léger',
-        'assets/img/plats/salade-fruits.webp',
+        'salade-fruits.webp',
         'Dessert',
         1
     ),
@@ -376,7 +376,7 @@ VALUES
         19,
         'Quiche aux poireaux',
         'Pâte brisée maison, crème légère',
-        'assets/img/plats/quiche-poireaux.webp',
+        'quiche-poireaux.webp',
         'Entree',
         1
     ),
@@ -384,7 +384,7 @@ VALUES
         20,
         'Daurade royale',
         'Cuite au four, tombée de tomates',
-        'assets/img/plats/daurade-royale.webp',
+        'daurade-royale.webp',
         'Plat',
         1
     ),
@@ -392,7 +392,7 @@ VALUES
         21,
         'Pavlova aux fruits rouges',
         'Meringue croustillante, chantilly',
-        'assets/img/plats/pavlova-rouge.webp',
+        'pavlova-rouge.webp',
         'Dessert',
         1
     ),
@@ -400,7 +400,7 @@ VALUES
         22,
         'Gaspacho andalou',
         'Tomates fraîches, poivrons, concombre',
-        'assets/img/plats/gaspacho.webp',
+        'gaspacho.webp',
         'Entree',
         1
     ),
@@ -408,7 +408,7 @@ VALUES
         23,
         'Filet de poulet rôti aux herbes',
         'Pommes de terre grenailles',
-        'assets/img/plats/filet-poulet.webp',
+        'filet-poulet.webp',
         'Plat',
         1
     ),
@@ -416,7 +416,7 @@ VALUES
         24,
         'Tartelette au citron',
         'Crème onctueuse, meringue italienne',
-        'assets/img/plats/tarte-citron.webp',
+        'tarte-citron.webp',
         'Dessert',
         1
     ),
@@ -424,7 +424,7 @@ VALUES
         25,
         'Assiette de fromages',
         'Sélection de nos producteurs locaux',
-        'assets/img/plats/fromage.webp',
+        'fromage.webp',
         'Dessert',
         1
     );

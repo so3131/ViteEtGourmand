@@ -133,28 +133,9 @@ En complément de l'installation locale via XAMPP, une configuration Docker comp
 
 **Prérequis :** [Docker Desktop](https://www.docker.com/products/docker-desktop) installé et démarré.
 
-**Fichiers fournis :** `Dockerfile`, `docker-compose.yml`.
+**Fichiers fournis :** `Dockerfile`, `docker-compose.yml`, `.env.docker.example`.
 
-**Configuration :** créer à la racine du projet un fichier `.env.docker` (non versionné, déjà exclu du dépôt) avec le contenu ci-dessous, en remplaçant chaque valeur par vos propres identifiants. Utilisez de préférence des clés dédiées aux tests (compte Brevo et compte OpenRouteService de test) pour ne pas consommer les quotas gratuits de vos clés principales.
-
-```env
-# Variables lues par « docker compose --env-file .env.docker ».
-# DB_HOST n'y figure pas : docker-compose.yml le fixe à « db ».
-
-# Base de données (service MariaDB du docker-compose)
-DB_ROOT_PASS=mot_de_passe_root_a_definir
-DB_NAME=test_transit_ecf
-DB_USER=vg_creator
-DB_PASS=votre_mot_de_passe
-
-# Base de données NoSQL (MongoDB Atlas)
-MONGODB_URI=mongodb+srv://<utilisateur>:<mot_de_passe>@<cluster>.mongodb.net/vite_gourmand?appName=ProjetViteGourmand
-
-# API externes et services
-BREVO_API_KEY=votre_cle_brevo
-MAIL_FROM_EMAIL=votre_email_expediteur
-OPENROUTESERVICE_API_KEY=votre_cle_openroute
-```
+**Configuration :** copier `.env.docker.example` en `.env.docker` à la racine du projet (ce fichier n'est pas versionné, il est exclu du dépôt), puis remplacer chaque valeur par vos propres identifiants. Utilisez de préférence des clés dédiées aux tests (compte Brevo et compte OpenRouteService de test) pour ne pas consommer les quotas gratuits de vos clés principales.
 
 **Lancement :**
 
@@ -164,7 +145,7 @@ docker compose --env-file .env.docker up --build
 
 L'application est alors accessible sur `http://localhost:8080/index.php?page=home`.
 
-Les données MariaDB sont conservées dans un volume Docker persistant entre les redémarrages. Pour repartir d'une base vide : `docker compose down -v`, puis réimporter `Schema_VG.sql`/`fixture_VG.sql`.
+Au premier lancement, la base MariaDB est créée et remplie automatiquement : `Schema_VG.sql` (tables) puis `fixture_VG.sql` (données de démonstration) sont importés. Les données sont ensuite conservées dans un volume Docker persistant entre les redémarrages. Pour repartir d'une base vide : `docker compose --env-file .env.docker down -v`, puis relancer la commande ci-dessus (l'import se refait automatiquement).
 
 ## Structure du projet
 
