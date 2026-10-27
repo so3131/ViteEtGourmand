@@ -1,20 +1,20 @@
-# definir les services et les conteneurs à lancer
+# définit les services et les conteneurs à lancer
 services:
-  # definir le service pour l'application
+  # définit le service pour l'application
   app:
-    # definir le contexte de construction et le Dockerfile à utiliser pour construire l'image du conteneur
+    # définit le contexte de construction et le Dockerfile utilisé pour construire l'image du conteneur
     build:
       context: .
       dockerfile: Dockerfile
-    # definir les ports à exposer pour le conteneur de l'application
+    # définit les ports exposés pour le conteneur de l'application
     ports:
       - "8080:80"
-    # definir les volumes ou les fichiers locaux sont montés dans le conteneur pour permettre le développement en temps réel
-    # (+ creer un volume vendor vide pour éviter de monter le dossier vendor du projet local dans le conteneur)
+    # définit les volumes où les fichiers locaux sont montés dans le conteneur, pour le développement en temps réel
+    # (+ crée un volume vendor vide pour éviter de monter le dossier vendor du projet local dans le conteneur)
     volumes:
       - .:/var/www/html
       - /var/www/html/vendor
-    # definir les variables d'environnement pour configurer la connexion à la base de données
+    # définit les variables d'environnement de l'application (base de données, MongoDB, mails, API de routage)
     environment:
       APP_ENV: docker
       DB_HOST: db
@@ -26,24 +26,25 @@ services:
       BREVO_API_KEY: ${BREVO_API_KEY}
       MAIL_FROM_EMAIL: ${MAIL_FROM_EMAIL}
       OPENROUTESERVICE_API_KEY: ${OPENROUTESERVICE_API_KEY}
-    # definie les dépendances du service
+    # définit les dépendances du service (ordre de démarrage)
     depends_on:
       - db
-  # definir le service pour la base de données
+  # définit le service pour la base de données
   db:
-    # definir l'image à utiliser pour le conteneur de la base de données
+    # définit l'image utilisée pour le conteneur de la base de données
     image: mariadb:10.6
-    # definir les variables d'environnement pour configurer la base de données
+    # définit les variables d'environnement pour configurer la base de données
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
-    # definir les ports à exposer pour le conteneur de la base de données
+    # définit les ports exposés pour le conteneur de la base de données
     ports:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
+      # importe automatiquement le schéma puis les données au premier démarrage
       - ./app/Database/Schema_VG.sql:/docker-entrypoint-initdb.d/01-schema.sql
       - ./app/Database/fixture_VG.sql:/docker-entrypoint-initdb.d/02-fixture.sql
 
