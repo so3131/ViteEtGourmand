@@ -5,7 +5,7 @@
 # Guide d'installation et de déploiement local - Vite & Gourmand
 
 
-Application web PHP MVC de traiteur événementiel — catalogue de menus, tunnel de commande, espaces client / employé / administrateur.
+Application web PHP MVC de traiteur événementiel - catalogue de menus, tunnel de commande, espaces client / employé / administrateur.
 
 Ce document décrit la démarche pour installer et exécuter l'application en local (environnement XAMPP / MariaDB / PHP).
 
@@ -72,7 +72,7 @@ FLUSH PRIVILEGES;
 ```
 ### 5. Configurer les variables d'environnement (`.env`)
 
-Créer un fichier `.env` à la racine du projet (déjà présent dans `.gitignore` — ne jamais le committer)
+Créer un fichier `.env` à la racine du projet (déjà présent dans `.gitignore` - ne jamais le committer)
 <br>
 Copier le contenu ci-dessous dedans, puis remplacer chaque valeur d'exemple par vos propres identifiants:
 
@@ -97,7 +97,7 @@ APP_URL=http://localhost/Projet_Vite_Gourmand_Finale/public
 
 ### 6. Emails
 
-L'application utilise exclusivement l'API **Brevo** pour l'envoi d'emails transactionnels (e-mail de bienvenue à l'inscription, confirmation de commande, notifications liées au suivi, à la modification et à l'annulation d'une commande, réinitialisation de mot de passe et création de compte du personnel) — y compris en local. Aucune configuration SMTP locale n'est nécessaire ; il suffit de renseigner `BREVO_API_KEY`. Sans cette clé, `MailService::sendEmail()` échoue silencieusement et journalise l'erreur via `error_log()` sans bloquer le reste de l'application.
+L'application utilise exclusivement l'API **Brevo** pour l'envoi d'emails transactionnels (e-mail de bienvenue à l'inscription, confirmation de commande, notifications liées au suivi, à la modification et à l'annulation d'une commande, réinitialisation de mot de passe et création de compte du personnel), y compris en local. Aucune configuration SMTP locale n'est nécessaire ; il suffit de renseigner `BREVO_API_KEY`. Sans cette clé, `MailService::sendEmail()` échoue silencieusement et journalise l'erreur via `error_log()` sans bloquer le reste de l'application.
 
 ## Lancer l'application
 
@@ -133,28 +133,9 @@ En complément de l'installation locale via XAMPP, une configuration Docker comp
 
 **Prérequis :** [Docker Desktop](https://www.docker.com/products/docker-desktop) installé et démarré.
 
-**Fichiers fournis :** `Dockerfile`, `docker-compose.yml`.
+**Fichiers fournis :** `Dockerfile`, `docker-compose.yml`, `.env.docker.example`.
 
-**Configuration :** créer à la racine du projet un fichier `.env.docker` (non versionné, déjà exclu du dépôt) avec le contenu ci-dessous, en remplaçant chaque valeur par vos propres identifiants. Utilisez de préférence des clés dédiées aux tests (compte Brevo et compte OpenRouteService de test) pour ne pas consommer les quotas gratuits de vos clés principales.
-
-```env
-# Variables lues par « docker compose --env-file .env.docker ».
-# DB_HOST n'y figure pas : docker-compose.yml le fixe à « db ».
-
-# Base de données (service MariaDB du docker-compose)
-DB_ROOT_PASS=mot_de_passe_root_a_definir
-DB_NAME=test_transit_ecf
-DB_USER=vg_creator
-DB_PASS=votre_mot_de_passe
-
-# Base de données NoSQL (MongoDB Atlas)
-MONGODB_URI=mongodb+srv://<utilisateur>:<mot_de_passe>@<cluster>.mongodb.net/vite_gourmand?appName=ProjetViteGourmand
-
-# API externes et services
-BREVO_API_KEY=votre_cle_brevo
-MAIL_FROM_EMAIL=votre_email_expediteur
-OPENROUTESERVICE_API_KEY=votre_cle_openroute
-```
+**Configuration :** copier `.env.docker.example` en `.env.docker` à la racine du projet (ce fichier n'est pas versionné, il est exclu du dépôt), puis remplacer chaque valeur par vos propres identifiants. Utilisez de préférence des clés dédiées aux tests (compte Brevo et compte OpenRouteService de test) pour ne pas consommer les quotas gratuits de vos clés principales.
 
 **Lancement :**
 
@@ -164,7 +145,7 @@ docker compose --env-file .env.docker up --build
 
 L'application est alors accessible sur `http://localhost:8080/index.php?page=home`.
 
-Les données MariaDB sont conservées dans un volume Docker persistant entre les redémarrages. Pour repartir d'une base vide : `docker compose down -v`, puis réimporter `Schema_VG.sql`/`fixture_VG.sql`.
+Au premier lancement, la base MariaDB est créée et remplie automatiquement : `Schema_VG.sql` (tables) puis `fixture_VG.sql` (données de démonstration) sont importés. Les données sont ensuite conservées dans un volume Docker persistant entre les redémarrages. Pour repartir d'une base vide : `docker compose --env-file .env.docker down -v`, puis relancer la commande ci-dessus (l'import se refait automatiquement).
 
 ## Structure du projet
 
@@ -176,7 +157,7 @@ app/
 ├── Helpers/      Fonctions utilitaires et services (mail, sécurité...)
 ├── Managers/     Accès aux données (requêtes SQL préparées) et orchestration
 │                 (transactions, appels aux Models pour les calculs métier)
-├── Models/       Logique métier pure (calculs, règles) — en principe sans accès
+├── Models/       Règles métier et calculs - en principe sans accès
 │                 direct à la base
 └── Views/        Vues HTML/PHP
 
@@ -197,7 +178,7 @@ docker-compose.yml Orchestration des services app (PHP/Apache) et db (MariaDB) e
 
 ## Déploiement en production
 
-L'application est déployée sur **Heroku** (add-on JawsDB pour la base MySQL). Le détail complet de la procédure — Config, add-ons, import de la base, vérifications post-déploiement — est documenté dans la **documentation technique** du projet.
+L'application est déployée sur **Heroku** (add-on JawsDB pour la base MySQL). Le détail complet de la procédure, Config, add-ons, import de la base, vérifications post-déploiement, est documenté dans la **documentation technique** du projet.
 
 Docker constitue un environnement de développement local complémentaire et n'intervient pas dans cette procédure de déploiement en production.
 

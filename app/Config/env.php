@@ -1,5 +1,5 @@
 <?php
-// Code PHP qui lit le fichier .env local et remplit $_ENV — ce n'est pas un fichier de config, c'est un script chargé par l'app a chaque requete
+// Lit le fichier .env local et remplit $_ENV : script chargé à chaque requête par l'application.
 // Utiliser la fonction putenv pour définir les variables d'environnement et $_ENV pour les rendre accessibles dans le script.
 $envFile = ROOT_PATH . '/.env';
 

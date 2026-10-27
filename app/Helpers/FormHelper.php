@@ -86,7 +86,6 @@ function render_textarea_field(string $name, string $placeholder = '', int $rows
         <?php if (!empty($errorMessage)): ?>
             <div id="<?= $errorId ?>" class="text-danger small mt-1"><?= $errorMessage ?></div>
         <?php elseif ($errorId): ?>
-            <!-- Fallback si tu gères l'erreur en JS -->
             <div id="<?= $errorId ?>" class="erreurMessage text-danger small mt-1"></div>
         <?php endif; ?>
     </div>

@@ -133,9 +133,6 @@ class UpdateOrderController
                 $lieu = LieuManager::getById($db, (int)$lieu_id);
 
 
-
-
-
                 $fraisLivraison = 0.00;
                 if ($lieu && !empty($lieu['latitude']) && !empty($lieu['longitude'])) {
                     $distance = \App\Models\Order::calculerDistanceRouteVersClient(

@@ -33,7 +33,7 @@ class DashboardAdminController
             exit();
         }
 
-        // Récupération des statistiques depuis MongoDB (stats commandes — exigence NoSQL ECF)
+        // Récupération des statistiques depuis MongoDB (stats commandes)
         $mongoManager = new MongoStatsManager();
 
         // Avis en attente de modération (depuis la base SQL)

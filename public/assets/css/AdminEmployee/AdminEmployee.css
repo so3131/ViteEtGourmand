@@ -304,7 +304,7 @@ table.dataTable {
   background-color: var(--shadow-xs);
 }
 
-/* Pagination DataTables —  */
+/* Pagination DataTables  */
 .dataTables_paginate a,
 .dataTables_paginate .paginate_button {
   min-width: var(--min-touch-target) !important;
@@ -316,7 +316,7 @@ table.dataTable {
   margin: 0 2px !important;
 }
 
-/* Liens sidebar — */
+/* Liens sidebar */
 .sidebar-menu a {
   min-height: var(--min-touch-target) !important;
   display: flex !important;
@@ -331,12 +331,12 @@ table .btn {
   align-items: center !important;
   justify-content: center !important;
 }
-/* Badges warning — texte sombre pour contraste */
+/* Badges warning : texte sombre pour contraste */
 .badge.bg-warning {
   color: var(--color-dark) !important;
 }
 
-/* Badges info — texte blanc pour contraste */
+/* Badges info : texte blanc pour contraste */
 .badge.bg-info {
   color: var(--color-white) !important;
 }
