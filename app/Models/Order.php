@@ -35,16 +35,16 @@ class Order
 
 
     // Vérifie que "Bordeaux" annoncé est cohérent avec le code postal et la position GPS
-public static function adresseCoherentePourBordeaux(string $ville, string $codePostal, float $lat, float $lon): bool
-{
-    if (mb_strtolower(trim($ville)) !== VILLE_LIVRAISON_GRATUITE) {
-        return true; // pas de gratuité : les frais sont calculés selon la distance
+    public static function adresseCoherentePourBordeaux(string $ville, string $codePostal, float $lat, float $lon): bool
+    {
+        if (mb_strtolower(trim($ville)) !== VILLE_LIVRAISON_GRATUITE) {
+            return true; // pas de gratuité : les frais sont calculés selon la distance
+        }
+        if (!in_array(trim($codePostal), CODES_POSTAUX_BORDEAUX, true)) {
+            return false;
+        }
+        return self::calculerDistanceVolOiseau(COMPANY_LAT, COMPANY_LON, $lat, $lon) <= RAYON_MAX_BORDEAUX_KM;
     }
-    if (!in_array(trim($codePostal), CODES_POSTAUX_BORDEAUX, true)) {
-        return false;
-    }
-    return self::calculerDistanceVolOiseau(COMPANY_LAT, COMPANY_LON, $lat, $lon) <= RAYON_MAX_BORDEAUX_KM;
-}
 
     public static function calculerFraisLivraisonParKm(string $ville, float $distanceKm): float
     {
@@ -67,38 +67,38 @@ public static function adresseCoherentePourBordeaux(string $ville, string $codeP
     }
 
     public static function calculerDistanceRoute(float $lat1, float $lon1, float $lat2, float $lon2): float
-{
-    $apiKey = getenv('OPENROUTESERVICE_API_KEY') ?: '';
+    {
+        $apiKey = getenv('OPENROUTESERVICE_API_KEY') ?: '';
 
-    $url = "https://api.heigit.org/openrouteservice/v2/directions/driving-car?api_key={$apiKey}&start={$lon1},{$lat1}&end={$lon2},{$lat2}";
+        $url = "https://api.heigit.org/openrouteservice/v2/directions/driving-car?api_key={$apiKey}&start={$lon1},{$lat1}&end={$lon2},{$lat2}";
 
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 8);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Accept: application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8'
-    ]);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 4);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 8);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Accept: application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8'
+        ]);
 
-    $response = curl_exec($ch);
+        $response = curl_exec($ch);
 
-    if ($response === false) {
-        error_log('OpenRouteService : échec cURL (' . curl_error($ch) . ') - repli sur Haversine.');
-    } elseif ($response) {
-        $data = json_decode($response, true);
+        if ($response === false) {
+            error_log('OpenRouteService : échec cURL (' . curl_error($ch) . ') - repli sur Haversine.');
+        } elseif ($response) {
+            $data = json_decode($response, true);
 
-        if (isset($data['features'][0]['properties']['segments'][0]['distance'])) {
-            $distanceMetres = $data['features'][0]['properties']['segments'][0]['distance'];
-            return round($distanceMetres / 1000, 2);
+            if (isset($data['features'][0]['properties']['segments'][0]['distance'])) {
+                $distanceMetres = $data['features'][0]['properties']['segments'][0]['distance'];
+                return round($distanceMetres / 1000, 2);
+            }
+
+            error_log('OpenRouteService : réponse inattendue - repli sur Haversine. Réponse brute : ' . substr($response, 0, 300));
         }
 
-        error_log('OpenRouteService : réponse inattendue - repli sur Haversine. Réponse brute : ' . substr($response, 0, 300));
+        // Fallback à vol d'oiseau
+        return self::calculerDistanceVolOiseau($lat1, $lon1, $lat2, $lon2);
     }
-
-    // Fallback à vol d'oiseau
-    return self::calculerDistanceVolOiseau($lat1, $lon1, $lat2, $lon2);
-}
 
     public static function calculerDistanceVolOiseau($lat1, $lon1, $lat2, $lon2)
     {
