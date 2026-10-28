@@ -15,7 +15,7 @@
 
 
 <div class="container-fluid my-4">
-    <h2 class="mb-4"><i class="fa-solid fa-chart-line me-2"></i> Tableau de bord & Statistiques</h2>
+    <h1 class="h2 mb-4"><i class="fa-solid fa-chart-line me-2"></i> Tableau de bord & Statistiques</h1>
 
 
     <!-- Statistiques rapides -->

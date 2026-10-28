@@ -1,4 +1,4 @@
-<div class="container my-5 py-5 text-center">
+<main class="container my-5 py-5 text-center">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <h1 class="display-1 fw-bold text-success">Ding!</h1>
@@ -11,4 +11,4 @@
             </a>
         </div>
     </div>
-</div>
+</main>

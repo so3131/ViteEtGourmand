@@ -8,7 +8,7 @@ require_once ROOT_PATH . '/app/Helpers/FormHelper.php'; ?>
         <div class="row justify-content-center">
             <div class="col-md-5 bg-white p-4 shadow-sm rounded">
 
-                <h2 class="text-center mb-4">Connexion</h2>
+                <h1 class="h2 text-center mb-4">Connexion</h1>
 
                 <?php if (!empty($error)): ?>
                     <div class="alert alert-danger py-2 mb-3">

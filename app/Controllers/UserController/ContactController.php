@@ -27,7 +27,7 @@ class ContactController
 
             // Validation
             if (empty($nom) || empty($prenom) || !$email || empty($sujet) || empty($message)) {
-                $errors[] = "Veuillez remplir correctement tous les champs obligatoires.";
+                $errors['general'] = "Veuillez remplir correctement tous les champs obligatoires.";
             } else {
                 // Construction des données pour l'envoi via Brevo (MailService)
                 $contactDetails = [
@@ -47,7 +47,7 @@ class ContactController
                     // Vider le $_POST pour réinitialiser le formulaire
                     $_POST = [];
                 } else {
-                    $errors[] = "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.";
+                    $errors['general'] = "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer.";
                 }
             }
         }

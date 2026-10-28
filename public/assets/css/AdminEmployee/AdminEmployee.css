@@ -64,6 +64,11 @@ body {
   color: var(--color-dark);
 }
 
+/* Bootstrap met le fond de .offcanvas-lg en transparent !important dès 992px : on le rétablit pour l'espace employé */
+#employeeSidebar {
+  background-color: var(--color-sidebar) !important;
+}
+
 .logout-btn {
   margin-top: auto;
   background: var(--color-danger);
@@ -210,7 +215,7 @@ table.dataTable thead th,
 #menusTable thead th,
 #employesTable thead th,
 #platsTable thead th,
-#moderationTable thead th  {
+#moderationTable thead th {
   cursor: pointer !important;
 }
 
@@ -261,7 +266,7 @@ table.dataTable thead th,
 /* S'assure que le wrapper ne coupe pas les bords */
 .dataTables_wrapper {
   width: 100% !important;
-  overflow-x: hidden !important; 
+  overflow-x: hidden !important;
   overflow-y: visible !important;
 }
 /* Si un conteneur responsive est généré par DataTables, le contraindre */

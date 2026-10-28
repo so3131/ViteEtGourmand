@@ -4,7 +4,7 @@
     </div>
 <?php else : ?>
     <div class="container mt-5">
-        <h2>Modifier la commande #<?= htmlspecialchars($commande['numero_commande']) ?></h2>
+        <h1 class="h2">Modifier la commande #<?= htmlspecialchars($commande['numero_commande']) ?></h1>
 
         <form id="updateOrderForm"
             action="index.php?page=edit-order-common&action=processUpdate"

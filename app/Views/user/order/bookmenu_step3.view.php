@@ -6,25 +6,16 @@
 /** @var array $orderData */
 ?>
 
-<div class="container py-5">
+<main class="container py-5">
     <!-- Barre d'étape (Steppers) -->
-    <div class="row justify-content-center mb-5">
-        <div class="col-lg-8">
-            <div class="d-flex justify-content-between position-relative bg-light p-3 rounded shadow-sm">
-                <span class="badge <?= ($step == 0) ? 'bg-primary' : 'bg-secondary' ?> px-3 py-2">0. Détails</span>
-                <span class="badge <?= ($step == 1) ? 'bg-primary' : 'bg-secondary' ?> px-3 py-2">1. Quantité</span>
-                <span class="badge <?= ($step == 2) ? 'bg-primary' : 'bg-secondary' ?> px-3 py-2">2. Options</span>
-                <span class="badge <?= ($step == 3) ? 'bg-primary' : 'bg-secondary' ?> px-3 py-2">3. Récap</span>
-            </div>
-        </div>
-    </div>
+    <?php include ROOT_PATH . '/app/Views/user/order/order.steps.view.php'; ?>
 
     <!-- Carte principale du récapitulatif -->
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card shadow border-0 rounded-4">
                 <div class="card-body p-4 p-md-5">
-                    <h2 class="h3 fw-bold text-dark mb-4 text-center">Récapitulatif de votre commande</h2>
+                    <h1 class="h3 fw-bold text-dark mb-4 text-center">Récapitulatif de votre commande</h1>
 
                     <!-- Section Informations de prestation -->
                     <div class="mb-4">
@@ -111,7 +102,7 @@
                         <input type="hidden"
                             name="csrf_token"
                             value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
-                            <a href="index.php?page=search" class="btn btn-secondary me-2">Annuler la commande</a>
+                        <a href="index.php?page=search" class="btn btn-secondary me-2">Annuler la commande</a>
                         <a href="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=2" class="btn btn-outline-secondary px-4">
                             <i class="bi bi-arrow-left me-2"></i>Retour
                         </a>
@@ -124,4 +115,4 @@
             </div>
         </div>
     </div>
-</div>
+</main>

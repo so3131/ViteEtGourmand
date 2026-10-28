@@ -1,7 +1,7 @@
 <main class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2 class="mb-4">Modifier mes informations personnelles</h2>
+            <h1 class="h2 mb-4">Modifier mes informations personnelles</h1>
 
             <?php if (isset($error)): ?>
                 <div class="alert alert-danger" role="alert">

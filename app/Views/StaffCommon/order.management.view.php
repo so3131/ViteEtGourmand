@@ -1,5 +1,5 @@
 <div class="card shadow-sm p-4">
-    <h3 class="mb-4">Gestion des Commandes</h3>
+    <h1 class="h3 mb-4">Gestion des Commandes</h1>
 
     <!-- Filtres -->
     <form method="GET" action="index.php?page=order-management" class="row g-3 mb-4 align-items-end">

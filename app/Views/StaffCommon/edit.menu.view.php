@@ -3,7 +3,7 @@
 <div class="container my-5">
     <div class="card shadow-sm p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3>Modifier le menu : <?= htmlspecialchars($menu['titre'] ?? '') ?></h3>
+            <h1 class="h3">Modifier le menu : <?= htmlspecialchars($menu['titre'] ?? '') ?></h1>
             <a href="index.php?page=menu-management" class="btn btn-secondary">
                 <i class="fa-solid fa-arrow-left"></i> Retour
             </a>

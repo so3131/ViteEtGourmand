@@ -6,16 +6,9 @@
 /** @var array $menuInfo */
 ?>
 
-<div class="container mt-4">
-    <h1 class="mb-4">Choisir le nombre de <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?></h1>
+<main class="container mt-4">
 
-    <?php $step = $step ?? 1; ?>
-    <div class="d-flex justify-content-between mb-4 bg-light p-3 rounded">
-        <span class="badge <?= ($step == 0) ? 'bg-primary' : 'bg-secondary' ?>">0. Détails</span>
-        <span class="badge <?= ($step == 1) ? 'bg-primary' : 'bg-secondary' ?>">1. Quantité</span>
-        <span class="badge <?= ($step == 2) ? 'bg-primary' : 'bg-secondary' ?>">2. Options</span>
-        <span class="badge <?= ($step == 3) ? 'bg-primary' : 'bg-secondary' ?>">3. Récap</span>
-    </div>
+    <?php include ROOT_PATH . '/app/Views/user/order/order.steps.view.php'; ?>
 
     <div id="step-1" class="card p-4 shadow-sm">
         <form action="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=1" method="POST">
@@ -24,19 +17,21 @@
                 value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
 
             <div class="mb-3">
-                <label for="quantite_restante" class="form-label">
-                    Nous pouvons actuellement vous preparer <?= htmlspecialchars($menuInfo['quantite_restante'] ?? 0) ?> <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?>
-                </label>
+                <h1 class=" h4 mb-4">Choisir le nombre de <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?></h1>
+                <p class="form-label">
+                    Nous pouvons actuellement vous préparer <?= htmlspecialchars($menuInfo['quantite_restante'] ?? 0) ?> <?= htmlspecialchars($menuInfo['titre'] ?? 'Menu inconnu') ?>.
+                </p>
                 <br>
+
+                <input type="number" name="nombre_personne" id="nombre_personne" class="form-control"
+                    min="<?= $menu ? $menu->getMinimumRequis() : 1 ?>"
+                    max="<?= $menuInfo['quantite_restante'] ?? 0 ?>" required
+                    value="<?= htmlspecialchars($_SESSION['current_order']['menu']['quantite'] ?? ($menu ? $menu->getMinimumRequis() : 1)) ?>">
                 <label for="nombre_personne" class="form-label">
                     Nombre de personnes (Minimum requis :
                     <?= htmlspecialchars($menu->getMinimumRequis() ?? 0) ?>
                     personnes) :
                 </label>
-                <input type="number" name="nombre_personne" id="nombre_personne" class="form-control"
-                    min="<?= $menu ? $menu->getMinimumRequis() : 1 ?>"
-                    max="<?= $menuInfo['quantite_restante'] ?? 0 ?>" required
-                    value="<?= htmlspecialchars($_SESSION['current_order']['menu']['quantite'] ?? ($menu ? $menu->getMinimumRequis() : 1)) ?>">
             </div>
 
             <div class="d-flex justify-content-between">
@@ -47,4 +42,4 @@
 
         </form>
     </div>
-</div>
+</main>

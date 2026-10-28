@@ -1,17 +1,17 @@
 <?php if (!isset($commande, $menuData, $lieux) || !is_array($commande)) : ?>
-    <div class="container mt-5">
+    <main class="container mt-5">
         <div class="alert alert-danger">Commande introuvable.</div>
-    </div>
+    </main>
 <?php else : ?>
-    <div class="container mt-5">
-        <h2>Modifier ma commande #<?= htmlspecialchars($commande['numero_commande']) ?></h2>
+    <main class="container mt-5">
+        <h1 class="h2">Modifier ma commande #<?= htmlspecialchars($commande['numero_commande']) ?></h1>
 
         <form id="updateOrderForm" data-id="<?= htmlspecialchars($commande['id'] ?? $commande['commande_id']) ?>" class="p-4 border rounded shadow-sm">
             <input type="hidden"
                 name="csrf_token"
                 value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
             <div class="mb-3">
-                <label>Date de prestation :</label>
+                <label for="date_prestation">Date de prestation :</label>
                 <input type="date"
                     name="date_prestation"
                     min="<?= date('Y-m-d', strtotime('+' . $menuData['delai_commande'] . ' days')) ?>"
@@ -20,12 +20,12 @@
             </div>
 
             <div class="mb-3">
-                <label>Heure de livraison :</label>
+                <label for="heure_livraison">Heure de livraison :</label>
                 <input type="time" name="heure_livraison" class="form-control" value="<?= $commande['heure_livraison'] ?>" required>
             </div>
 
             <div class="mb-3">
-                <label>Nombre de personnes :</label>
+                <label for="nombre_personne">Nombre de personnes :</label>
                 <input type="number" name="nombre_personne" class="form-control" value="<?= $commande['nombre_personne'] ?>" min="1" required>
             </div>
 
@@ -78,5 +78,5 @@
             <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
             <a href="index.php?page=dashboard-user" class="btn btn-secondary">Annuler</a>
         </form>
-    </div>
+    </main>
 <?php endif; ?>

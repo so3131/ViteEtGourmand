@@ -8,7 +8,7 @@
         <div class="col-md-6 col-lg-5 p-4 p-md-5 bg-white shadow-sm rounded-3">
 
             <div class="text-center mb-4">
-                <h2 class="h4 fw-bold text-dark mb-2">Nouveau mot de passe</h2>
+                <h1 class="h4 fw-bold text-dark mb-2">Nouveau mot de passe</h1>
                 <p class="text-muted small">Veuillez choisir un nouveau mot de passe sécurisé (10 caractères min.).</p>
             </div>
 

@@ -2,9 +2,10 @@
 $reviews = $reviews ?? [];
 ?>
 <?php foreach ($reviews as $review): ?>
+    <h1 class="h3 mb-4">Modération des avis</h1>
     <div class="card bg-white border-0 shadow-sm mb-2 rounded p-2 px-3">
         <div class="d-flex w-100 justify-content-between align-items-center">
-            <h6 class="mb-0 fw-bold"><?= htmlspecialchars($review['nom_auteur'] ?? 'Client') ?></h6>
+            <h2 class="h6 mb-0 fw-bold"><?= htmlspecialchars($review['nom_auteur'] ?? 'Client') ?></h2>
             <small class="text-muted font-xs">Réf n°:<?= htmlspecialchars($review['numero_commande'] ?? $review['commande_id'] ?? '') ?></small>
         </div>
 

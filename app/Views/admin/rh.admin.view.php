@@ -5,7 +5,7 @@
     <!-- ========================================== -->
     <div class="admin-section mb-5">
         <div class="section-header mb-3">
-            <h3 class="mb-1"><i class="fa-solid fa-user-shield"></i> Gestion de l'équipe</h3>
+            <h1 class="h3 mb-1"><i class="fa-solid fa-user-shield"></i> Gestion de l'équipe</h1>
             <p class="text-muted small mb-0">Ajoutez de nouveaux employés et gérez les accès de votre équipe actuelle.</p>
         </div>
 
@@ -107,7 +107,7 @@
     <!-- ========================================== -->
     <div class="admin-section">
         <div class="section-header mb-3">
-            <h3 class="mb-1"><i class="fas fa-users-gear"></i> Modération des utilisateurs</h3>
+            <h2 class="h3 mb-1"><i class="fas fa-users-gear"></i> Modération des utilisateurs</h2>
             <p class="text-muted small mb-0">Recherchez un utilisateur pour gérer ses accès et son statut sur le site.</p>
         </div>
 

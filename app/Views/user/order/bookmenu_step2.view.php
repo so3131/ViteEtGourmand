@@ -3,16 +3,12 @@
     /** @var int $step */
     ?>
  <!-- Step 2 : Options (matériel, etc.). -->
- <div class="container mt-4">
+ <main class="container mt-4">
 
-     <div class="d-flex justify-content-between mb-4 bg-light p-3 rounded">
-         <span class="badge <?= ($step == 0) ? 'bg-primary' : 'bg-secondary' ?>">0. Détails</span>
-         <span class="badge <?= ($step == 1) ? 'bg-primary' : 'bg-secondary' ?>">1. Quantité</span>
-         <span class="badge <?= ($step == 2) ? 'bg-primary' : 'bg-secondary' ?>">2. Options</span>
-         <span class="badge <?= ($step == 3) ? 'bg-primary' : 'bg-secondary' ?>">3. Récap</span>
-     </div>
+     <?php include ROOT_PATH . '/app/Views/user/order/order.steps.view.php'; ?>
      <div class="container mt-4">
          <div class="card p-4 shadow-sm">
+             <h1 class="h4 mb-4">Options de service</h1>
              <form action="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=2" method="POST">
                  <input type="hidden"
                      name="csrf_token"
@@ -46,10 +42,11 @@
                  </div>
 
                  <div class="d-flex justify-content-between mt-4">
-                    <a href="index.php?page=search" class="btn btn-secondary me-2">Annuler la commande</a>
+                     <a href="index.php?page=search" class="btn btn-secondary me-2">Annuler la commande</a>
                      <a href="index.php?page=order-menu&menu_id=<?= htmlspecialchars($menuID) ?>&step=1" class="btn btn-outline-secondary">Retour</a>
                      <button type="submit" class="btn btn-primary">Passer à l'étape suivante</button>
                  </div>
              </form>
          </div>
      </div>
+ </main>

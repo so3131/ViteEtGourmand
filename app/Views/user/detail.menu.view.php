@@ -8,7 +8,7 @@
  */
 ?>
 
-<div class="content-wrapper container py-4">
+<main class="content-wrapper container py-4">
     <div class="row">
         <!-- Colonne 1 : Carrousel des plats et bouton retour -->
         <div class="col-lg-4 col-md-12 mb-4">
@@ -17,7 +17,8 @@
                     <?php foreach ($plats as $index => $plat): ?>
                         <button type="button" data-bs-target="#menuCarousel"
                             data-bs-slide-to="<?= $index ?>"
-                            class="<?= $index === 0 ? 'active' : '' ?>">
+                            class="<?= $index === 0 ? 'active' : '' ?>"
+                            aria-label="Plat <?= $index + 1 ?>">
                         </button>
                     <?php endforeach; ?>
                 </div>
@@ -39,10 +40,12 @@
                 </div>
 
                 <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Plat précédent</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Plat suivant</span>
                 </button>
             </div>
 
@@ -60,14 +63,14 @@
 
             <p class="mt-4 lead"><?= htmlspecialchars($menu['description_menu']) ?></p>
 
-            <h4 class="mt-4">Composition du menu</h4>
+            <h2 class="h4">Composition du menu</h2>
             <ul class="list-group list-group-flush mb-4">
                 <?php foreach ($plats as $plat): ?>
                     <li class="list-group-item bg-transparent"><?= htmlspecialchars($plat['titre_plat']) ?> - <?= htmlspecialchars($plat['description_plat']) ?></li>
                 <?php endforeach; ?>
             </ul>
 
-            <h4 class="mt-4">Allergènes</h4>
+            <h3 class="h4 mt-4">Allergènes</h3>
             <p>
                 <?php if (!empty($allergenes)): ?>
                     <?php foreach ($allergenes as $a): ?>
@@ -82,8 +85,9 @@
         <!-- Colonne 3 : Carte de commande et tarifs -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card p-4 shadow-sm">
-                <h5 class="text-muted">À partir de</h5>
-                <h2 class="display-5 fw-bold"><?= number_format($menu['prix_par_personne'], 2) ?>€</h2>
+                <p class="h5 text-muted">À partir de</p>
+                <p class="display-5 fw-bold mb-2"><?= number_format($menu['prix_par_personne'], 2) ?>€</p>
+
                 <hr>
                 <p>Minimum : <strong><?= $menu['nombre_personne_minimum'] ?> pers.</strong></p>
                 <p>Quantité restante : <strong><?= $menu['quantite_restante'] ?></strong></p>
@@ -130,4 +134,4 @@
         </div>
 
     </div>
-</div>
+</main>

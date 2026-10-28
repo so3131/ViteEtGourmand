@@ -1,34 +1,34 @@
 <!-- 1. BANDEAU DE PRÉSENTATION -->
-<section class="full-width-section text-white">
-    <div class="container">
-        <h2 class="text-center mb-5 titre-1">Vite & Gourmand : 25 ans de passion au service de vos événements</h2>
+<main>
+    <section class="full-width-section text-white">
+        <div class="container">
+            <h1 class="text-center mb-5 titre-1">Vite & Gourmand : 25 ans de passion au service de vos événements</h1>
 
-        <div class="row align-items-center">
-            <div class="col-md-6 lead">
-                <p class="slogan-1">
-                    Tout a commencé à Bordeaux, il y a un quart de siècle, autour d'une idée simple, rapide et gourmande :</p>
-                <p class="slogan-2">Partager une cuisine authentique et créative.
-                </p>
+            <div class="row align-items-center">
+                <div class="col-md-6 lead">
+                    <p class="slogan-1">
+                        Tout a commencé à Bordeaux, il y a un quart de siècle, autour d'une idée simple, rapide et gourmande :</p>
+                    <p class="slogan-2">Partager une cuisine authentique et créative.
+                    </p>
 
-                <p class="slogan-3">
-                    Julie et José, fondateurs de <strong>Vite & Gourmand</strong>, ont bâti leur réputation sur des menus en constante évolution, capables de sublimer vos moments les plus précieux.
-                </p>
-                <p>
-                    Avec notre application web, vous pouvez découvrir nos créations culinaires et nous solliciter plus facilement.
-                </p>
-            </div>
+                    <p class="slogan-3">
+                        Julie et José, fondateurs de <strong>Vite & Gourmand</strong>, ont bâti leur réputation sur des menus en constante évolution, capables de sublimer vos moments les plus précieux.
+                    </p>
+                    <p>
+                        Avec notre application web, vous pouvez découvrir nos créations culinaires et nous solliciter plus facilement.
+                    </p>
+                </div>
 
-            <div class="col-md-6 text-center mt-4 mt-md-0">
-                <img src="assets/img/others/plat-presentation.webp"
-                    class="hero-img plat-presentation-img"
-                    alt="Un plat de la cuisine artisanale de Vite & Gourmand">
+                <div class="col-md-6 text-center mt-4 mt-md-0">
+                    <img src="assets/img/others/plat-presentation.webp"
+                        class="hero-img plat-presentation-img"
+                        alt="Un plat de la cuisine artisanale de Vite & Gourmand">
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- 2. CONTENEUR PRINCIPAL -->
-<main>
+    <!-- 2. CONTENU PRINCIPAL -->
     <!-- Section Équipe -->
     <section class="mb-5 pt-4 equipe-section">
         <h2 class="text-center mb-4 text-dark">~ Notre Équipe ~ </h2>

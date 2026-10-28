@@ -11,7 +11,7 @@ $menuID = $menuID ?? '';
 $step = $step ?? 0;
 ?>
 
-<div class="container mt-5 text-center">
+<main class="container mt-5 text-center">
     <div class="card p-5 shadow-sm">
         <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
         <h1 class="mt-3">Commande confirmée !</h1>
@@ -22,4 +22,4 @@ $step = $step ?? 0;
             <a href="index.php?page=home" class="btn btn-primary">Retour à l'accueil</a>
         </div>
     </div>
-</div>
+</main>

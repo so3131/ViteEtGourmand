@@ -2,6 +2,8 @@
 // Récupère la page actuelle pour la classe active du menu
 $request_uri = $_SERVER['REQUEST_URI'];
 $current_page = basename($request_uri, '.php');
+$pageTitles = require ROOT_PATH . '/app/Config/Titles.php';
+$pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
 // Enlève les slashes au début et fin
 $current_page = $_GET['page'] ?? 'dashboard-admin'; // Si c'est vide ou /, c'est la page d'accueil
 if ($current_page === '' || $current_page === '/') {
@@ -15,7 +17,7 @@ if ($current_page === '' || $current_page === '/') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite & Gourmand | Administration</title>
+    <title><?= htmlspecialchars($pageName) ?> | Vite & Gourmand</title>
     <?php if (isset($specific_styles)): ?>
         <?php foreach ($specific_styles as $style): ?>
             <link rel="stylesheet" href="<?= $style ?>">
@@ -51,7 +53,7 @@ if ($current_page === '' || $current_page === '/') {
         <aside class="sidebar flex-shrink-0 offcanvas-lg offcanvas-start bg-dark text-white p-3" tabindex="-1" id="adminSidebar">
             <div class="sidebar-header d-flex justify-content-between align-items-center mb-4">
                 <h2 class="h5 m-0">Vite & Gourmand <span class="text-warning">ADMIN</span></h2>
-                <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#adminSidebar" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#adminSidebar" aria-label="Fermer"></button>
             </div>
 
             <nav class="sidebar-menu flex-grow-1">
@@ -102,15 +104,11 @@ if ($current_page === '' || $current_page === '/') {
         </aside>
         <main class="main-content flex-grow-1 w-100">
             <header class="top-bar navbar navbar-expand bg-white border-bottom px-4 py-3">
-                <?php
-                $pageTitles = require ROOT_PATH . '/app/Config/Titles.php';
-                $pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
-                ?>
 
                 <div class="container-fluid p-0">
                     <div class="d-flex align-items-center">
                         <!-- Bouton Burger affiché uniquement sur mobile/tablette -->
-                        <button class="btn btn-outline-secondary d-lg-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar">
+                        <button class="btn btn-outline-secondary d-lg-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar" aria-controls="adminSidebar" aria-label="Ouvrir le menu">
                             <i class="fa-solid fa-bars"></i>
                         </button>
                         <div class="breadcrumb m-0">

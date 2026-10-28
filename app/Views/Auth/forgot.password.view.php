@@ -1,11 +1,11 @@
-<div class="container mt-5">
+<main class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4 p-md-5">
 
                     <div class="text-center mb-4">
-                        <h2 class="h4 fw-bold text-dark">Mot de passe oublié ?</h2>
+                        <h1 class="h4 fw-bold text-dark">Mot de passe oublié ?</h1>
                         <p class="text-muted small">Entrez votre adresse email pour recevoir un lien de réinitialisation.</p>
                     </div>
 
@@ -13,7 +13,7 @@
                     <?php if (!empty($success)): ?>
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <?= htmlspecialchars($success) ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
                     <?php endif; ?>
 
@@ -21,7 +21,7 @@
                     <?php if (!empty($errors['email'])): ?>
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <?= htmlspecialchars($errors['email']) ?>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
                         </div>
                     <?php endif; ?>
 
@@ -47,4 +47,4 @@
             </div>
         </div>
     </div>
-</div>
+</main>

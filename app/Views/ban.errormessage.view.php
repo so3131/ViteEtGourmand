@@ -2,8 +2,7 @@
     <div class="container my-5 py-5 text-center">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <h1 class="display-1 fw-bold text-success"></h1>
-                <h2 class="mb-4">Utilisateur désactivé</h2>
+                <h1 class="h2 mb-4">Utilisateur désactivé</h1>
                 <p class="text-muted mb-5">
                     Votre compte est désactivé. <br>
                     Veuillez contacter notre support pour plus d'informations.

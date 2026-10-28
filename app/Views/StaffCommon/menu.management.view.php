@@ -9,7 +9,7 @@
     <!-- Section Menus & Plats -->
     <div class="card shadow-sm p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3>Gestion des Menus</h3>
+            <h1 class="h3">Gestion des Menus</h1>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMenuModal">
                 <i class="fa-solid fa-plus"></i> Ajouter un menu
             </button>
@@ -130,7 +130,7 @@
         <!-- Tableau des Plats  -->
         <div class="card shadow-sm p-4 mt-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h3 class="m-0">Gestion des Plats</h3>
+                <h2 class="h3 m-0">Gestion des Plats</h2>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addPlatModalDirect">
                     <i class="fa-solid fa-plus"></i> Ajouter un plat
                 </button>

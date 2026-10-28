@@ -1,10 +1,10 @@
-<div class="container mt-5">
+<main class="container mt-5">
     <div class="card p-5 text-center shadow-sm">
         <div class="mb-4">
             <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
         </div>
 
-        <h2 class="mb-3">Commande validée avec succès !</h2>
+        <h1 class="h2 mb-3">Commande validée avec succès !</h1>
         <p class="lead text-muted">
             Merci pour votre confiance. Votre commande a bien été enregistrée.
         </p>
@@ -18,4 +18,4 @@
             <a href="index.php?page=dashboard-user" class="btn btn-outline-secondary btn-lg">Voir mes commandes</a>
         </div>
     </div>
-</div>
+</main>

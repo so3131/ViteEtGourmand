@@ -24,7 +24,7 @@ if (isset($_SESSION['error'])): ?>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 <?php endif; ?>
-
+<h1 class="visually-hidden">Mon espace personnel</h1>
 <?php include ROOT_PATH . '/app/Views/user/partialsDashboardUser/dashboard.Profil.view.php'; ?>
 
 <main class="container-fluid py-4 px-lg-5">

@@ -1,3 +1,7 @@
+</section>
+</div>
+</main>
+</div>
 <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
 
 <script src="<?= BASE_URL ?>/assets/javascript/notifications.js"></script>

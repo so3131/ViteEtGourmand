@@ -4,6 +4,8 @@ $request_uri = $_SERVER['REQUEST_URI'];
 $current_page = basename($request_uri, '.php');
 // Enlève les slashes au début et fin
 $current_page = $_GET['page'] ?? 'dashboard-employee'; // Si c'est vide ou /, c'est la page d'accueil
+$pageTitles = require ROOT_PATH . '/app/Config/Titles.php';
+$pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
 if ($current_page === '' || $current_page === '/') {
     $current_page = 'index';
 }
@@ -15,7 +17,7 @@ if ($current_page === '' || $current_page === '/') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite & Gourmand | Administration</title>
+    <title><?= htmlspecialchars($pageName) ?> | Vite & Gourmand</title>
     <?php if (isset($specific_styles)): ?>
         <?php foreach ($specific_styles as $style): ?>
             <link rel="stylesheet" href="<?= $style ?>">
@@ -45,10 +47,12 @@ if ($current_page === '' || $current_page === '/') {
 
     <!-- Sidebar -->
     <div class="d-flex wrapperstyle">
-        <aside class="sidebar flex-shrink-0">
-            <div class="sidebar-header">
+        <aside class="sidebar flex-shrink-0 offcanvas-lg offcanvas-start" tabindex="-1" id="employeeSidebar">
+            <div class="sidebar-header d-flex justify-content-between align-items-center">
                 <h2>Vite & Gourmand <span>Employee</span></h2>
+                <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#employeeSidebar" aria-label="Fermer"></button>
             </div>
+
 
             <nav class="sidebar-menu">
                 <ul class="nav flex-column">
@@ -96,14 +100,14 @@ if ($current_page === '' || $current_page === '/') {
 
         <main class="main-content flex-grow-1">
             <header class="top-bar">
-                <?php
-                $pageTitles = require ROOT_PATH . '/app/Config/Titles.php';
-                $pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
-                ?>
-
-                <div class="breadcrumb">
-                    <span style="color: var(--color-dark-lighter)">Administration /</span>
-                    <strong><?= htmlspecialchars($pageName) ?></strong>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-secondary d-lg-none me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#employeeSidebar" aria-controls="employeeSidebar" aria-label="Ouvrir le menu">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="breadcrumb m-0">
+                        <span style="color: var(--color-dark-lighter)">Administration /</span>
+                        <strong><?= htmlspecialchars($pageName) ?></strong>
+                    </div>
                 </div>
                 <div class="Employee-profile">
                     <span style="margin-right: var(--spacing-sm)">Bienvenue, <strong>Employee</strong></span>

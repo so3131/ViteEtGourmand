@@ -36,7 +36,7 @@ function render_password_input(string $name, string $label, string $value = '')
                 placeholder="Votre mot de passe"
                 autocomplete="current-password"
                 required>
-            <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn">
+            <button class="btn btn-outline-secondary" type="button" id="togglePasswordBtn" aria-label="Afficher le mot de passe">
                 👁️
             </button>
         </div>
@@ -51,6 +51,8 @@ function render_standard_field(string $name, string $label, string $type = 'text
 
     $isInvalid = (isset($errors[$name])) ? 'is-invalid' : '';
     $errorMessage = $errors[$name] ?? '';
+    $aria = ($errorMessage !== '') ? ' aria-invalid="true" aria-describedby="' . htmlspecialchars($errorId) . '"' : '';
+
 ?>
     <div class="mb-3" id="div_<?= $name ?>">
         <label for="<?= $name ?>" class="form-label fw-bold"><?= $label ?></label>
@@ -59,10 +61,10 @@ function render_standard_field(string $name, string $label, string $type = 'text
             id="<?= $name ?>"
             name="<?= $name ?>"
             value="<?= htmlspecialchars($value) ?>"
-            placeholder="<?= htmlspecialchars($placeholder) ?>">
+            placeholder="<?= htmlspecialchars($placeholder) ?>" <?= $aria ?>>
 
         <?php if (!empty($errorMessage)): ?>
-            <div id="<?= $errorId ?>" class="text-danger small mt-1"><?= $errorMessage ?></div>
+            <div id="<?= $errorId ?>" class="text-danger small mt-1"><?= htmlspecialchars($errorMessage) ?></div>
         <?php endif; ?>
     </div>
 <?php
@@ -74,17 +76,19 @@ function render_textarea_field(string $name, string $placeholder = '', int $rows
 {
     $isInvalid = (isset($errors[$name])) ? 'is-invalid' : '';
     $errorMessage = $errors[$name] ?? '';
+    $aria = ($errorMessage !== '') ? ' aria-invalid="true" aria-describedby="' . htmlspecialchars($errorId) . '"' : '';
 ?>
     <div class="mb-3">
+        <label for="<?= $name ?>" class="visually-hidden"><?= htmlspecialchars($placeholder) ?></label>
         <textarea class="form-control <?= $isInvalid ?>"
             id="<?= $name ?>"
             name="<?= $name ?>"
             rows="<?= $rows ?>"
-            placeholder="<?= htmlspecialchars($placeholder) ?>"
+            placeholder="<?= htmlspecialchars($placeholder) ?>" <?= $aria ?>
             required><?= htmlspecialchars($value) ?></textarea>
 
         <?php if (!empty($errorMessage)): ?>
-            <div id="<?= $errorId ?>" class="text-danger small mt-1"><?= $errorMessage ?></div>
+            <div id="<?= $errorId ?>" class="text-danger small mt-1"><?= htmlspecialchars($errorMessage) ?></div>
         <?php elseif ($errorId): ?>
             <div id="<?= $errorId ?>" class="erreurMessage text-danger small mt-1"></div>
         <?php endif; ?>

@@ -8,8 +8,7 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
     <!-- Colonne Formulaire de contact -->
     <div class="col-lg-7">
       <div class="box p-4 shadow rounded bg-white">
-        <h5 class="text-muted mb-3">Contactez-nous</h5>
-
+        <h1 class="h5 text-muted mb-3">Contactez-nous</h1>
         <?php
         $success = $success ?? false;
         $errors = $errors ?? [];
@@ -17,14 +16,14 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
         <?php if ($success): ?>
           <div class="alert alert-success alert-dismissible fade show" role="alert">
             Votre message a été envoyé avec succès !
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
           </div>
         <?php endif; ?>
 
         <?php if (!empty($errors['general'])): ?>
           <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <?= htmlspecialchars($errors['general']) ?>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fermer"></button>
           </div>
         <?php endif; ?>
 
@@ -88,12 +87,12 @@ require_once dirname(__DIR__, 2) . '/Config/Constants.php';
     <!-- Colonne Équipe -->
     <div class="col-lg-5">
       <div class="box p-4 shadow rounded bg-white">
-        <h3 class="mb-4 text-center h5 fw-bold">Notre Équipe</h3>
+        <h2 class="mb-4 text-center h5 fw-bold">Notre Équipe</h2>
         <div class="row row-cols-1 g-4">
 
           <div class="col text-center d-flex flex-column align-items-center">
-            <img src="assets/img/others/chef-ratatouille.webp" alt="Photo du Chef José" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
-            <div class="small fw-bold">Chef José</div>
+            <img src="assets/img/others/chef-ratatouille.webp" alt="Photo du Chef Ratatouille" class="img-fluid rounded-circle mb-2 shadow-sm" style="width: 90px; height: 90px; object-fit: cover;">
+            <div class="small fw-bold">Chef Ratatouille</div>
             <div class="text-muted small">Chef de cuisine</div>
           </div>
 

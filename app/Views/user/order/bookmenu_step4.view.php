@@ -4,18 +4,13 @@
 /** @var int $step */
 ?>
 
-<div class="container mt-4">
+<main class="container mt-4">
 
-    <div class="d-flex justify-content-between mb-4 bg-light p-3 rounded">
-        <span class="badge <?= ($step == 0) ? 'bg-primary' : 'bg-secondary' ?>">0. Détails</span>
-        <span class="badge <?= ($step == 1) ? 'bg-primary' : 'bg-secondary' ?>">1. Quantité</span>
-        <span class="badge <?= ($step == 2) ? 'bg-primary' : 'bg-secondary' ?>">2. Options</span>
-        <span class="badge <?= ($step == 3) ? 'bg-primary' : 'bg-secondary' ?>">3. Récap</span>
-    </div>
+    <?php include ROOT_PATH . '/app/Views/user/order/order.steps.view.php'; ?>
 
     <div class="container mt-5">
         <div class="card p-4 shadow-sm text-center">
-            <h3>Paiement</h3>
+            <h1 class="h3">Paiement</h1>
             <p>Livraison prévue le : <?= htmlspecialchars($order['prestation']['date_prestation'] ?? '') ?></p>
             <p>Adresse : <?= htmlspecialchars($_SESSION['current_order']['prestation']['adresse_livraison'] ?? '') ?></p>
             <hr>
@@ -26,7 +21,7 @@
                     name="csrf_token"
                     value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
                 <button type="submit" class="btn btn-success">
-                    <i class="bi bi-credit-card"></i> Paiement sécurisé<br>                    (Rappel : Ce site est un projet de démonstration (ECF))
+                    <i class="bi bi-credit-card"></i> Paiement sécurisé<br> (Rappel : Ce site est un projet de démonstration (ECF))
                 </button>
             </form>
 
@@ -35,3 +30,4 @@
             </div>
         </div>
     </div>
+</main>
