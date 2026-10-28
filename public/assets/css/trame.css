@@ -226,7 +226,7 @@ footer.container-fluid {
 .text-danger-accessible {
   color: var(--color-danger) !important;
 }
-footer h3 {
+footer .footer-title {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;

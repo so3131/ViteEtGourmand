@@ -21,7 +21,7 @@ use App\Managers\HoraireManager; ?>
             </div>
 
             <div class="col-md-3">
-                <h3>Horaires</h3>
+                <h2 class="footer-title">Horaires</h2>
                 <ul class="list-unstyled small">
                     <?php
                     if (isset($db)) {
@@ -42,7 +42,7 @@ use App\Managers\HoraireManager; ?>
             </div>
 
             <div class="col-md-3">
-                <h3>Contacts</h3>
+                <h2 class="footer-title">Contacts</h2>
                 <dl class="contact-list small">
                     <dt>Mail :</dt>
                     <dd><a href="mailto:vite&gourmand@gmail.com" class="text-black d-inline-block py-1">Vite&Gourmand@gmail.com</a></dd>
@@ -55,7 +55,8 @@ use App\Managers\HoraireManager; ?>
             </div>
 
             <div class="col-md-3">
-                <h3>Informations</h3>
+                <h2 class="footer-title">Informations</h2>
+                <nav aria-label="Informations et mentions légales">
                 <ul class="nav-list list-unstyled small">
                     <li><a href="?page=contact" class="text-black d-block py-1">Nous contacter</a></li>
                     <li><a href="?page=mention" class="text-black d-block py-1">Mentions Légales</a></li>
@@ -64,6 +65,7 @@ use App\Managers\HoraireManager; ?>
                 <ul class="nav-list list-unstyled small">
                     <li><a href="?page=mention#rgpd" class="text-black d-block py-1">Politique de confidentialité et RGPD</a></li>
                 </ul>
+                </nav>
             </div>
         </div>
     </div>
