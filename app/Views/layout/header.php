@@ -8,15 +8,22 @@ $current_page = $_GET['page'] ?? 'home';
 <html lang="fr">
 
 <head>
-    <title><?= htmlspecialchars(trim($title ?? 'Vite & Gourmand - Traiteur événementiel à Bordeaux')) ?></title>
+    <?php
+    $pageTitles = require ROOT_PATH . '/app/Config/Titles.php';
+    $pageLabel  = $pageTitles[$current_page] ?? null;
+    $fullTitle  = $pageLabel
+        ? $pageLabel . ' - Vite & Gourmand'
+        : ($title ?? 'Vite & Gourmand - Traiteur événementiel à Bordeaux');
+    ?>
+    <title><?= htmlspecialchars(trim($fullTitle)) ?></title>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="<?= htmlspecialchars($meta_description ?? 'Vite & Gourmand, traiteur événementiel à Bordeaux : découvrez nos menus pour mariages, anniversaires et réceptions, avec livraison.') ?>">
+    <meta name="description" content="<?= htmlspecialchars($meta_description ?? 'Vite & Gourmand, traiteur événementiel à Bordeaux : découvrez nos menus pour mariages, anniversaires et réceptions, avec livraison.') ?>">
 
     <!-- Open Graph Tags -->
     <meta property="og:title" content="Vite&Gourmand">
-        <meta property="og:description" content="<?= htmlspecialchars($meta_description ?? 'Vite & Gourmand est un traiteur spécialisé dans la création de menus pour les événements. Nous proposons une large gamme de plats adaptés à tous les goûts et régimes alimentaires, avec un service de livraison rapide et fiable.') ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($meta_description ?? 'Vite & Gourmand est un traiteur spécialisé dans la création de menus pour les événements. Nous proposons une large gamme de plats adaptés à tous les goûts et régimes alimentaires, avec un service de livraison rapide et fiable.') ?>">
 
     <meta property="og:type" content="website">
     <!-- Stylesheets -->
