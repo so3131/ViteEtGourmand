@@ -147,6 +147,12 @@ class OrderMenuController
                         header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
                         exit();
                     }
+                    // Controle de securité supplémentaire de la cohérence de l'adresse pour Bordeaux : ville, code postal et position GPS
+                    if (!Order::adresseCoherentePourBordeaux($ville, $codePostal, $latClient, $lonClient)) {
+                        error_message("Adresse incohérente : la ville, le code postal et la position ne correspondent pas à Bordeaux.");
+                        header('Location: index.php?page=order-menu&step=0&menu_id=' . $menuID);
+                        exit();
+                    }
 
 
                     // Calcul des frais de livraison si la ville n'est pas Bordeaux
@@ -313,8 +319,8 @@ class OrderMenuController
 
                     // Paiement simulé et enregistrement de la commande
                     try {
-                       $nouvelleCommandeId = OrderManager::createOrderFromData($db, $user, $menuData, $prestation, $totalCommande);
-if ($nouvelleCommandeId) {
+                        $nouvelleCommandeId = OrderManager::createOrderFromData($db, $user, $menuData, $prestation, $totalCommande);
+                        if ($nouvelleCommandeId) {
 
                             // === Ajout de la commande dans MongoDB pour les statistiques ===
 
@@ -441,7 +447,7 @@ if ($nouvelleCommandeId) {
             'tousLesLieux' => $tousLesLieux,
             'dateMinimale' => $dateMinimale,
             'delaiCommande' => $delaiCommande,
-            
+
         ];
 
         $step = $data['step'];
@@ -455,7 +461,7 @@ if ($nouvelleCommandeId) {
         $tousLesLieux = $data['tousLesLieux'];
         $dateMinimale = $data['dateMinimale'];
         $delaiCommande = $data['delaiCommande'];
-        
+
 
         /** @var int $step */
         /** @var int $menuID */
@@ -468,7 +474,7 @@ if ($nouvelleCommandeId) {
         /** @var array $tousLesLieux */
         /** @var string|null $dateMinimale */
         /** @var int $delaiCommande */
-       
+
 
         $specific_scripts = ["assets/javascript/orderMenu.js"];
         $vue = ROOT_PATH . '/app/Views/user/order/bookmenu_step' . $step . '.view.php';

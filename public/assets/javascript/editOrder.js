@@ -135,7 +135,14 @@ document.querySelectorAll("input, select").forEach((el) => {
           },
         );
 
-        const result = await response.json();
+     const result = await response.json();
+
+        // Gestion des erreurs serveur : on affiche le message et on garde le prix affiché
+        if (result.error) {
+          console.error("Erreur serveur recalcul :", result.error);
+          showToast(result.error, "error");
+          return;
+        }
 
         // Mise à jour du prix total
         if (result.nouveau_prix !== undefined) {
@@ -147,11 +154,6 @@ document.querySelectorAll("input, select").forEach((el) => {
         if (result.frais_livraison !== undefined) {
           document.getElementById("montant-frais").innerText =
             result.frais_livraison;
-        }
-
-        // Gestion des erreurs serveur
-        if (result.error) {
-          console.error("Erreur serveur recalcul :", result.error);
         }
       } catch (err) {
         showToast("Erreur technique : " + err.message, "error");
