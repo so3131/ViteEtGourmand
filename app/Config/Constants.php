@@ -19,4 +19,8 @@ define('DEPOT_GARANTIE_MATERIEL', 600.00);
 // Définis les coordonnées de l'entreprise
 define('COMPANY_LAT', 44.837789);
 define('COMPANY_LON', -0.579180);
+// Livraison gratuite : ville concernée, codes postaux associés et rayon maximal autour de l'entreprise
+define('VILLE_LIVRAISON_GRATUITE', 'bordeaux');
+define('CODES_POSTAUX_BORDEAUX', ['33000', '33100', '33200', '33300', '33800']);
+define('RAYON_MAX_BORDEAUX_KM', 15);
 

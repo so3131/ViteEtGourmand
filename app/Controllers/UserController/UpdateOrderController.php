@@ -86,6 +86,17 @@ class UpdateOrderController
                             "Veuillez sélectionner une nouvelle adresse dans la liste."
                         );
                     }
+                    
+                    if (!\App\Models\Order::adresseCoherentePourBordeaux(
+                        $ville,
+                        (string)($data['code_postal'] ?? ''),
+                        (float)$data['lat'],
+                        (float)$data['lon']
+                    )) {
+                        throw new \Exception(
+                            "Adresse incohérente : la ville, le code postal et la position ne correspondent pas à Bordeaux."
+                        );
+                    }
 
                     $lieu_id = \App\Managers\LieuManager::getOrInsert(
                         $db,
@@ -258,7 +269,16 @@ class UpdateOrderController
             $menu_id = (int)$orderData['menu_id'];
 
             $lieu_id = 0;
-            if (!empty($data['adresse_livraison']) && !empty($data['lat']) && !empty($data['lon'])) {
+             if (!empty($data['adresse_livraison']) && !empty($data['lat']) && !empty($data['lon'])) {
+                if (!\App\Models\Order::adresseCoherentePourBordeaux(
+                    (string)($data['ville'] ?? ''),
+                    (string)($data['code_postal'] ?? ''),
+                    (float)$data['lat'],
+                    (float)$data['lon']
+                )) {
+                    echo json_encode(['nouveau_prix' => '0.00', 'error' => 'Adresse incohérente.']);
+                    exit();
+                }
                 $lieu_id = LieuManager::getOrInsert(
                     $db,
                     $data['adresse_livraison'],

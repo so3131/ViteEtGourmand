@@ -33,6 +33,19 @@ class Order
         public float $km = 0.0,
     ) {}
 
+
+    // Vérifie que "Bordeaux" annoncé est cohérent avec le code postal et la position GPS
+public static function adresseCoherentePourBordeaux(string $ville, string $codePostal, float $lat, float $lon): bool
+{
+    if (mb_strtolower(trim($ville)) !== VILLE_LIVRAISON_GRATUITE) {
+        return true; // pas de gratuité : les frais sont calculés selon la distance
+    }
+    if (!in_array(trim($codePostal), CODES_POSTAUX_BORDEAUX, true)) {
+        return false;
+    }
+    return self::calculerDistanceVolOiseau(COMPANY_LAT, COMPANY_LON, $lat, $lon) <= RAYON_MAX_BORDEAUX_KM;
+}
+
     public static function calculerFraisLivraisonParKm(string $ville, float $distanceKm): float
     {
         // Si la ville est Bordeaux, la livraison est gratuite
