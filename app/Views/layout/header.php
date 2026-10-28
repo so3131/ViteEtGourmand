@@ -2,14 +2,7 @@
 require_once dirname(__DIR__, 2) . '/Config/Constants.php';
 
 // Récupère la page actuelle pour la classe active du menu
-$request_uri = $_SERVER['REQUEST_URI'];
-$current_page = basename($request_uri, '.php');
-// Enlève les slashes au début et fin
-$current_page = trim($current_page, '/');
-// Si c'est vide ou /, c'est la page d'accueil
-if ($current_page === '' || $current_page === '/') {
-    $current_page = 'index';
-}
+$current_page = $_GET['page'] ?? 'home';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -60,7 +53,7 @@ if ($current_page === '' || $current_page === '/') {
                     </a>
 
                     <!-- Bouton Burger mobile -->
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Ouvrir le menu de navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
@@ -68,13 +61,13 @@ if ($current_page === '' || $current_page === '/') {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center align-lg-items-start text-center text-lg-start">
                             <li class="nav-item">
-                                <a class="nav-link <?php echo ($current_page === 'index') ? 'active' : ''; ?>" <?= ($current_page === 'index') ? 'aria-current="page"' : '' ?> href="?page=home">Accueil</a>
+                                <a class="nav-link <?php echo ($current_page === 'home') ? 'active' : ''; ?>" <?= ($current_page === 'home') ? 'aria-current="page"' : '' ?> href="?page=home">Accueil</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link <?php echo ($current_page === 'search') ? 'active' : ''; ?>" href="?page=search">Accès à tous les menus</a>
+                                <a class="nav-link <?php echo ($current_page === 'search') ? 'active' : ''; ?>" <?= ($current_page === 'search') ? 'aria-current="page"' : '' ?> href="?page=search">Accès à tous les menus</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link <?php echo ($current_page === 'contact') ? 'active' : ''; ?>" href="?page=contact">Contact</a>
+                                <a class="nav-link <?php echo ($current_page === 'contact') ? 'active' : ''; ?>" <?= ($current_page === 'contact') ? 'aria-current="page"' : '' ?> href="?page=contact">Contact</a>
                             </li>
                             <?php if (isset($_SESSION['user_id'])): ?>
                                 <li class="nav-item dropdown">
@@ -90,7 +83,7 @@ if ($current_page === '' || $current_page === '/') {
                                         <?php elseif (isset($_SESSION['role_id']) && (int)$_SESSION['role_id'] === ROLE_EMPLOYE): ?>
                                             <li><a class="dropdown-item rounded-2 py-2 px-3" href="?page=dashboard-employee">Gestion Employé</a></li>
                                         <?php else: ?>
-                                            <li><a class="dropdown-item rounded-2 py-2 px-3 <?php echo ($current_page === 'dashboard-user') ? 'active' : ''; ?>" href="?page=dashboard-user">Gérer mon compte</a></li>
+                                            <li><a class="dropdown-item rounded-2 py-2 px-3 <?php echo ($current_page === 'dashboard-user') ? 'active' : ''; ?>" <?= ($current_page === 'dashboard-user') ? 'aria-current="page"' : '' ?> href="?page=dashboard-user">Gérer mon compte</a></li>
                                         <?php endif; ?>
                                         <li>
                                             <hr class="dropdown-divider my-2">
