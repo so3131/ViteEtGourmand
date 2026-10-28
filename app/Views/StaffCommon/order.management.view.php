@@ -93,8 +93,8 @@
                                 $badgeClass = match ($order['statut']) {
                                     'annulee' => 'bg-danger',
                                     'terminee', 'livree' => 'bg-success',
-                                    'en_attente' => 'bg-warning',
-                                    default => 'bg-info'
+                                    'en_attente' => 'bg-warning text-dark',
+                                    default => 'bg-info text-dark'
                                 };
                                 ?>
                                 <span class="badge <?php echo $badgeClass; ?>">

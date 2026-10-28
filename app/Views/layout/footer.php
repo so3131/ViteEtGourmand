@@ -14,7 +14,7 @@ use App\Managers\HoraireManager; ?>
                     La qualité d'un restaurant, le confort de votre table.
                 </p>
                 <!-- Avertissement projet fictif pour le déploiement public -->
-                <p class="small text-warning fw-semibold mb-2">
+                <p class="small footer-notice fw-semibold mb-2">
                     <i class="bi bi-info-circle"></i> Projet de formation (ECF) - Site fictif.
                 </p>
                 <p class="rights small">© <span class="copyright-year">2026</span> Vite&Gourmand.</p>
@@ -57,14 +57,14 @@ use App\Managers\HoraireManager; ?>
             <div class="col-md-3">
                 <h2 class="footer-title">Informations</h2>
                 <nav aria-label="Informations et mentions légales">
-                <ul class="nav-list list-unstyled small">
-                    <li><a href="?page=contact" class="text-black d-block py-1">Nous contacter</a></li>
-                    <li><a href="?page=mention" class="text-black d-block py-1">Mentions Légales</a></li>
-                    <li><a href="?page=mention#cgv" class="text-black d-block py-1">Conditions Générales de Vente</a></li>
-                </ul>
-                <ul class="nav-list list-unstyled small">
-                    <li><a href="?page=mention#rgpd" class="text-black d-block py-1">Politique de confidentialité et RGPD</a></li>
-                </ul>
+                    <ul class="nav-list list-unstyled small">
+                        <li><a href="?page=contact" class="text-black d-block py-1">Nous contacter</a></li>
+                        <li><a href="?page=mention" class="text-black d-block py-1">Mentions Légales</a></li>
+                        <li><a href="?page=mention#cgv" class="text-black d-block py-1">Conditions Générales de Vente</a></li>
+                    </ul>
+                    <ul class="nav-list list-unstyled small">
+                        <li><a href="?page=mention#rgpd" class="text-black d-block py-1">Politique de confidentialité et RGPD</a></li>
+                    </ul>
                 </nav>
             </div>
         </div>

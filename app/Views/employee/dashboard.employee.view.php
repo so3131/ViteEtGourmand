@@ -37,7 +37,7 @@
                     <div class="card-body">
                         <h6 class="card-title text-uppercase fw-bold">Commandes terminées</h6>
                         <p class="display-5 fw-bold mb-0"><?= $finishedOrders ?></p>
-                        <small class="text-white-50">Voir la liste →</small>
+                        <small class="text-white">Voir la liste →</small>
                     </div>
                 </div>
             </a>
@@ -50,7 +50,7 @@
                     <div class="card-body">
                         <h6 class="card-title text-uppercase fw-bold">Commandes en attente de retour materiel</h6>
                         <p class="display-5 fw-bold mb-0"><?= $pendingReturnOrders ?></p>
-                        <small class="text-white-50">Voir tout →</small>
+                        <small class="text-white">Voir tout →</small>
                     </div>
                 </div>
             </a>

@@ -53,7 +53,7 @@ class ContactController
         }
 
         $title = "Nous contacter - Vite & Gourmand";
-
+        $meta_description = "Contactez Vite & Gourmand : suivi de commande, demande de devis pour votre événement, questions sur les allergènes ou restitution de matériel.";
 
         $specific_styles = [];
         $specific_scripts = [];

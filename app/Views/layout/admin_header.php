@@ -1,14 +1,8 @@
 <?php
 // Récupère la page actuelle pour la classe active du menu
-$request_uri = $_SERVER['REQUEST_URI'];
-$current_page = basename($request_uri, '.php');
+$current_page = $_GET['page'] ?? 'dashboard-admin';
 $pageTitles = require ROOT_PATH . '/app/Config/Titles.php';
 $pageName = $pageTitles[$current_page] ?? ucfirst(str_replace(['-', '_'], ' ', $current_page));
-// Enlève les slashes au début et fin
-$current_page = $_GET['page'] ?? 'dashboard-admin'; // Si c'est vide ou /, c'est la page d'accueil
-if ($current_page === '' || $current_page === '/') {
-    $current_page = 'index';
-}
 ?>
 
 <!DOCTYPE html>
@@ -17,6 +11,7 @@ if ($current_page === '' || $current_page === '/') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Espace d'administration de Vite & Gourmand : commandes, menus, équipe et statistiques.">
     <title><?= htmlspecialchars($pageName) ?> | Vite & Gourmand</title>
     <?php if (isset($specific_styles)): ?>
         <?php foreach ($specific_styles as $style): ?>

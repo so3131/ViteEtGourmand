@@ -27,8 +27,8 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <p class="mb-0 text-muted">Total des commandes reçues</p>
-                        <h3 class="text-primary mb-1"> <?= htmlspecialchars((string) ($totalOrders ?? 0), ENT_QUOTES, 'UTF-8') ?>
-                        </h3>
+                        <div class="h3 text-primary mb-1"> <?= htmlspecialchars((string) ($totalOrders ?? 0), ENT_QUOTES, 'UTF-8') ?>
+                        </div>
 
                     </div>
                     <div class="fs-2 text-primary opacity-50"><i class="fa-solid fa-utensils"></i></div>
@@ -42,7 +42,7 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <p class="mb-0 text-muted">CA Réel Global <br>( Hors caution)</p>
-                        <h3 class="text-success mb-1"><?= number_format($caGlobal ?? 0, 2, ',', ' '); ?> €</h3>
+                        <div class="h3 text-success mb-1"><?= number_format($caGlobal ?? 0, 2, ',', ' '); ?> €</div>
 
                     </div>
                     <div class="fs-2 text-success opacity-50"><i class="fa-solid fa-euro-sign"></i></div>
@@ -56,7 +56,7 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <p class="mb-0 text-muted">Menus proposés</p>
-                        <h3 class="text-success mb-1"><?= htmlspecialchars($statsSql['total_menus'] ?? 0); ?></h3>
+                        <div class="h3 text-success mb-1"><?= htmlspecialchars($statsSql['total_menus'] ?? 0); ?></div>
 
                     </div>
                     <div class="fs-2 text-success opacity-50"><i class="fa-solid fa-book-open"></i></div>
@@ -70,7 +70,7 @@
                 <div class="d-flex align-items-center">
                     <div class="flex-grow-1">
                         <p class="mb-0 text-muted">Total des utilisateurs</p>
-                        <h3 class="text-info mb-1"><?= htmlspecialchars($statsSql['total_users'] ?? 0); ?></h3>
+                        <div class="h3 text-info mb-1"><?= htmlspecialchars($statsSql['total_users'] ?? 0); ?></div>
 
                     </div>
                     <div class="fs-2 text-info opacity-50"><i class="fa-solid fa-users"></i></div>
@@ -137,7 +137,7 @@
 <?php if (!empty($menuId)): ?>
     <div class="card border-primary shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
-            <h4 class="mb-0 fs-5"><i class="fa-solid fa-circle-info me-2"></i> Détail du menu sélectionné</h4>
+            <h2 class="mb-0 fs-5"><i class="fa-solid fa-circle-info me-2"></i> Détail du menu sélectionné</h2>
         </div>
         <div class="card-body">
             <div class="row text-center text-md-start">
@@ -163,9 +163,9 @@
 <?php else: ?>
     <!-- Alerte globale (ou filtrée par période) si aucun menu n'est sélectionné -->
     <div class="alert alert-info shadow-sm mb-4">
-        <h4 class="alert-heading mb-1"><i class="fa-solid fa-chart-line me-2"></i>
+        <h2 class="h4 alert-heading mb-1"><i class="fa-solid fa-chart-line me-2"></i>
             <?= (!empty($dateDebut) || !empty($dateFin)) ? "Vue d'ensemble sur la période" : "Vue d'ensemble globale"; ?>
-        </h4>
+        </h2>
         <p class="mb-0">
             Chiffre d'affaires <?= (!empty($dateDebut) || !empty($dateFin)) ? "sur la période" : "total"; ?> :
             <strong><?= number_format($caGlobal ?? 0, 2, ',', ' '); ?> €</strong>
@@ -181,7 +181,7 @@
         <div class="col-md-6">
             <div class="chart-wrapper">
                 <div class="chart-header mb-3">
-                    <h5 class="card-title"><i class="fa-solid fa-chart-pie me-2"></i> Chiffre d'affaires par Menu</h5>
+                    <h2 class="h5 card-title"><i class="fa-solid fa-chart-pie me-2"></i> Chiffre d'affaires par Menu</h2>
                 </div>
                 <div class="chart-container" style="position: relative; height: 280px; width: 100%;">
                     <canvas id="caMenuChart"></canvas>
@@ -193,7 +193,7 @@
         <div class="col-md-6">
             <div class="chart-wrapper">
                 <div class="chart-header mb-3">
-                    <h5 class="card-title"><i class="fa-solid fa-chart-bar me-2"></i> Volume des commandes</h5>
+                    <h2 class="h5 card-title"><i class="fa-solid fa-chart-bar me-2"></i> Volume des commandes</h2>
                     <p class="text-muted small">Nombre de ventes par menu</p>
                 </div>
                 <div class="chart-container" style="position: relative; height: 280px; width: 100%;">

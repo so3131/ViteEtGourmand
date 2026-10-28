@@ -61,7 +61,7 @@ body {
 
 .sidebar-menu a.active {
   background: var(--color-accent) !important;
-  color: var(--color-dark);
+  color: var(--color-dark) !important;
 }
 
 /* Bootstrap met le fond de .offcanvas-lg en transparent !important dès 992px : on le rétablit pour l'espace employé */
@@ -343,15 +343,9 @@ table .btn {
 
 /* Badges info : texte blanc pour contraste */
 .badge.bg-info {
-  color: var(--color-white) !important;
-}
-
-/* Boutons outline-info */
-.btn-outline-info {
   color: var(--color-dark) !important;
-  border-color: var(--color-dark) !important;
 }
-.btn-outline-info:hover {
-  background-color: var(--color-dark) !important;
-  color: var(--color-white) !important;
+#adminSidebar .btn-outline-danger {
+  color: #ea868f;
+  border-color: #ea868f;
 }

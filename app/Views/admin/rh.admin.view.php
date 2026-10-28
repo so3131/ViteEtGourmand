@@ -11,7 +11,7 @@
 
         <!-- Bloc Formulaire d'ajout-->
         <div class="card shadow-sm p-3 mb-4">
-            <h6 class="fw-bold mb-3"><i class="fa-solid fa-user-plus"></i> Ajouter un employé</h6>
+            <h2 class="h6 fw-bold mb-3"><i class="fa-solid fa-user-plus"></i> Ajouter un employé</h2>
             <form action="index.php?page=rh-admin-create" method="POST" autocomplete="off">
                 <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?? '' ?>">
                 <div class="row g-3 align-items-end">
@@ -30,7 +30,7 @@
 
         <!-- Bloc Liste de l'équipe actuelle -->
         <div class="card shadow-sm p-3">
-            <h6 class="fw-bold mb-3"><i class="fa-solid fa-users"></i> Équipe actuelle</h6>
+            <h2 class="h6 fw-bold mb-3"><i class="fa-solid fa-users"></i> Équipe actuelle</h2>
             <div>
                 <table class="table table-sm table-admin align-middle mb-0" id="employesTable">
                     <thead>
@@ -119,7 +119,7 @@
                     <input type="text" class="form-control form-control-sm" placeholder="Rechercher par nom ou email..." name="search-user" value="<?= htmlspecialchars($_GET['search-user'] ?? '') ?>">
                 </div>
 
-                <select name="filter-role" class="search-select form-select form-select-sm w-auto">
+                <select name="filter-role" class="search-select form-select form-select-sm w-auto" aria-label="Filtrer par rôle">
                     <option value="">Tous les rôles</option>
                     <?php foreach ($listeRoles ?? [] as $role): ?>
                         <option value="<?= $role['role_id'] ?>" <?= (isset($_GET['filter-role']) && $_GET['filter-role'] == $role['role_id']) ? 'selected' : '' ?>>

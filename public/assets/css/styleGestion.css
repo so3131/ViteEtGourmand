@@ -9,7 +9,7 @@
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   background-color: var(--color-olive) !important;
-  color: var(--color-bg-dark-hero) !important;
+  color: var(--color-white) !important;
 }
 .nav-link {
   color: var(--color-bg-dark-hero) !important;

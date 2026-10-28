@@ -30,8 +30,8 @@ class MenuController
         }
 
         $title = "Rechercher un menu - Vite Gourmand";
-
-        $specific_styles = ["assets/css/styleSearch.css", "assets/css/trame.css"];
+        $meta_description = "Parcourez tous les menus de Vite & Gourmand et filtrez par thème, régime, prix ou nombre de personnes.";
+        $specific_styles = ["assets/css/styleSearch.css"];
         $specific_scripts = ["assets/javascript/recherche.js"];
         $themes = MenuManager::getAllThemes($db);
         $regimes = MenuManager::getAllRegimes($db);
@@ -84,7 +84,7 @@ class MenuController
         $plats = MenuManager::getPlatsByMenuId($db, $menuID);
         $allergenes = MenuManager::getAllergenesByMenuId($db, $menuID);
         $themes = MenuManager::getAllThemes($db);
-$regimes = MenuManager::getAllRegimes($db);
+        $regimes = MenuManager::getAllRegimes($db);
         $title = "Détail du menu - Vite Gourmand";
 
 

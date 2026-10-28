@@ -91,7 +91,7 @@
                     <div class="card-body py-2 px-3">
                         <h2 class="card-title text-uppercase fw-bold fs-7 mb-1">En attente de retour materiel</h2>
                         <p class="display-5 fw-bold mb-0"><?= $pendingReturnOrders ?></p>
-                        <small class="text-white-50">Voir tout →</small>
+                        <small class="text-white">Voir tout →</small>
                     </div>
                 </div>
             </a>

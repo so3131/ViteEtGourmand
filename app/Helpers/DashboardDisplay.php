@@ -11,11 +11,11 @@ use App\Managers\ReviewManager;
 function renderOrderRow(array $order, \PDO $db)
 {
     $badgeClass = match ($order['statut']) {
-        'en_attente' => 'bg-warning',                           // jaune - en attente
-        'acceptee', 'en_preparation' => 'bg-info',      // bleu - préparation
+        'en_attente' => 'bg-warning text-dark',                           // jaune - en attente
+        'acceptee', 'en_preparation' => 'bg-info text-dark',      // bleu - préparation
         'en_cours_livraison' => 'bg-primary',            // bleu foncé - en route
         'livree' => 'bg-success',                        // vert - livré
-        'en_attente_retour_materiel' => 'bg-warning',   // jaune - en attente retour
+        'en_attente_retour_materiel' => 'bg-warning text-dark',   // jaune - en attente retour
         'terminee' => 'bg-success',                        // vert - terminé
         'annulee' => 'bg-danger',                        // rouge - annulé
         default => 'bg-secondary'

@@ -84,6 +84,15 @@ img {
   box-shadow: var(--shadow-button);
   transform: translateY(-2px);
 }
+/* Boutons outline-info */
+.btn-outline-info {
+  color: var(--color-dark) !important;
+  border-color: var(--color-dark) !important;
+}
+.btn-outline-info:hover {
+  background-color: var(--color-dark) !important;
+  color: var(--color-white) !important;
+}
 /* ==========================================================================
    2. FORMULAIRES & MESSAGES D'ERREUR
    ========================================================================== */
@@ -144,7 +153,7 @@ select {
 
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-  color: var(--color-olive) !important;
+  color: var(--color-dark) !important;
 }
 
 .navbar-nav .nav-link::after {
@@ -153,7 +162,7 @@ select {
   height: 2px;
   bottom: 0;
   left: 50%;
-  background-color: var(--color-olive);
+  background-color: var(--color-dark);
   transition: var(--transition-base);
   transform: translateX(-50%);
   width: 0;
@@ -201,6 +210,11 @@ select {
   background-color: rgba(var(--bs-primary-rgb), 0.1);
   transform: translateX(3px);
 }
+.dropdown-menu .dropdown-item.active,
+.dropdown-menu .dropdown-item:active {
+  background-color: var(--color-olive);
+  color: var(--color-white);
+}
 
 @keyframes fadeIn {
   from {
@@ -224,7 +238,7 @@ footer.container-fluid {
   padding-bottom: var(--spacing-md);
 }
 .text-danger-accessible {
-  color: var(--color-danger) !important;
+  color: #c82333 !important;
 }
 footer .footer-title {
   font-size: var(--font-size-base);
@@ -234,7 +248,9 @@ footer .footer-title {
   margin-bottom: var(--spacing-md);
   color: var(--color-olive);
 }
-
+.footer-notice {
+  color: var(--color-olive);
+}
 footer ul li,
 footer dl dd {
   margin-bottom: var(--spacing-xs);
@@ -416,3 +432,4 @@ footer .text-danger {
   color: var(--color-white);
   font-weight: var(--font-weight-medium);
 }
+

@@ -15,7 +15,10 @@ $(document).ready(function () {
       previous: "Précédent",
     },
   };
-
+  // La pagination de DataTables génère un attribut ARIA invalide (aria-role) : on le retire après chaque affichage
+  $(document).on("draw.dt", function () {
+    $(".page-link[aria-role]").removeAttr("aria-role");
+  });
   if ($("#ordersTable").length) {
     $("#ordersTable").DataTable({
       responsive: true,
@@ -47,8 +50,8 @@ $(document).ready(function () {
     $("#menusTable").DataTable({
       responsive: true,
       columnDefs: [
-        { responsivePriority: 1, targets: 0 }, // Menu 
-        { responsivePriority: 2, targets: 1 }, // Prix/Pers 
+        { responsivePriority: 1, targets: 0 }, // Menu
+        { responsivePriority: 2, targets: 1 }, // Prix/Pers
         { targets: -1, className: "desktop" }, // Actions
         { targets: 2, className: "desktop" }, // Plats inclus
       ],
@@ -99,22 +102,22 @@ $(document).ready(function () {
     });
   }
 
- if ($("#moderationTable").length) {
-  $("#moderationTable").DataTable({
-    responsive: true,
-    columnDefs: [
-      { targets: 0, className: "all" },   // Utilisateur : toujours visible
-      { targets: 2, className: "all" },   // Rôle : toujours visible
-      { targets: 1, className: "none" },  // Email 
-      { targets: -1, className: "none" }, // Actions (Désactiver/Réactiver/Protégé) toujours dans le "+"
-    ],
-    paging: true,
-    searching: false,
-    ordering: true,
-    dom: '<"dt-toolbar d-flex justify-content-between align-items-center mb-3"lf>rtip',
-    language: frLanguage,
-  });
-}
+  if ($("#moderationTable").length) {
+    $("#moderationTable").DataTable({
+      responsive: true,
+      columnDefs: [
+        { targets: 0, className: "all" }, // Utilisateur : toujours visible
+        { targets: 2, className: "all" }, // Rôle : toujours visible
+        { targets: 1, className: "none" }, // Email
+        { targets: -1, className: "none" }, // Actions (Désactiver/Réactiver/Protégé) toujours dans le "+"
+      ],
+      paging: true,
+      searching: false,
+      ordering: true,
+      dom: '<"dt-toolbar d-flex justify-content-between align-items-center mb-3"lf>rtip',
+      language: frLanguage,
+    });
+  }
 
   // Nettoyage ARIA
   setTimeout(function () {
